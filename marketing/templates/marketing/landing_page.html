@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShulePlusERP - Mfumo Kamili wa Usimamizi wa Shule</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: { colors: {
+    navy:'#0B2545', navy2:'#0F3460', gold:'#D4AF37', green:'#146B3A', paper:'#FBFAF7'
+  }, fontFamily: { serif:['Georgia','Times New Roman','serif'] } } } }
+</script>
+</head>
+<style>
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  section { animation: fadeInUp 0.5s ease-out; }
+  a, button { transition: transform 0.15s ease, background-color 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease; }
+  a:active, button:active { transform: scale(0.97); }
+  .hover\:shadow-md, .hover\:shadow-xl { transition: transform 0.2s ease, box-shadow 0.2s ease !important; }
+</style>
+<body class="bg-paper text-gray-800">
+
+<!-- Nav -->
+<header class="bg-gradient-to-r from-navy to-navy2 border-b-4 border-gold sticky top-0 z-20">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="h-9 w-9 rounded-full bg-white/20 border-2 border-gold flex items-center justify-center text-gold font-bold text-sm">S</div>
+      <span class="text-white font-serif font-bold text-lg">ShulePlus<span class="text-gold">ERP</span></span>
+    </div>
+    <nav class="hidden md:flex gap-6 text-sm text-gray-200">
+      <a href="#features" class="hover:text-gold">Vipengele</a>
+      <a href="#pricing" class="hover:text-gold">Bei</a>
+      <a href="#demo" class="hover:text-gold">Omba Demo</a>
+      <a href="/register-school/" class="hover:text-gold">Sajili Shule</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="{% url 'accounts:login' %}" class="text-gray-200 hover:text-white text-sm font-semibold px-4 py-2 rounded border border-white/25 hover:border-white/50">Ingia</a>
+      <a href="#demo" class="bg-gold text-amber-950 text-sm font-semibold px-4 py-2 rounded">Omba Demo</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<!-- HERO CAROUSEL - inazunguka kiotomatiki kama Lake Zone, rangi za brand -->
+<!--
+  JINSI YA KUWEKA PICHA ZAKO HALISI BAADAYE (badala ya emoji + gradient):
+  Kwa kila <div id="hero-slide-N">, ongeza background image hivi:
+    class="hero-slide absolute inset-0 bg-cover bg-center transition-opacity duration-700"
+    style="background-image: linear-gradient(to bottom right, rgba(11,37,69,.75), rgba(15,52,96,.75)), url('/static/marketing/img/wanafunzi-1.jpg');"
+  (weka picha zako kwenye static/marketing/img/, kisha badilisha jina la faili hapo juu.
+  Gradient ya rangi imeachwa juu ya picha ili maandishi meupe yaendelee kusomeka.)
+-->
+<section class="relative overflow-hidden text-white h-[520px] md:h-[560px]">
+
+  <div id="hero-slide-0" class="hero-slide absolute inset-0 bg-gradient-to-br from-navy via-navy2 to-navy flex items-center transition-opacity duration-700">
+    <div class="max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="56" fill="#D4AF37" fill-opacity="0.15"/>
+        <rect x="30" y="60" width="12" height="30" rx="2" fill="#D4AF37"/>
+        <rect x="48" y="48" width="12" height="42" rx="2" fill="#FBFAF7" fill-opacity="0.9"/>
+        <rect x="66" y="36" width="12" height="54" rx="2" fill="#D4AF37"/>
+        <path d="M30 44l16-10 16 8 14-16" stroke="#FBFAF7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="76" cy="26" r="5" fill="#D4AF37"/>
+      </svg>
+      <span class="inline-block bg-gold text-amber-950 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Matokeo &amp; Taaluma</span>
+      <h1 class="font-serif text-3xl md:text-5xl font-bold mb-4 leading-tight">Matokeo, Broadsheet, na Division —<br class="hidden md:block"> Kikokotolewa Kiotomatiki.</h1>
+      <p class="text-gray-200 max-w-2xl mx-auto mb-8">Mfumo wa CA (Continuous Assessment) unaofanana na jinsi shule za Tanzania zinavyofanya kazi - Test, Midterm, Terminal, Annual.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/register-school/" class="bg-gold text-amber-950 font-semibold px-8 py-3 rounded-full inline-block">Jisajili Sasa</a>
+        <a href="#demo" class="border border-white/40 text-white font-semibold px-8 py-3 rounded-full inline-block hover:bg-white/10">Omba Demo Kwanza</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="hero-slide-1" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-green via-navy2 to-navy flex items-center transition-opacity duration-700">
+    <div class="max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="56" fill="#146B3A" fill-opacity="0.2"/>
+        <rect x="42" y="24" width="30" height="52" rx="6" fill="#FBFAF7" fill-opacity="0.95"/>
+        <rect x="46" y="30" width="22" height="36" rx="2" fill="#0F3460"/>
+        <circle cx="57" cy="70" r="2.5" fill="#0F3460"/>
+        <path d="M74 46c10-1 18 6 18 14s-9 15-19 14l3 7-9-6" fill="#D4AF37"/>
+        <circle cx="80" cy="55" r="1.6" fill="#0B2545"/>
+        <circle cx="86" cy="55" r="1.6" fill="#0B2545"/>
+        <circle cx="92" cy="55" r="1.6" fill="#0B2545"/>
+      </svg>
+      <span class="inline-block bg-gold text-amber-950 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Mawasiliano ya Wazazi</span>
+      <h1 class="font-serif text-3xl md:text-5xl font-bold mb-4 leading-tight">Wazazi Wanapata Taarifa<br class="hidden md:block"> Papo Hapo kwa SMS.</h1>
+      <p class="text-gray-200 max-w-2xl mx-auto mb-8">Matokeo, ada, na nidhamu - mzazi anajua kila kitu bila kupiga simu shuleni.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/register-school/" class="bg-gold text-amber-950 font-semibold px-8 py-3 rounded-full inline-block">Jisajili Sasa</a>
+        <a href="#demo" class="border border-white/40 text-white font-semibold px-8 py-3 rounded-full inline-block hover:bg-white/10">Omba Demo Kwanza</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="hero-slide-2" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-red-900 via-navy2 to-navy flex items-center transition-opacity duration-700">
+    <div class="max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="56" fill="#7f1d1d" fill-opacity="0.2"/>
+        <path d="M60 22l28 10v22c0 20-12 34-28 44-16-10-28-24-28-44V32l28-10z" fill="#FBFAF7" fill-opacity="0.95"/>
+        <path d="M60 22l28 10v22c0 20-12 34-28 44V22z" fill="#D4AF37" fill-opacity="0.5"/>
+        <path d="M47 58l10 10 18-20" stroke="#0B2545" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="inline-block bg-gold text-amber-950 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Nidhamu na Usalama</span>
+      <h1 class="font-serif text-3xl md:text-5xl font-bold mb-4 leading-tight">Nidhamu ya Wanafunzi<br class="hidden md:block"> Inafuatiliwa kwa Uwazi.</h1>
+      <p class="text-gray-200 max-w-2xl mx-auto mb-8">Alama za nidhamu, alert za moja kwa moja, na ripoti kamili - bila karatasi zinazopotea.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/register-school/" class="bg-gold text-amber-950 font-semibold px-8 py-3 rounded-full inline-block">Jisajili Sasa</a>
+        <a href="#demo" class="border border-white/40 text-white font-semibold px-8 py-3 rounded-full inline-block hover:bg-white/10">Omba Demo Kwanza</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="hero-slide-3" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-amber-700 via-navy2 to-navy flex items-center transition-opacity duration-700">
+    <div class="max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="56" fill="#b45309" fill-opacity="0.2"/>
+        <ellipse cx="46" cy="78" rx="20" ry="7" fill="#D4AF37"/>
+        <ellipse cx="46" cy="70" rx="20" ry="7" fill="#FBFAF7" fill-opacity="0.9"/>
+        <ellipse cx="46" cy="62" rx="20" ry="7" fill="#D4AF37"/>
+        <ellipse cx="46" cy="54" rx="20" ry="7" fill="#FBFAF7" fill-opacity="0.95"/>
+        <path d="M78 34h16v10H78z" fill="#FBFAF7" fill-opacity="0.9"/>
+        <path d="M80 28h12l6 8H74z" fill="#D4AF37"/>
+        <circle cx="86" cy="39" r="2.5" fill="#0B2545"/>
+      </svg>
+      <span class="inline-block bg-gold text-amber-950 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Ada na Malipo</span>
+      <h1 class="font-serif text-3xl md:text-5xl font-bold mb-4 leading-tight">Madeni ya Ada<br class="hidden md:block"> Yanafuatiliwa Kiotomatiki.</h1>
+      <p class="text-gray-200 max-w-2xl mx-auto mb-8">Risiti, tathmini za mwaka, na ripoti ya madeni - kila kitu sehemu moja kwa Accountant.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/register-school/" class="bg-gold text-amber-950 font-semibold px-8 py-3 rounded-full inline-block">Jisajili Sasa</a>
+        <a href="#demo" class="border border-white/40 text-white font-semibold px-8 py-3 rounded-full inline-block hover:bg-white/10">Omba Demo Kwanza</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="hero-slide-4" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-blue-900 via-navy2 to-navy flex items-center transition-opacity duration-700">
+    <div class="max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="56" fill="#3b82f6" fill-opacity="0.18"/>
+        <rect x="38" y="26" width="44" height="60" rx="5" fill="#FBFAF7" fill-opacity="0.95"/>
+        <rect x="50" y="20" width="20" height="12" rx="3" fill="#D4AF37"/>
+        <line x1="46" y1="46" x2="74" y2="46" stroke="#0F3460" stroke-width="3" stroke-linecap="round"/>
+        <line x1="46" y1="56" x2="74" y2="56" stroke="#0F3460" stroke-width="3" stroke-linecap="round"/>
+        <line x1="46" y1="66" x2="62" y2="66" stroke="#0F3460" stroke-width="3" stroke-linecap="round"/>
+        <path d="M64 66l6 6 12-14" stroke="#146B3A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="inline-block bg-gold text-amber-950 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Kwa Walimu</span>
+      <h1 class="font-serif text-3xl md:text-5xl font-bold mb-4 leading-tight">Jaza Marks kwa Dakika Tano,<br class="hidden md:block"> Siyo Masaa.</h1>
+      <p class="text-gray-200 max-w-2xl mx-auto mb-8">Spreadsheet moja kwa somo lako - darasa zima, mihula yote - bila makaratasi wala Excel za kuchanganya.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/register-school/" class="bg-gold text-amber-950 font-semibold px-8 py-3 rounded-full inline-block">Jisajili Sasa</a>
+        <a href="#demo" class="border border-white/40 text-white font-semibold px-8 py-3 rounded-full inline-block hover:bg-white/10">Omba Demo Kwanza</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="hero-slide-5" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-emerald-900 via-navy2 to-navy flex items-center transition-opacity duration-700">
+    <div class="max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="56" fill="#059669" fill-opacity="0.2"/>
+        <path d="M30 44l30-14 30 14-30 14z" fill="#D4AF37"/>
+        <path d="M30 44v30l30 14V58z" fill="#FBFAF7" fill-opacity="0.9"/>
+        <path d="M90 44v30L60 88V58z" fill="#FBFAF7" fill-opacity="0.7"/>
+        <line x1="60" y1="58" x2="60" y2="88" stroke="#0B2545" stroke-width="1.5" stroke-opacity="0.3"/>
+      </svg>
+      <span class="inline-block bg-gold text-amber-950 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Duka la Shule</span>
+      <h1 class="font-serif text-3xl md:text-5xl font-bold mb-4 leading-tight">Vifaa na Michango<br class="hidden md:block"> Vinafuatiliwa Kiotomatiki.</h1>
+      <p class="text-gray-200 max-w-2xl mx-auto mb-8">Store Keeper anasimamia stock, michango ya wanafunzi, na maombi - bila kuchanganya kwenye daftari.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/register-school/" class="bg-gold text-amber-950 font-semibold px-8 py-3 rounded-full inline-block">Jisajili Sasa</a>
+        <a href="#demo" class="border border-white/40 text-white font-semibold px-8 py-3 rounded-full inline-block hover:bg-white/10">Omba Demo Kwanza</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="hero-slide-6" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-purple-900 via-navy2 to-navy flex items-center transition-opacity duration-700">
+    <div class="max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="56" fill="#6b21a8" fill-opacity="0.2"/>
+        <rect x="34" y="26" width="52" height="66" rx="4" fill="#FBFAF7" fill-opacity="0.95"/>
+        <rect x="42" y="38" width="36" height="5" rx="2" fill="#D4AF37"/>
+        <rect x="42" y="50" width="36" height="4" rx="2" fill="#0F3460" fill-opacity="0.4"/>
+        <rect x="42" y="58" width="24" height="4" rx="2" fill="#0F3460" fill-opacity="0.4"/>
+        <rect x="42" y="68" width="30" height="4" rx="2" fill="#146B3A" fill-opacity="0.6"/>
+        <rect x="42" y="76" width="20" height="4" rx="2" fill="#0F3460" fill-opacity="0.4"/>
+        <circle cx="86" cy="84" r="14" fill="#D4AF37"/>
+        <path d="M79 84l5 5 9-10" stroke="#0B2545" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="inline-block bg-gold text-amber-950 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">Ripoti Kamili kwa Mzazi</span>
+      <h1 class="font-serif text-3xl md:text-5xl font-bold mb-4 leading-tight">Taaluma, Ada, Nidhamu na Duka —<br class="hidden md:block"> Ripoti Moja, PDF Moja.</h1>
+      <p class="text-gray-200 max-w-2xl mx-auto mb-8">Mzazi anapakua ripoti kamili ya mtoto wake - kila kitu shuleni kinachomhusu, sehemu moja, muda wowote.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/register-school/" class="bg-gold text-amber-950 font-semibold px-8 py-3 rounded-full inline-block">Jisajili Sasa</a>
+        <a href="#demo" class="border border-white/40 text-white font-semibold px-8 py-3 rounded-full inline-block hover:bg-white/10">Omba Demo Kwanza</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dots -->
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+    <button onclick="goToSlide(0)" class="hero-dot w-2.5 h-2.5 rounded-full bg-gold transition-all"></button>
+    <button onclick="goToSlide(1)" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all"></button>
+    <button onclick="goToSlide(2)" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all"></button>
+    <button onclick="goToSlide(3)" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all"></button>
+    <button onclick="goToSlide(4)" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all"></button>
+    <button onclick="goToSlide(5)" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all"></button>
+    <button onclick="goToSlide(6)" class="hero-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all"></button>
+  </div>
+
+  <!-- Arrows -->
+  <button onclick="prevSlide()" class="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 items-center justify-center">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+  </button>
+  <button onclick="nextSlide()" class="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 items-center justify-center">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+  </button>
+</section>
+
+<script>
+  let currentHeroSlide = 0;
+  const totalHeroSlides = 7;
+
+  function showSlide(index) {
+    for (let i = 0; i < totalHeroSlides; i++) {
+      document.getElementById('hero-slide-' + i).style.opacity = (i === index) ? '1' : '0';
+    }
+    const dots = document.querySelectorAll('.hero-dot');
+    dots.forEach((dot, i) => {
+      dot.className = 'hero-dot w-2.5 h-2.5 rounded-full transition-all ' + (i === index ? 'bg-gold w-6' : 'bg-white/40');
+    });
+    currentHeroSlide = index;
+  }
+
+  function goToSlide(index) { showSlide(index); resetHeroTimer(); }
+  function nextSlide() { showSlide((currentHeroSlide + 1) % totalHeroSlides); resetHeroTimer(); }
+  function prevSlide() { showSlide((currentHeroSlide - 1 + totalHeroSlides) % totalHeroSlides); resetHeroTimer(); }
+
+  let heroTimer = setInterval(nextSlide, 5000);
+  function resetHeroTimer() {
+    clearInterval(heroTimer);
+    heroTimer = setInterval(nextSlide, 5000);
+  }
+</script>
+
+<!-- Problem/Solution -->
+<section class="max-w-6xl mx-auto px-4 py-14">
+  <div class="grid md:grid-cols-3 gap-6 text-center">
+    <div class="bg-white border border-gray-200 rounded p-6">
+      <div class="h-12 w-12 rounded-full bg-navy2/10 flex items-center justify-center mx-auto mb-3">
+        <svg class="w-6 h-6 text-navy2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2"/></svg>
+      </div>
+      <h3 class="font-serif text-navy font-bold mb-1">Matokeo Kiotomatiki</h3>
+      <p class="text-sm text-gray-500">Division, nafasi, na wastani vinahesabika wenyewe — hakuna Excel za mkono tena.</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded p-6">
+      <div class="h-12 w-12 rounded-full bg-green/10 flex items-center justify-center mx-auto mb-3">
+        <svg class="w-6 h-6 text-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+      </div>
+      <h3 class="font-serif text-navy font-bold mb-1">SMS kwa Wazazi</h3>
+      <p class="text-sm text-gray-500">Matokeo, ada, na nidhamu - mzazi anapata SMS papo hapo, bila kupiga simu shuleni.</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded p-6">
+      <div class="h-12 w-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-3">
+        <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      </div>
+      <h3 class="font-serif text-navy font-bold mb-1">Kila Kitu Kinafuatiliwa</h3>
+      <p class="text-sm text-gray-500">Audit log inarekodi nani-alifanya-nini-lini — hakuna nafasi ya udanganyifu.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features" class="bg-white border-y border-gray-200">
+  <div class="max-w-6xl mx-auto px-4 py-16">
+    <h2 class="font-serif text-2xl md:text-3xl text-navy text-center mb-10">Kila Idara, Mfumo Mmoja</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="border border-gray-200 rounded p-4">
+        <h4 class="font-semibold text-navy text-sm mb-1">Academic</h4>
+        <p class="text-xs text-gray-500">Broadsheet, division, publish, PDF/Excel.</p>
+      </div>
+      <div class="border border-gray-200 rounded p-4">
+        <h4 class="font-semibold text-navy text-sm mb-1">Discipline</h4>
+        <p class="text-xs text-gray-500">Alama za nidhamu na alert kiotomatiki.</p>
+      </div>
+      <div class="border border-gray-200 rounded p-4">
+        <h4 class="font-semibold text-navy text-sm mb-1">Store</h4>
+        <p class="text-xs text-gray-500">Michango ya wanafunzi na stock ya vifaa.</p>
+      </div>
+      <div class="border border-gray-200 rounded p-4">
+        <h4 class="font-semibold text-navy text-sm mb-1">Accountant</h4>
+        <p class="text-xs text-gray-500">Ada, madeni, risiti - kiotomatiki.</p>
+      </div>
+      <div class="border border-gray-200 rounded p-4">
+        <h4 class="font-semibold text-navy text-sm mb-1">Branding</h4>
+        <p class="text-xs text-gray-500">Tovuti ya umma ya shule yako.</p>
+      </div>
+      <div class="border border-gray-200 rounded p-4">
+        <h4 class="font-semibold text-navy text-sm mb-1">Teacher Portal</h4>
+        <p class="text-xs text-gray-500">Jaza marks, ona takwimu za somo lako.</p>
+      </div>
+      <div class="border border-gray-200 rounded p-4">
+        <h4 class="font-semibold text-navy text-sm mb-1">Parent Portal</h4>
+        <p class="text-xs text-gray-500">Matokeo, ada, na nidhamu - sehemu moja.</p>
+      </div>
+      <div class="border border-gray-200 rounded p-4">
+        <h4 class="font-semibold text-navy text-sm mb-1">Audit Log</h4>
+        <p class="text-xs text-gray-500">Uwazi kamili wa kila kitendo mfumoni.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing" class="max-w-6xl mx-auto px-4 py-16">
+  <h2 class="font-serif text-2xl md:text-3xl text-navy text-center mb-2">Bei Rahisi, Wazi</h2>
+  <p class="text-center text-gray-500 text-sm mb-10">Malipo kwa mwaka, kwa shule nzima - siyo kwa kila mwanafunzi.</p>
+
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="border border-gray-200 rounded p-6 text-center">
+      <h3 class="font-serif text-navy font-bold mb-1">Shule Ndogo</h3>
+      <p class="text-xs text-gray-400 mb-4">Chini ya wanafunzi 300</p>
+      <div class="text-3xl font-bold text-navy font-serif mb-1">TZS 25,000<span class="text-sm font-normal text-gray-400">–40,000</span></div>
+      <p class="text-xs text-gray-400 mb-4">kwa mwaka</p>
+      <a href="/register-school/" class="block bg-navy2 text-white text-sm font-semibold py-2.5 rounded">Jisajili Sasa</a>
+    </div>
+    <div class="border-2 border-gold rounded p-6 text-center relative">
+      <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold text-amber-950 text-xs font-bold px-3 py-1 rounded-full">MAARUFU</span>
+      <h3 class="font-serif text-navy font-bold mb-1">Shule ya Kati</h3>
+      <p class="text-xs text-gray-400 mb-4">Wanafunzi 300–800</p>
+      <div class="text-3xl font-bold text-navy font-serif mb-1">TZS 50,000<span class="text-sm font-normal text-gray-400">–80,000</span></div>
+      <p class="text-xs text-gray-400 mb-4">kwa mwaka</p>
+      <a href="/register-school/" class="block bg-gold text-amber-950 text-sm font-semibold py-2.5 rounded">Jisajili Sasa</a>
+    </div>
+    <div class="border border-gray-200 rounded p-6 text-center">
+      <h3 class="font-serif text-navy font-bold mb-1">Shule Kubwa</h3>
+      <p class="text-xs text-gray-400 mb-4">Wanafunzi 800+</p>
+      <div class="text-3xl font-bold text-navy font-serif mb-1">TZS 100,000+</div>
+      <p class="text-xs text-gray-400 mb-4">majadiliano</p>
+      <a href="#demo" class="block bg-navy2 text-white text-sm font-semibold py-2.5 rounded">Wasiliana Nasi</a>
+    </div>
+  </div>
+  <p class="text-center text-xs text-gray-400 mt-6">SMS zinanunuliwa tofauti (Beem Africa credits) - hazijajumuishwa kwenye bei hapo juu.</p>
+
+  <!--
+    TODO: Mara utakapokuwa na akaunti ya ClickPesa/Selcom, badilisha vitufe
+    vya "Anza Sasa" hapo juu kuwa checkout link halisi, au unganisha na
+    payment view yako mwenyewe inayothibitisha malipo na kuwasha akaunti
+    ya shule kiotomatiki (webhook).
+  -->
+</section>
+
+<!-- Stats Bar -->
+<section class="bg-navy text-white py-10">
+  <div class="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <div>
+      <div class="text-3xl font-bold font-serif text-gold">14</div>
+      <div class="text-xs uppercase tracking-wide text-gray-300 mt-1">Moduli Zilizounganishwa</div>
+    </div>
+    <div>
+      <div class="text-3xl font-bold font-serif text-gold">8</div>
+      <div class="text-xs uppercase tracking-wide text-gray-300 mt-1">Roles Tofauti</div>
+    </div>
+    <div>
+      <div class="text-3xl font-bold font-serif text-gold">100%</div>
+      <div class="text-xs uppercase tracking-wide text-gray-300 mt-1">Imetengenezwa Tanzania</div>
+    </div>
+    <div>
+      <div class="text-3xl font-bold font-serif text-gold">24/7</div>
+      <div class="text-xs uppercase tracking-wide text-gray-300 mt-1">Ufikiaji wa Mfumo</div>
+    </div>
+  </div>
+</section>
+
+<!-- Kwa Nani -->
+<section class="max-w-6xl mx-auto px-4 py-16">
+  <h2 class="font-serif text-2xl md:text-3xl text-navy text-center mb-2">Kwa Nani ShulePlusERP?</h2>
+  <p class="text-center text-gray-500 text-sm mb-10">Kila mtu shuleni ana dashboard yake mwenyewe.</p>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="text-center border border-gray-200 rounded-xl p-5 hover:shadow-md">
+      <div class="h-12 w-12 rounded-full bg-navy2/10 text-navy2 flex items-center justify-center mx-auto mb-3">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422A12.083 12.083 0 0121 14.5c0 2.485-.837 4.775-2.24 6.598M12 14l-6.16-3.422A12.083 12.083 0 003 14.5c0 2.485.837 4.775 2.24 6.598M12 14v7"/></svg>
+      </div>
+      <div class="font-semibold text-navy text-sm">Mkuu wa Shule</div>
+      <div class="text-xs text-gray-400 mt-1">Uangalizi kamili</div>
+    </div>
+    <div class="text-center border border-gray-200 rounded-xl p-5 hover:shadow-md">
+      <div class="h-12 w-12 rounded-full bg-green/10 text-green flex items-center justify-center mx-auto mb-3">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+      </div>
+      <div class="font-semibold text-navy text-sm">Mwalimu</div>
+      <div class="text-xs text-gray-400 mt-1">Jaza marks kwa urahisi</div>
+    </div>
+    <div class="text-center border border-gray-200 rounded-xl p-5 hover:shadow-md">
+      <div class="h-12 w-12 rounded-full bg-gold/20 text-amber-600 flex items-center justify-center mx-auto mb-3">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 100-8 4 4 0 000 8zm6 3c0-1.657-2.686-3-6-3s-6 1.343-6 3"/></svg>
+      </div>
+      <div class="font-semibold text-navy text-sm">Mzazi</div>
+      <div class="text-xs text-gray-400 mt-1">Fuatilia mtoto wako</div>
+    </div>
+    <div class="text-center border border-gray-200 rounded-xl p-5 hover:shadow-md">
+      <div class="h-12 w-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-3">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6a2 2 0 012 2v9a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2zm3-4a1 1 0 011 1v1h-2V4a1 1 0 011-1zM6 10h.01M6 14h.01"/></svg>
+      </div>
+      <div class="font-semibold text-navy text-sm">Accountant</div>
+      <div class="text-xs text-gray-400 mt-1">Simamia ada na madeni</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="bg-white border-y border-gray-200 py-16">
+  <div class="max-w-3xl mx-auto px-4">
+    <h2 class="font-serif text-2xl md:text-3xl text-navy text-center mb-10">Maswali Yanayoulizwa Mara kwa Mara</h2>
+    <div class="space-y-3">
+      <details class="border border-gray-200 rounded-lg p-4 group">
+        <summary class="font-semibold text-navy text-sm cursor-pointer flex items-center justify-between">
+          Je, shule yangu inahitaji internet ya kasi?
+          <span class="text-gold group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <p class="text-sm text-gray-500 mt-3">Hapana - mfumo unafanya kazi vizuri hata na internet ya kawaida ya simu (3G/4G). Kompyuta au simu yenye browser tu inatosha.</p>
+      </details>
+      <details class="border border-gray-200 rounded-lg p-4 group">
+        <summary class="font-semibold text-navy text-sm cursor-pointer flex items-center justify-between">
+          Je, data ya shule yangu iko salama?
+          <span class="text-gold group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <p class="text-sm text-gray-500 mt-3">Ndiyo - kila shule ina data yake iliyotengwa kabisa (multi-tenant), password zimesimbwa, na tunafanya backup ya mara kwa mara. Angalia Sera yetu ya Faragha kwa maelezo zaidi.</p>
+      </details>
+      <details class="border border-gray-200 rounded-lg p-4 group">
+        <summary class="font-semibold text-navy text-sm cursor-pointer flex items-center justify-between">
+          Je, SMS zinajumuishwa kwenye bei?
+          <span class="text-gold group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <p class="text-sm text-gray-500 mt-3">Hapana - SMS zinanunuliwa tofauti (Beem Africa credits), shule inanunua kadri inavyohitaji. Hii inaweka bei ya mfumo chini.</p>
+      </details>
+      <details class="border border-gray-200 rounded-lg p-4 group">
+        <summary class="font-semibold text-navy text-sm cursor-pointer flex items-center justify-between">
+          Tunaanzaje kutumia mfumo?
+          <span class="text-gold group-open:rotate-45 transition-transform">+</span>
+        </summary>
+        <p class="text-sm text-gray-500 mt-3">Jaza fomu ya "Omba Demo" hapa chini, tutakupigia simu ndani ya masaa 24 kupanga demo na kukusanidia akaunti ya shule yako.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- Demo Request -->
+<section id="demo" class="bg-navy text-white">
+  <div class="max-w-xl mx-auto px-4 py-16">
+    <h2 class="font-serif text-2xl text-center mb-2">Omba Demo Bure</h2>
+    <p class="text-center text-gray-300 text-sm mb-8">Tutakupigia simu ndani ya masaa 24.</p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="bg-green-100 border border-green-600 text-green-800 text-sm rounded px-4 py-3 mb-5">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" class="bg-white rounded p-6 grid grid-cols-1 gap-3">
+      {% csrf_token %}
+      {{ form.school_name }}
+      {{ form.contact_name }}
+      {{ form.phone }}
+      {{ form.email }}
+      {{ form.student_count }}
+      {{ form.message }}
+      <button type="submit" class="bg-gold text-amber-950 font-semibold py-3 rounded mt-2">Tuma Ombi</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER & SOCIAL MEDIA & CONTACTS -->
+<footer class="bg-navy text-gray-300 pt-12 pb-8 border-t border-white/10">
+  <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+
+    <!-- Safu ya 1: Kuhusu Brand -->
+    <div>
+      <div class="flex items-center gap-2 mb-3">
+        <div class="h-8 w-8 rounded-full bg-white/20 border-2 border-gold flex items-center justify-center text-gold font-bold text-xs">S</div>
+        <span class="text-white font-serif font-bold text-base">ShulePlus<span class="text-gold">ERP</span></span>
+      </div>
+      <p class="text-xs text-gray-400 leading-relaxed">
+        Mfumo kamili wa kisasa ulioundwa maalum kurahisisha usimamizi wa shule, taaluma, ada, na mawasiliano na wazazi Tanzania.
+      </p>
+    </div>
+
+    <!-- Safu ya 2: Mawasiliano (WhatsApp & Email) -->
+    <div>
+      <h4 class="text-white font-semibold text-sm mb-3">Wasiliana Nasi</h4>
+      <ul class="space-y-2 text-xs">
+        <li>
+          <!-- TODO: badilisha 255XXXXXXXXX na namba yako halisi ya WhatsApp -->
+          <a href="https://wa.me/255XXXXXXXXX" target="_blank" class="hover:text-gold flex items-center gap-2">
+            <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            WhatsApp: +255 XXX XXX XXX
+          </a>
+        </li>
+        <li>
+          <!-- TODO: badilisha info@shuleplus.co.tz na email yako halisi -->
+          <a href="mailto:info@shuleplus.co.tz" class="hover:text-gold flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            Email: info@shuleplus.co.tz
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Safu ya 3: Social Media Links -->
+    <div>
+      <h4 class="text-white font-semibold text-sm mb-3">Tufuate Mtandaoni</h4>
+      <div class="flex items-center gap-3 flex-wrap">
+
+        <!-- Facebook -->
+        <!-- TODO: badilisha '#' na link halisi -->
+        <a href="#" target="_blank" class="bg-white/10 hover:bg-gold hover:text-amber-950 p-2 rounded-full transition text-white" title="Facebook">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.494v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+        </a>
+
+        <!-- TikTok -->
+        <!-- TODO: badilisha '#' na link halisi -->
+        <a href="#" target="_blank" class="bg-white/10 hover:bg-gold hover:text-amber-950 p-2 rounded-full transition text-white" title="TikTok">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
+        </a>
+
+        <!-- YouTube -->
+        <a href="#" target="_blank" class="bg-white/10 hover:bg-gold hover:text-amber-950 p-2 rounded-full transition text-white" title="YouTube">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
+
+        <!-- Instagram -->
+        <a href="#" target="_blank" class="bg-white/10 hover:bg-gold hover:text-amber-950 p-2 rounded-full transition text-white" title="Instagram">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+
+        <!-- X (Twitter) -->
+        <a href="#" target="_blank" class="bg-white/10 hover:bg-gold hover:text-amber-950 p-2 rounded-full transition text-white" title="X (Twitter)">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+
+        <!-- LinkedIn -->
+        <a href="#" target="_blank" class="bg-white/10 hover:bg-gold hover:text-amber-950 p-2 rounded-full transition text-white" title="LinkedIn">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Copyright chini kabisa -->
+  <div class="text-center text-xs text-gray-500 border-t border-white/5 pt-4">
+    <div class="mb-2">
+      <a href="{% url 'marketing:terms_of_service' %}" class="hover:text-gold">Masharti ya Huduma</a>
+      <span class="mx-2">&middot;</span>
+      <a href="{% url 'marketing:privacy_policy' %}" class="hover:text-gold">Sera ya Faragha</a>
+    </div>
+    &copy; {% now "Y" %} ShulePlusERP &middot; Haki zote zimehifadhiwa.
+  </div>
+</footer>
+
+</body>
+</html>

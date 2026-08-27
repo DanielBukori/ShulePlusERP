@@ -1,0 +1,29 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Taarifa Zangu{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="font-serif text-xl text-navy">Taarifa Zangu</h1>
+    {% if unread_notifications_count %}
+      <a href="{% url 'notifications:mark_all_read' %}?next={{ request.path }}" class="text-sm text-navy2 font-semibold">Weka Zote 'Zimesomwa'</a>
+    {% endif %}
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
+    {% for n in notifications %}
+      <a href="{% url 'notifications:mark_read_and_go' n.id %}" class="block px-4 py-3 {% if not n.is_read %}bg-blue-50{% endif %} hover:bg-gray-50">
+        <div class="flex items-start gap-2">
+          {% if not n.is_read %}<span class="h-2 w-2 bg-navy2 rounded-full mt-1.5 shrink-0"></span>{% endif %}
+          <div>
+            <p class="text-sm text-gray-700">{{ n.message }}</p>
+            <p class="text-xs text-gray-400 mt-0.5">{{ n.created_at|date:"d/m/Y H:i" }}</p>
+          </div>
+        </div>
+      </a>
+    {% empty %}
+      <p class="text-sm text-gray-400 text-center py-10">Hakuna taarifa bado.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

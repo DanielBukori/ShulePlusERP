@@ -1,0 +1,47 @@
+{% extends "shule_core/base_tailwind.html" %}
+{% block title %}Madarasa Yangu - Mahudhurio{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-8 px-4">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">
+        <i class="fas fa-clipboard-check text-indigo-600 mr-2"></i>
+        Mahudhurio - Madarasa Yangu
+    </h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mb-4 p-3 rounded-lg
+                {% if message.tags == 'error' %}bg-red-100 text-red-700
+                {% elif message.tags == 'success' %}bg-green-100 text-green-700
+                {% else %}bg-yellow-100 text-yellow-700{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if classes %}
+        <h1 class="text-lg font-semibold text-gray-700 mb-3">Chagua Kitendo</h1>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {% for c in classes %}
+                <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
+                    <p class="text-lg font-semibold text-gray-800 mb-3">{{ c }}</p>
+                    <div class="flex gap-3">
+                        <a href="{% url 'attendance:mark_attendance' c.id %}"
+                           class="flex-1 text-center bg-indigo-50 text-indigo-700 text-sm font-medium px-3 py-2 rounded-lg hover:bg-indigo-100">
+                            Mahudhurio
+                        </a>
+                        <a href="{% url 'attendance:conduct_list' c.id %}"
+                           class="flex-1 text-center bg-amber-50 text-amber-700 text-sm font-medium px-3 py-2 rounded-lg hover:bg-amber-100">
+                            Tabia/Mwenendo
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="bg-white border border-gray-200 rounded-xl p-8 text-center text-gray-500">
+            Hujapangiwa darasa lolote kama Mwalimu wa Darasa. Wasiliana na Uongozi wa Shule.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

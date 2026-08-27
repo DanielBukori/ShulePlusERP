@@ -1,0 +1,29 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Hariri Maoni{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <h1 class="font-serif text-xl text-navy mb-5">Hariri Maoni ya {{ testimonial.author_name }}</h1>
+
+  <div class="bg-white border border-gray-200 rounded p-5">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.author_name.label }}</label>{{ form.author_name }}</div>
+        <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.author_role.label }}</label>{{ form.author_role }}</div>
+        <div class="md:col-span-2"><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.quote.label }}</label>{{ form.quote }}</div>
+        <div>
+          {% if testimonial.photo %}<img src="{{ testimonial.photo.url }}" class="w-16 h-16 rounded-full object-cover mb-2">{% endif %}
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.photo.label }}</label>{{ form.photo }}
+        </div>
+        <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.order.label }}</label>{{ form.order }}</div>
+        <label class="md:col-span-2 flex items-center gap-2 text-sm">{{ form.is_published }} {{ form.is_published.label }}</label>
+      </div>
+      <div class="mt-4 flex gap-3">
+        <button type="submit" class="bg-gold text-amber-950 font-semibold px-6 py-2.5 rounded">Hifadhi</button>
+        <a href="{% url 'branding:manage_testimonials' %}" class="text-sm text-gray-500 self-center">Ghairi</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

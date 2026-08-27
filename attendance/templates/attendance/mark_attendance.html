@@ -1,0 +1,159 @@
+{% extends "shule_core/base_tailwind.html" %}
+{% block title %}Mahudhurio - {{ school_class }}{% endblock %}
+
+{% block content %}
+<div class="max-w-full mx-auto py-6 px-4">
+
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+        <h1 class="text-xl md:text-2xl font-serif font-bold text-navy">
+            Mahudhurio - {{ school_class }}
+        </h1>
+        <a href="{% url 'attendance:my_classes' %}" class="text-sm text-navy2 hover:underline">
+            &larr; Rudi Madarasa Yangu
+        </a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mb-4 p-3 rounded-lg text-sm
+                {% if message.tags == 'error' %}bg-red-100 text-red-700
+                {% elif message.tags == 'success' %}bg-green-100 text-green-700
+                {% else %}bg-yellow-100 text-yellow-700{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Navigation ya mwezi -->
+    <div class="flex items-center justify-between bg-white border border-gray-200 rounded-xl px-4 py-3 mb-4">
+        <a href="?year={{ prev_year }}&month={{ prev_month }}"
+           class="flex items-center gap-1 text-sm text-navy2 hover:text-gold font-medium">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            Mwezi Uliopita
+        </a>
+        <div class="text-center">
+            <div class="font-serif font-bold text-navy text-lg">{{ month_name }} {{ year }}</div>
+            <a href="?year={{ today.year }}&month={{ today.month }}" class="text-xs text-gold hover:underline">Nenda Mwezi wa Sasa</a>
+        </div>
+        <a href="?year={{ next_year }}&month={{ next_month }}"
+           class="flex items-center gap-1 text-sm text-navy2 hover:text-gold font-medium">
+            Mwezi Ujao
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </a>
+    </div>
+
+    <!-- Ufunguo wa rangi -->
+    <div class="flex flex-wrap items-center gap-4 mb-4 text-xs text-gray-600">
+        <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-green-500 inline-block"></span> P = Yupo</span>
+        <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-red-500 inline-block"></span> A = Hayupo</span>
+        <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-amber-400 inline-block"></span> L = Amechelewa</span>
+        <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-blue-400 inline-block"></span> E = Ruhusa</span>
+        <span class="flex items-center gap-1"><span class="w-4 h-4 rounded bg-gray-100 border border-gray-300 inline-block"></span> Bofya kubadilisha</span>
+    </div>
+
+    <form method="post" id="attendance-form">
+        {% csrf_token %}
+        <input type="hidden" name="year" value="{{ year }}">
+        <input type="hidden" name="month" value="{{ month }}">
+
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-x-auto">
+            <table class="min-w-full text-sm border-collapse">
+                <thead>
+                    <tr class="bg-navy text-white sticky top-0">
+                        <th class="px-3 py-2 text-left sticky left-0 bg-navy z-10 min-w-[180px]">Mwanafunzi</th>
+                        {% for day in school_days %}
+                            <th class="px-1 py-2 text-center w-8 {% if day == today %}bg-gold text-amber-950{% endif %}">
+                                {{ day.day }}
+                            </th>
+                        {% endfor %}
+                        <th class="px-2 py-2 text-center min-w-[70px]">Yupo</th>
+                        <th class="px-2 py-2 text-center min-w-[70px]">Hayupo</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for row in student_rows %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-3 py-1.5 font-medium text-gray-800 sticky left-0 bg-white z-10 whitespace-nowrap">
+                            {{ row.student }}
+                        </td>
+                        {% for cell in row.cells %}
+                        <td class="px-0.5 py-1 text-center">
+                            <input type="hidden" name="cell_{{ row.student.id }}_{{ cell.day }}"
+                                   class="cell-value" value="{{ cell.status }}">
+                            <button type="button"
+                                class="att-cell w-7 h-7 rounded text-xs font-bold flex items-center justify-center mx-auto
+                                    {% if cell.is_future %}bg-gray-50 text-gray-300 cursor-not-allowed
+                                    {% elif cell.status == 'PRESENT' %}bg-green-500 text-green-700
+                                    {% elif cell.status == 'ABSENT' %}bg-red-500 text-white
+                                    {% elif cell.status == 'LATE' %}bg-amber-400 text-amber-950
+                                    {% elif cell.status == 'EXCUSED' %}bg-blue-400 text-white
+                                    {% else %}bg-gray-100 text-gray-400 hover:bg-gray-200{% endif %}"
+                                {% if cell.is_future %}disabled{% endif %}
+                                data-student="{{ row.student.id }}" data-day="{{ cell.day }}">{{ cell.letter }}</button>
+                        </td>
+                        {% endfor %}
+                        <td class="px-2 py-1 text-center text-green-700 font-semibold present-count">{{ row.present_count }}</td>
+                        <td class="px-2 py-1 text-center text-red-700 font-semibold absent-count">{{ row.absent_count }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="100" class="px-4 py-6 text-center text-gray-500">
+                            Hakuna wanafunzi waliosajiliwa kwenye darasa hili.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if student_rows %}
+        <div class="mt-5 flex items-center justify-end gap-3">
+            <button type="submit"
+                    class="bg-gold text-amber-950 font-semibold px-6 py-2.5 rounded-xl shadow-sm hover:opacity-90">
+                Hifadhi Mahudhurio ya Mwezi
+            </button>
+        </div>
+        {% endif %}
+    </form>
+</div>
+
+<script>
+// Mzunguko wa hali kila bofya moja: tupu -> P -> A -> L -> E -> tupu
+const CYCLE = ["", "PRESENT", "ABSENT", "LATE", "EXCUSED"];
+const LETTER = {"": "", "PRESENT": "P", "ABSENT": "A", "LATE": "L", "EXCUSED": "E"};
+const STYLE = {
+  "": "bg-gray-100 text-gray-400 hover:bg-gray-200",
+  "PRESENT": "bg-green-500 text-white",
+  "ABSENT": "bg-red-500 text-white",
+  "LATE": "bg-amber-400 text-amber-950",
+  "EXCUSED": "bg-blue-400 text-white",
+};
+
+function updateCounts(studentId) {
+  const row = document.querySelector(`button.att-cell[data-student="${studentId}"]`).closest('tr');
+  let present = 0, absent = 0;
+  row.querySelectorAll('.cell-value').forEach(inp => {
+    if (inp.value === "PRESENT") present++;
+    if (inp.value === "ABSENT") absent++;
+  });
+  row.querySelector('.present-count').textContent = present;
+  row.querySelector('.absent-count').textContent = absent;
+}
+
+document.querySelectorAll('.att-cell').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const studentId = this.dataset.student;
+    const day = this.dataset.day;
+    const hiddenInput = this.parentElement.querySelector('.cell-value');
+    const currentIndex = CYCLE.indexOf(hiddenInput.value);
+    const nextValue = CYCLE[(currentIndex + 1) % CYCLE.length];
+
+    hiddenInput.value = nextValue;
+    this.textContent = LETTER[nextValue];
+    this.className = "att-cell w-7 h-7 rounded text-xs font-bold flex items-center justify-center mx-auto " + STYLE[nextValue];
+
+    updateCounts(studentId);
+  });
+});
+</script>
+{% endblock %}

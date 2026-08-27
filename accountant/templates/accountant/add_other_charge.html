@@ -1,0 +1,45 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Michango Mingine{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
+    <h3 class="font-serif text-navy mb-3">Ongeza Mchango Mpya</h3>
+    <form method="POST" class="grid grid-cols-1 gap-3">
+      {% csrf_token %}
+      {{ form.name }}
+      {{ form.amount }}
+      {{ form.school_class }}
+      {{ form.academic_year }}
+      {% if form.authorized_by.field.queryset %}
+        <div>
+          {{ form.authorized_by }}
+          {% for e in form.authorized_by.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+      {% endif %}
+      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded py-2.5">Ongeza</button>
+    </form>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-5">
+    <h3 class="font-serif text-navy mb-3">Michango Iliyopo</h3>
+    <div class="space-y-2">
+      {% for c in charges %}
+        <div class="flex items-center justify-between text-sm border-b border-gray-100 pb-2">
+          <span>{{ c.name }} &middot; {{ c.school_class|default:"Shule Nzima" }} ({{ c.academic_year }})</span>
+          <span class="font-semibold text-navy">TZS {{ c.amount }}</span>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-400">Hakuna bado.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

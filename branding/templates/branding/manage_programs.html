@@ -1,0 +1,50 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Programu za Kitaaluma{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-6">
+  <h1 class="font-serif text-xl text-navy mb-5">Programu za Kitaaluma</h1>
+
+  {% if messages %}{% for message in messages %}
+    <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+  {% endfor %}{% endif %}
+
+  <details class="bg-white border border-gray-200 rounded p-5 mb-6">
+    <summary class="font-semibold text-navy cursor-pointer">+ Ongeza Programu/Mchepuo</summary>
+    <form method="POST" class="space-y-4 mt-4">
+      {% csrf_token %}
+      {% for field in form %}
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ field.label }}</label>
+          {{ field }}
+          {% for e in field.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="bg-gold text-amber-950 font-semibold px-6 py-2.5 rounded">Hifadhi</button>
+    </form>
+  </details>
+
+  <div class="bg-white border border-gray-200 rounded overflow-hidden">
+    <table class="min-w-full text-sm">
+      <thead class="bg-gray-50">
+        <tr><th class="p-3 text-left">Jina</th><th class="p-3 text-left">Ngazi</th><th class="p-3 text-left">Hali</th><th class="p-3 text-right">Vitendo</th></tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        {% for p in programs %}
+        <tr class="hover:bg-gray-50">
+          <td class="p-3 font-medium text-gray-800">{{ p.name }}</td>
+          <td class="p-3 text-gray-500">{{ p.get_level_display }}</td>
+          <td class="p-3">{% if p.is_published %}<span class="text-green-700 bg-green-50 text-xs px-2 py-1 rounded-full">Imechapishwa</span>{% else %}<span class="text-gray-500 bg-gray-100 text-xs px-2 py-1 rounded-full">Rasimu</span>{% endif %}</td>
+          <td class="p-3 text-right whitespace-nowrap">
+            <a href="{% url 'branding:edit_program' p.id %}" class="text-navy2 text-xs font-semibold hover:underline mr-3">Hariri</a>
+            <form method="POST" action="{% url 'branding:delete_program' p.id %}" class="inline" onsubmit="return confirm('Futa?');">
+              {% csrf_token %}<button type="submit" class="text-red-600 text-xs font-semibold hover:underline">Futa</button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="4" class="p-6 text-center text-gray-400">Bado hakuna programu.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

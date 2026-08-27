@@ -1,0 +1,103 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Jaza Marks{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-6">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  {% if is_emergency %}
+    <div class="text-sm bg-amber-50 border border-amber-500 text-amber-800 rounded px-3 py-2 mb-4">
+      &#9888; Uko kwenye mode ya <b>DHARURA</b> - unaweza kujaza marks za somo/darasa lolote, hata usilofundisha.
+    </div>
+  {% endif %}
+
+  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
+    <h3 class="font-serif text-navy mb-3">Chagua {% if is_emergency %}Somo na Darasa{% else %}Somo/Darasa Lako{% endif %}</h3>
+    <form method="GET" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+      {% if is_emergency %}
+        <div>{{ filter_form.subject }}</div>
+        <div>{{ filter_form.school_class }}</div>
+        <div>{{ filter_form.combination }}</div>
+      {% else %}
+        <div class="sm:col-span-2">{{ filter_form.assignment }}</div>
+      {% endif %}
+      <div>{{ filter_form.term }}</div>
+      <div class="{% if is_emergency %}md:col-span-4{% else %}sm:col-span-2{% endif %}">{{ filter_form.academic_year }}</div>
+      <button type="submit" class="sm:col-span-2 md:col-span-4 bg-navy2 text-white text-sm font-semibold rounded py-2.5">Onyesha Wanafunzi</button>
+    </form>
+  </div>
+
+  {% if subject %}
+    <form method="POST">
+      {% csrf_token %}
+      <div class="bg-white border border-gray-200 rounded p-4 overflow-x-auto">
+        <h3 class="font-serif text-navy mb-3">{{ subject.name }} - {{ school_class }}</h3>
+        <p class="text-xs text-gray-500 mb-1">Jaza kile ulichonacho sasa - safu nyingine unaweza kujaza baadaye. "Matokeo ya Sasa" yanajisasisha yenyewe baada ya kuhifadhi.</p>
+        {% if series_columns %}
+          <p class="text-xs text-navy2 mb-4">
+            <span class="inline-block w-2.5 h-2.5 rounded-sm bg-navy2/80 align-middle mr-1"></span>
+            Column za <b>"Maandalizi (Series)"</b> ni hiari kwa Form IV/VI - <b>hazibadilishi</b> Mid-Term/Terminal/Annual, ni taarifa ya maendeleo tu.
+          </p>
+        {% endif %}
+
+        <table class="w-full text-sm min-w-[720px]">
+          <thead>
+            <tr class="bg-navy text-white text-xs uppercase">
+              <th class="p-2 text-left sticky left-0 bg-navy">Mwanafunzi</th>
+              {% for code, label in exam_columns %}
+                <th class="p-2">{{ label }}</th>
+              {% endfor %}
+              {% if series_columns %}
+                {% for code, label in series_columns %}
+                  <th class="p-2 bg-navy2/80" title="Mtihani wa maandalizi - hauathiri Mid-Term/Terminal/Annual">{{ label }}</th>
+                {% endfor %}
+              {% endif %}
+              <th class="p-2 bg-gold text-amber-950">Mid-Term</th>
+              <th class="p-2 bg-green text-white">Matokeo ya Sasa</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in students %}
+              <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
+                <td class="p-2 sticky left-0 {% cycle 'bg-white' 'bg-gray-50' %} font-medium">
+                  <span class="text-gray-400 text-[10px] block">{{ row.student.reg_number }}</span>
+                  {{ row.student.first_name }} {{ row.student.last_name }}
+                </td>
+                {% for code, value in row.score_list %}
+                  <td class="p-1 text-center">
+                    <input type="number" step="0.01" min="0" max="100"
+                           name="score_{{ row.student.id }}_{{ code }}"
+                           value="{{ value }}"
+                           class="w-16 border border-gray-300 rounded px-1 py-1 text-sm text-center">
+                  </td>
+                {% endfor %}
+                {% for code, value in row.series_list %}
+                  <td class="p-1 text-center bg-navy2/5">
+                    <input type="number" step="0.01" min="0" max="100"
+                           name="score_{{ row.student.id }}_{{ code }}"
+                           value="{{ value }}"
+                           class="w-16 border border-navy2/30 rounded px-1 py-1 text-sm text-center">
+                  </td>
+                {% endfor %}
+                <td class="p-2 text-center font-semibold text-amber-700 bg-amber-50">{{ row.midterm|default:"-" }}</td>
+                <td class="p-2 text-center font-bold text-green-700 bg-green-50">{{ row.final|default:"-" }}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="12" class="text-center text-gray-400 py-6">Hakuna wanafunzi kwenye darasa hili.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        {% if students %}
+          <button type="submit" class="w-full mt-4 bg-gold text-amber-950 font-semibold py-2.5 rounded">Hifadhi Marks Zote</button>
+        {% endif %}
+      </div>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

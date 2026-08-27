@@ -1,0 +1,56 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Accountant Dashboard{% endblock %}
+{% block page_tag %}Ada na Malipo{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6 space-y-5">
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <a href="{% url 'accountant:record_payment' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
+      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Rekodi Malipo</div>
+      <div class="text-navy font-serif text-lg font-bold">+ Malipo</div>
+    </a>
+    <a href="{% url 'accountant:set_fee_structure' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
+      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Ada</div>
+      <div class="text-navy font-serif text-lg font-bold">Fee Structure</div>
+    </a>
+    <a href="{% url 'accountant:add_other_charge' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
+      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Michango</div>
+      <div class="text-navy font-serif text-lg font-bold">+ Charge</div>
+    </a>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-5 text-center">
+    <div class="text-2xl font-bold text-red-600 font-serif">TZS {{ total_outstanding }}</div>
+    <div class="text-[11px] uppercase text-gray-500 tracking-wide">Jumla ya Madeni ya Shule</div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-5">
+    <h3 class="font-serif text-navy mb-3">Wanafunzi Wenye Deni</h3>
+    <div class="space-y-2">
+      {% for d in debtors %}
+        <div class="flex items-center justify-between text-sm border-b border-gray-100 pb-2">
+          <span>{{ d.student.reg_number }} &middot; {{ d.student.first_name }} {{ d.student.last_name }}</span>
+          <span class="font-bold text-red-600">TZS {{ d.debt }}</span>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-400">Hakuna deni kwa sasa - kila mtu amelipa!</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-5">
+    <h3 class="font-serif text-navy mb-3">Malipo ya Hivi Karibuni</h3>
+    <div class="space-y-2">
+      {% for p in recent_payments %}
+        <div class="flex items-center justify-between text-sm">
+          <span>{{ p.student }} &middot; {{ p.bank_name }}</span>
+          <span class="text-green-700 font-semibold">TZS {{ p.amount }}</span>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-400">Hakuna malipo bado.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

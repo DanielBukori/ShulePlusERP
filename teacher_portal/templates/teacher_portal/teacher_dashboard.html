@@ -1,0 +1,51 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Dashboard ya Mwalimu{% endblock %}
+{% block page_tag %}Dashboard ya Mwalimu{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6 space-y-5">
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <a href="{% url 'teacher_portal:enter_marks' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
+      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Jaza Marks</div>
+      <div class="text-navy font-serif text-lg font-bold">+ Marks</div>
+    </a>
+    <a href="{% url 'teacher_portal:subject_stats' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
+      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Takwimu za Somo</div>
+      <div class="text-navy font-serif text-lg font-bold">Stats</div>
+    </a>
+    <a href="{% url 'teacher_portal:upload_home_package' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
+      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Home Package</div>
+      <div class="text-navy font-serif text-lg font-bold">+ Pakia</div>
+    </a>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-5">
+    <h3 class="font-serif text-navy mb-3">Masomo Ninayofundisha</h3>
+    <div class="space-y-2">
+      {% for a in assignments %}
+        <div class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm">
+          <span><b>{{ a.subject.name }}</b> &middot; {{ a.school_class }}{% if a.combination %} ({{ a.combination }}){% endif %}</span>
+          <span class="text-xs text-gray-400">{{ a.academic_year }}</span>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-400">Bado hujapangiwa somo lolote na Academic.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-5">
+    <h3 class="font-serif text-navy mb-3">Home Packages za Hivi Karibuni</h3>
+    <div class="space-y-2">
+      {% for p in recent_packages %}
+        <div class="flex items-center justify-between text-sm">
+          <span>{{ p.title }} &middot; {{ p.subject.name }} ({{ p.school_class }})</span>
+          <span class="text-xs text-gray-400">{{ p.uploaded_at|date:"d/m/Y" }}</span>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-400">Hakuna bado.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

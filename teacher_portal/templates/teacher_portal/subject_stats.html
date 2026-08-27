@@ -1,0 +1,56 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Takwimu za Somo{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+
+  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
+    <h3 class="font-serif text-navy mb-3">Chagua Somo/Darasa na Mtihani</h3>
+    <form method="GET" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="sm:col-span-2">{{ filter_form.assignment }}</div>
+      <div>{{ filter_form.exam_type }}</div>
+      <div>{{ filter_form.term }}</div>
+      <div class="sm:col-span-2">{{ filter_form.academic_year }}</div>
+      <button type="submit" class="sm:col-span-2 bg-navy2 text-white text-sm font-semibold rounded py-2.5">Onyesha Takwimu</button>
+    </form>
+  </div>
+
+  {% if stats %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
+      <div class="bg-white border border-gray-200 rounded p-4 text-center">
+        <div class="text-xl font-bold text-navy font-serif">{{ stats.average }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Wastani</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-4 text-center">
+        <div class="text-xl font-bold text-navy font-serif">{{ stats.highest }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Juu Kabisa</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-4 text-center">
+        <div class="text-xl font-bold text-navy font-serif">{{ stats.lowest }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Chini Kabisa</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-4 text-center">
+        <div class="text-xl font-bold text-green-700 font-serif">{{ stats.passed }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Waliofaulu</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-4 text-center">
+        <div class="text-xl font-bold text-red-600 font-serif">{{ stats.failed }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Waliofeli</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-4 text-center">
+        <div class="text-xl font-bold text-navy font-serif">{{ stats.total_students }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Jumla</div>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded p-5">
+      <h3 class="font-serif text-navy mb-3">Idadi ya Wanafunzi kwa Grade</h3>
+      <div class="flex flex-wrap gap-2">
+        {% for grade, count in stats.grade_counts.items %}
+          <span class="bg-navy2/10 text-navy2 text-sm font-semibold px-3 py-1.5 rounded-full">{{ grade }}: {{ count }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

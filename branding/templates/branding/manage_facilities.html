@@ -1,0 +1,45 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Miundombinu{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-6">
+  <h1 class="font-serif text-xl text-navy mb-5">Miundombinu (Facilities)</h1>
+
+  {% if messages %}{% for message in messages %}
+    <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+  {% endfor %}{% endif %}
+
+  <details class="bg-white border border-gray-200 rounded p-5 mb-6">
+    <summary class="font-semibold text-navy cursor-pointer">+ Ongeza Kifaa/Sehemu</summary>
+    <form method="POST" enctype="multipart/form-data" class="space-y-4 mt-4">
+      {% csrf_token %}
+      {% for field in form %}
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ field.label }}</label>
+          {{ field }}
+          {% for e in field.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="bg-gold text-amber-950 font-semibold px-6 py-2.5 rounded">Hifadhi</button>
+    </form>
+  </details>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    {% for f in facilities %}
+      <div class="bg-white border border-gray-200 rounded overflow-hidden">
+        {% if f.image %}<img src="{{ f.image.url }}" class="w-full h-24 object-cover">{% endif %}
+        <div class="p-3">
+          <div class="font-semibold text-navy text-sm">{{ f.icon }} {{ f.name }}</div>
+          {% if not f.is_published %}<span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Rasimu</span>{% endif %}
+          <div class="mt-2">
+            <a href="{% url 'branding:edit_facility' f.id %}" class="text-navy2 text-xs font-semibold hover:underline mr-3">Hariri</a>
+            <form method="POST" action="{% url 'branding:delete_facility' f.id %}" class="inline" onsubmit="return confirm('Futa?');">
+              {% csrf_token %}<button type="submit" class="text-red-600 text-xs font-semibold hover:underline">Futa</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% empty %}<p class="text-gray-400 col-span-3 text-center py-6">Bado hakuna kilichoongezwa.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Audit Log{% endblock %}
+{% block page_tag %}Kumbukumbu ya Mfumo (Audit Log){% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-6">
+
+  <div class="bg-white border border-gray-200 rounded p-4 mb-5">
+    <form method="GET" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <select name="actor" class="border border-gray-300 rounded px-3 py-2 text-sm">
+        <option value="">Watumiaji Wote</option>
+        {% for a in actors %}
+          <option value="{{ a.id }}" {% if selected_actor == a.id|stringformat:"s" %}selected{% endif %}>{{ a.get_full_name }}</option>
+        {% endfor %}
+      </select>
+      <select name="action" class="border border-gray-300 rounded px-3 py-2 text-sm">
+        <option value="">Aina Zote za Kitendo</option>
+        {% for value, label in action_choices %}
+          <option value="{{ value }}" {% if selected_action == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded py-2">Chuja</button>
+    </form>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded divide-y divide-gray-100">
+    {% for log in logs %}
+      <div class="px-4 py-3">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-navy2 uppercase">{{ log.get_action_display }}</span>
+          <span class="text-xs text-gray-400">{{ log.created_at|date:"d/m/Y H:i" }}</span>
+        </div>
+        <p class="text-sm text-gray-700">{{ log.description }}</p>
+        <p class="text-xs text-gray-400 mt-1">Na: {{ log.actor.get_full_name|default:"Mfumo" }}</p>
+      </div>
+    {% empty %}
+      <p class="text-sm text-gray-400 px-4 py-10 text-center">Hakuna kumbukumbu bado.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

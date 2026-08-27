@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page { size: A4 portrait; margin: 1.5cm; }
+  body { font-family: 'DejaVu Sans', Arial, sans-serif; color: #1B2430; margin: 0; position: relative; }
+
+  .watermark {
+    position: absolute; top: 35%; left: 12%;
+    font-size: 50px; font-weight: 800; color: rgba(11,37,69,0.06);
+    transform: rotate(-25deg); z-index: 0; letter-spacing: 4px;
+  }
+
+  .header { text-align: center; border-bottom: 2px solid #0B2545; padding-bottom: 10px; margin-bottom: 16px; position: relative; z-index: 1; }
+  .header h1 { margin: 4px 0; font-size: 18px; text-transform: uppercase; color: #0B2545; }
+  .header .sub { font-size: 11px; color: #5B6472; text-transform: uppercase; letter-spacing: .5px; }
+
+  .student-box { display: flex; justify-content: space-between; background: #F5F3EC; border: 1px solid #D9D4C6;
+                 border-radius: 3px; padding: 10px 14px; margin-bottom: 16px; font-size: 11px; position: relative; z-index: 1; }
+
+  .section-title { font-size: 13px; font-weight: bold; color: #0B2545; border-left: 4px solid #D4AF37;
+                    padding-left: 8px; margin: 18px 0 8px; position: relative; z-index: 1; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 10px; position: relative; z-index: 1; }
+  th, td { border: 1px solid #D9D4C6; padding: 5px 7px; text-align: center; }
+  thead th { background: #0B2545; color: #fff; text-transform: uppercase; font-size: 9px; }
+  tbody tr:nth-child(even) { background: #F5F3EC; }
+  td.name { text-align: left; }
+
+  .summary-grid { display: flex; gap: 10px; margin-bottom: 6px; position: relative; z-index: 1; }
+  .summary-card { flex: 1; border: 1px solid #D9D4C6; border-radius: 3px; padding: 10px; text-align: center; }
+  .summary-card .num { font-size: 16px; font-weight: bold; color: #0B2545; }
+  .summary-card .lbl { font-size: 8px; text-transform: uppercase; color: #5B6472; }
+
+  .alert-box { background: #FBE3E3; border: 1px solid #8A1F2B; color: #8A1F2B; padding: 8px 12px;
+               border-radius: 3px; font-size: 10px; margin-top: 8px; position: relative; z-index: 1; }
+
+  .signatures { display: flex; justify-content: space-between; margin-top: 50px; font-size: 10px; position: relative; z-index: 1; }
+  .signatures div { border-top: 1px solid #1B2430; padding-top: 4px; width: 40%; }
+</style>
+</head>
+<body>
+
+<div class="watermark">{{ school.name|default:"ShulePlus ERP" }}</div>
+
+<div class="header">
+  <h1>{{ school.name|default:"ShulePlus ERP" }}</h1>
+  <div class="sub">RIPOTI YA MAENDELEO YA MWANAFUNZI</div>
+</div>
+
+<div class="student-box">
+  <div><strong>{{ student.first_name }} {{ student.last_name }}</strong> &middot; Reg: {{ student.reg_number }}</div>
+  <div>{{ student.school_class }} &middot; Mwaka: {{ academic_year }}</div>
+</div>
+
+<div class="section-title">Muhtasari</div>
+<div class="summary-grid">
+  <div class="summary-card">
+    <div class="num">{% if results_summary %}{{ results_summary.average }}{% else %}-{% endif %}</div>
+    <div class="lbl">Wastani</div>
+  </div>
+  <div class="summary-card">
+    <div class="num">{% if results_summary %}{{ results_summary.position }}/{{ results_summary.total_students }}{% else %}-{% endif %}</div>
+    <div class="lbl">Nafasi</div>
+  </div>
+  <div class="summary-card">
+    <div class="num">{% if results_summary %}{{ results_summary.division }}{% else %}-{% endif %}</div>
+    <div class="lbl">Division</div>
+  </div>
+  <div class="summary-card">
+    <div class="num">{{ discipline_score }}/100</div>
+    <div class="lbl">Nidhamu</div>
+  </div>
+  <div class="summary-card">
+    <div class="num">TZS {{ debt }}</div>
+    <div class="lbl">Deni la Ada</div>
+  </div>
+</div>
+
+<div class="section-title">Matokeo kwa Somo{% if results_summary %} - {{ results_summary.exam_type }}, {{ results_summary.term }}{% endif %}</div>
+<table>
+  <thead><tr><th style="text-align:left;">Somo</th><th>Alama</th><th>Daraja</th></tr></thead>
+  <tbody>
+    {% for res in subject_results %}
+      <tr><td class="name">{{ res.subject.name }}</td><td>{{ res.score }}</td><td>{{ res.grade }}</td></tr>
+    {% empty %}
+      <tr><td colspan="3">Hakuna matokeo yaliyochapishwa bado.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if series_results %}
+<div class="section-title">Mitihani ya Maandalizi (Series) - Hiari, si Rasmi</div>
+<table>
+  <thead><tr><th style="text-align:left;">Somo</th><th>Series</th><th>Alama</th></tr></thead>
+  <tbody>
+    {% for r in series_results %}
+      <tr><td class="name">{{ r.subject.name }}</td><td>{{ r.get_exam_type_display }}</td><td>{{ r.score }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if conduct %}
+<div class="section-title">Tabia/Mwenendo</div>
+{% if conduct.conduct_items %}
+<table>
+  <tbody>
+    {% for label, grade in conduct.conduct_items %}
+      <tr><td class="name">{{ label }}</td><td colspan="2">{{ grade }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% if conduct.general_behavior %}<p><b>Mwenendo kwa Ujumla:</b> {{ conduct.general_behavior }}</p>{% endif %}
+{% if conduct.class_teacher_remarks %}<p><b>Maoni ya Mwalimu wa Darasa:</b> {{ conduct.class_teacher_remarks }}</p>{% endif %}
+{% if conduct.headteacher_remarks %}<p><b>Maoni ya Mkuu wa Shule:</b> {{ conduct.headteacher_remarks }}</p>{% endif %}
+{% endif %}
+
+<div class="section-title">Nidhamu - Makosa ya Hivi Karibuni</div>
+<table>
+  <thead><tr><th style="text-align:left;">Kosa</th><th>Alama</th><th>Tarehe</th></tr></thead>
+  <tbody>
+    {% for i in recent_incidents %}
+      <tr><td class="name">{{ i.offense_type.name }}</td><td>-{{ i.offense_type.points_deducted }}</td><td>{{ i.date_occurred }}</td></tr>
+    {% empty %}
+      <tr><td colspan="3">Hakuna makosa yaliyorekodiwa.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% if discipline_score < 50 %}
+  <div class="alert-box">Tahadhari: alama za nidhamu ziko chini - inashauriwa mzazi awasiliane na shule.</div>
+{% endif %}
+
+<div class="section-title">Michango ya Vifaa (Store)</div>
+<table>
+  <thead><tr><th style="text-align:left;">Kifaa</th><th>Anadaiwa</th></tr></thead>
+  <tbody>
+    {% for c in pending_contributions %}
+      <tr><td class="name">{{ c.requirement.item_name }}</td><td>{{ c.quantity_owed }}</td></tr>
+    {% empty %}
+      <tr><td colspan="2">Michango yote imekamilika.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="signatures">
+  <div>Sahihi ya Mwalimu wa Darasa</div>
+  <div>Muhuri na Sahihi ya Mkuu wa Shule</div>
+</div>
+
+</body>
+</html>

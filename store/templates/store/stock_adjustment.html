@@ -1,0 +1,19 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Rekebisha Stock{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto px-4 py-6">
+  <h1 class="font-serif text-xl text-navy mb-5">Rekebisha Stock</h1>
+
+  <div class="bg-white border border-gray-200 rounded p-5 md:p-8">
+    <form method="POST" class="grid grid-cols-1 gap-3">
+      {% csrf_token %}
+      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.stock.label }}</label>{{ form.stock }}{% for e in form.stock.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}</div>
+      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.quantity.label }}</label>{{ form.quantity }}{% for e in form.quantity.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}</div>
+      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.reason.label }}</label>{{ form.reason }}</div>
+      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.notes.label }}</label>{{ form.notes }}</div>
+      <button type="submit" class="bg-gold text-amber-950 font-semibold py-3 rounded mt-2">Hifadhi</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

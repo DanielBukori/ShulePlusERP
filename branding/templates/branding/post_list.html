@@ -1,0 +1,40 @@
+{% extends 'branding/public_base.html' %}
+{% block title %}Habari - {{ school.name }}{% endblock %}
+
+{% block content %}
+<section class="bg-gradient-to-br from-navy to-navy2 text-white">
+  <div class="max-w-4xl mx-auto px-4 py-16 text-center">
+    <span class="text-gold text-xs uppercase font-bold tracking-widest">Habari</span>
+    <h1 class="font-serif text-3xl md:text-4xl font-bold mt-2">Habari na Matukio</h1>
+  </div>
+</section>
+
+<section class="max-w-5xl mx-auto px-4 py-14">
+  <div class="flex flex-wrap gap-2 mb-8">
+    <a href="{% if subdomain %}{% url 'branding:post_list_local' subdomain=subdomain %}{% else %}{% url 'branding:post_list' %}{% endif %}"
+       class="px-4 py-1.5 rounded-full text-xs font-semibold {% if not selected_category %}bg-navy text-white{% else %}bg-gray-100 text-gray-600{% endif %}">Zote</a>
+    {% for value, label in categories %}
+      <a href="{% if subdomain %}{% url 'branding:post_list_local' subdomain=subdomain category=value %}{% else %}{% url 'branding:post_list' category=value %}{% endif %}"
+         class="px-4 py-1.5 rounded-full text-xs font-semibold {% if selected_category == value %}bg-navy text-white{% else %}bg-gray-100 text-gray-600{% endif %}">{{ label }}</a>
+    {% endfor %}
+  </div>
+
+  {% if posts %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {% for post in posts %}
+        <a href="{% if subdomain %}{% url 'branding:post_detail_local' subdomain=subdomain post_id=post.id %}{% else %}{% url 'branding:post_detail' post_id=post.id %}{% endif %}"
+           class="block border border-gray-200 rounded-xl overflow-hidden hover:shadow-md">
+          {% if post.image %}<img src="{{ post.image.url }}" class="w-full h-40 object-cover">{% endif %}
+          <div class="p-4">
+            <span class="text-xs uppercase text-gold font-semibold">{{ post.get_category_display }}</span>
+            <h3 class="font-serif font-bold text-navy mt-1">{{ post.title }}</h3>
+            <p class="text-gray-400 text-xs mt-2">{{ post.created_at|date:"d/m/Y" }}</p>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-center text-gray-400 py-10">Hakuna habari kwenye kundi hili bado.</p>
+  {% endif %}
+</section>
+{% endblock %}

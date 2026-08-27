@@ -1,0 +1,53 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Pandisha Wanafunzi Darasa{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="bg-white border border-gray-200 rounded-xl p-5">
+    <h3 class="font-serif text-navy mb-2">Pandisha Wanafunzi Darasa (Mwisho wa Mwaka)</h3>
+    <p class="text-sm text-gray-500 mb-5">
+      Kwa kila darasa, chagua linapanda kwenda darasa gani. Kama ni la mwisho
+      (mfano Form IV kabla ya kuchagua Combination, au Form VI mwisho wa masomo),
+      chagua "Wamehitimu" - hii itawatoa tu kwenye darasa (bila kufuta rekodi zao);
+      utahitaji kuwasajili upya kwenye darasa jipya (na Combination kama A-Level).
+    </p>
+
+    <form method="POST" class="space-y-3">
+      {% csrf_token %}
+      {% for c in classes %}
+        <div class="flex items-center gap-3 border border-gray-200 rounded-lg p-3">
+          <div class="flex-1">
+            <div class="font-serif font-bold text-navy">{{ c }}</div>
+            <div class="text-xs text-gray-400">{{ c.get_level_display }} &middot; Wanafunzi: {{ c.student_count }}</div>
+          </div>
+          <select name="promote_{{ c.id }}" class="border border-gray-300 rounded px-3 py-2 text-sm w-56">
+            <option value="NONE">-- Usibadilishe --</option>
+            {% for target in classes %}
+              {% if target.id != c.id %}
+                <option value="{{ target.id }}">Panda kwenda {{ target }}</option>
+              {% endif %}
+            {% endfor %}
+            <option value="GRADUATE">Wamehitimu (toa kwenye darasa)</option>
+          </select>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-400">Hakuna madarasa bado.</p>
+      {% endfor %}
+
+      {% if classes %}
+        <button type="submit" class="w-full bg-gold text-amber-950 font-semibold py-3 rounded-xl mt-2"
+                onclick="return confirm('Una uhakika? Hii itabadilisha darasa la wanafunzi wote uliochagua.')">
+          Thibitisha Promotion
+        </button>
+      {% endif %}
+    </form>
+  </div>
+</div>
+{% endblock %}

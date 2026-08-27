@@ -1,0 +1,30 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Tengeneza Tathmini za Ada{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-4 py-6">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="text-sm {% if message.tags == 'warning' %}bg-amber-50 border-amber-500 text-amber-800{% else %}bg-green-50 border-green-600 text-green-800{% endif %} border rounded px-3 py-2 mb-4">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="bg-white border border-gray-200 rounded p-5">
+    <h3 class="font-serif text-navy mb-2">Tengeneza Tathmini za Ada (Invoice)</h3>
+    <p class="text-sm text-gray-500 mb-4">
+      Hii itaandaa deni la ada kwa kila mwanafunzi wa mwaka huu, kutumia Fee
+      Structure na Michango iliyowekwa tayari. Haitaguza wale ambao tayari
+      wana tathmini ya mwaka huu.
+    </p>
+    <form method="POST" class="flex gap-3">
+      {% csrf_token %}
+      <input type="number" name="academic_year" value="2026"
+             class="border border-gray-300 rounded px-3 py-2 text-sm flex-1" required>
+      <button type="submit" class="bg-gold text-amber-950 font-semibold px-5 py-2 rounded">Tengeneza</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

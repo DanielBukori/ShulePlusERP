@@ -1,0 +1,113 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Matokeo ya {{ school_class }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  @media print { .no-print{ display:none !important; } body{ background:#fff; } }
+  .seal-watermark{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-18deg);
+    font-weight:800; font-size:3rem; letter-spacing:6px; color:rgba(11,37,69,.05);
+    white-space:nowrap; pointer-events:none; user-select:none; z-index:0; text-transform:uppercase;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-6">
+
+  <div class="bg-white border border-gray-200 rounded p-5 mb-5 no-print">
+    <form method="GET" class="grid grid-cols-2 md:grid-cols-5 gap-3 items-end">
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.term.label }}</label>
+        {{ form.term }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.exam_type.label }}</label>
+        {{ form.exam_type }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.education_level.label }}</label>
+        {{ form.education_level }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.academic_year.label }}</label>
+        {{ form.academic_year }}
+      </div>
+      <div class="hidden">{{ form.school_class }}</div>
+      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded py-2.5">Onyesha</button>
+    </form>
+  </div>
+
+  {% if broadsheet_groups %}
+    <div class="flex justify-end gap-2 mb-3 no-print">
+      <a href="{% url 'academic:download_broadsheet_pdf' school_class.id %}?{{ request.GET.urlencode }}"
+         class="bg-red-600 text-white text-sm font-semibold px-4 py-2 rounded">&#128196; PDF</a>
+      <a href="{% url 'academic:download_broadsheet_excel' school_class.id %}?{{ request.GET.urlencode }}"
+         class="bg-green-700 text-white text-sm font-bold px-4 py-2 rounded">&#128202; Excel</a>
+      <button onclick="window.print()" class="bg-white border border-navy2 text-navy2 text-sm font-semibold px-4 py-2 rounded">Chapisha</button>
+    </div>
+
+    {% for group in broadsheet_groups %}
+      <div class="bg-white border border-gray-200 rounded p-5 md:p-8 mb-6 relative overflow-hidden">
+        <div class="seal-watermark">{{ school.name|default:"ShulePlus ERP" }}</div>
+
+        <div class="text-center border-b-2 border-navy pb-3 mb-5 relative z-10">
+          <h1 class="font-serif text-xl uppercase tracking-wide text-navy">{{ school.name|default:"ShulePlus ERP" }}</h1>
+          <div class="text-sm text-gray-500 uppercase tracking-wide">MATOKEO RASMI &middot; DARASA LA {{ school_class }}{% if group.combination %} &middot; {{ group.combination }}{% endif %}</div>
+          <div class="text-xs text-gray-400 mt-1">Wanafunzi: {{ group.total_students }} &middot; Wastani wa Darasa: {{ group.class_average }}</div>
+        </div>
+
+        <div class="overflow-x-auto relative z-10">
+          <table class="w-full text-sm min-w-[600px]">
+            <thead>
+              <tr class="bg-navy text-white text-xs uppercase">
+                <th class="p-2">Nafasi</th>
+                <th class="p-2">Reg Number</th>
+                <th class="p-2 text-left">Jina</th>
+                {% for s in group.subjects %}<th class="p-2">{{ s.code }}</th>{% endfor %}
+                <th class="p-2">Jumla</th>
+                <th class="p-2">Wastani</th>
+                <th class="p-2">Pointi</th>
+                <th class="p-2">Division</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in group.rows %}
+                <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100 text-center">
+                  <td class="p-2">{{ row.position }}</td>
+                  <td class="p-2">{{ row.student.reg_number }}</td>
+                  <td class="p-2 text-left font-medium">{{ row.student.first_name }} {{ row.student.last_name }}</td>
+                  {% for score in row.scores %}<td class="p-2">{{ score }}</td>{% endfor %}
+                  <td class="p-2 font-bold text-navy">{{ row.total }}</td>
+                  <td class="p-2">{{ row.average }}</td>
+                  <td class="p-2">{{ row.points }}</td>
+                  <td class="p-2">
+                    <span class="text-xs font-bold px-2 py-0.5 rounded-full
+                      {% if row.division == 'I' %}bg-green-100 text-green-700
+                      {% elif row.division == 'II' %}bg-blue-100 text-navy2
+                      {% elif row.division == 'III' %}bg-amber-100 text-amber-800
+                      {% else %}bg-red-100 text-red-700{% endif %}">
+                      {{ row.division }}
+                    </span>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr><td colspan="{{ group.subjects|length|add:6 }}" class="text-center text-gray-400 py-6">Hakuna matokeo bado.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex justify-between mt-10 text-sm relative z-10">
+          <div class="border-t border-gray-800 pt-2 w-2/5">Sahihi ya Academic Master</div>
+          <div class="border-t border-gray-800 pt-2 w-2/5 text-right">Muhuri na Sahihi ya Mkuu wa Shule</div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="bg-white border border-gray-200 rounded p-12 text-center text-gray-400">
+      Chagua Muhula, Aina ya Mtihani na Mwaka hapo juu kuona matokeo ya darasa hili.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

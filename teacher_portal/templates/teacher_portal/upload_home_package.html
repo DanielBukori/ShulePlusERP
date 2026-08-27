@@ -1,0 +1,41 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Home Package{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
+    <h3 class="font-serif text-navy mb-3">Pakia Kazi ya Likizo</h3>
+    <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 gap-3">
+      {% csrf_token %}
+      {{ form.title }}
+      {{ form.subject }}
+      {{ form.school_class }}
+      {{ form.term }}
+      {{ form.academic_year }}
+      {{ form.file }}
+      <button type="submit" class="bg-gold text-amber-950 font-semibold py-2.5 rounded">Pakia</button>
+    </form>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-5">
+    <h3 class="font-serif text-navy mb-3">Zilizopakiwa Tayari</h3>
+    <div class="space-y-2">
+      {% for p in my_packages %}
+        <div class="flex items-center justify-between text-sm">
+          <span>{{ p.title }} &middot; {{ p.subject.name }} ({{ p.school_class }})</span>
+          <a href="{{ p.file.url }}" class="text-navy2 text-xs font-semibold">Fungua</a>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-400">Hakuna bado.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Tovuti ya Shule{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-6">
+  <h1 class="font-serif text-xl text-navy mb-1">Simamia Tovuti ya Shule</h1>
+  <p class="text-sm text-gray-500 mb-5">
+    Ukurasa wa umma: <a href="{% url 'branding:school_home_local' subdomain=school.subdomain %}" target="_blank" class="text-navy2 hover:underline">{{ school.subdomain }}.shuleplus.co.tz &#8599;</a>
+  </p>
+
+  {% if not profile_complete %}
+    <div class="mb-6 bg-amber-50 border border-amber-400 text-amber-800 rounded p-4 text-sm">
+      <b>Kamilisha Wasifu wa Tovuti Yako.</b> Bado hujaweka baadhi ya taarifa muhimu (About, Vision, Mission, au Picha Kuu).
+      <a href="{% url 'branding:edit_profile' %}" class="underline font-semibold ml-1">Kamilisha Sasa &rarr;</a>
+    </div>
+  {% endif %}
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <a href="{% url 'branding:manage_posts' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
+      <div class="text-2xl font-serif font-bold text-navy">{{ total_posts }}</div>
+      <div class="text-xs text-gray-500 mt-1">Machapisho</div>
+    </a>
+    <a href="{% url 'branding:manage_leadership' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
+      <div class="text-2xl font-serif font-bold text-navy">{{ total_leadership }}</div>
+      <div class="text-xs text-gray-500 mt-1">Uongozi</div>
+    </a>
+    <a href="{% url 'branding:manage_programs' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
+      <div class="text-2xl font-serif font-bold text-navy">{{ total_programs }}</div>
+      <div class="text-xs text-gray-500 mt-1">Programu</div>
+    </a>
+    <a href="{% url 'branding:manage_facilities' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
+      <div class="text-2xl font-serif font-bold text-navy">{{ total_facilities }}</div>
+      <div class="text-xs text-gray-500 mt-1">Miundombinu</div>
+    </a>
+    <a href="{% url 'branding:manage_testimonials' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
+      <div class="text-2xl font-serif font-bold text-navy">{{ total_testimonials }}</div>
+      <div class="text-xs text-gray-500 mt-1">Maoni</div>
+    </a>
+    <a href="{% url 'branding:manage_inquiries' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md relative">
+      {% if new_inquiries %}
+        <span class="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{{ new_inquiries }}</span>
+      {% endif %}
+      <div class="text-2xl font-serif font-bold text-navy">{{ new_inquiries }}</div>
+      <div class="text-xs text-gray-500 mt-1">Maombi Mapya</div>
+    </a>
+    <a href="{% url 'branding:edit_profile' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
+      <div class="text-2xl font-serif font-bold text-navy">&#9881;</div>
+      <div class="text-xs text-gray-500 mt-1">Wasifu wa Shule</div>
+    </a>
+  </div>
+</div>
+{% endblock %}

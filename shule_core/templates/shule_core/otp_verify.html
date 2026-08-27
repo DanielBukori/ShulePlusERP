@@ -1,0 +1,56 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Weka OTP{% endblock %}
+{% block page_tag %}Uthibitisho wa Hatua ya Pili (2FA){% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center px-4 py-16 min-h-[70vh]">
+  <div class="w-full max-w-sm bg-white border border-gray-200 rounded shadow-lg p-8 relative">
+    <div class="absolute inset-2 border border-gold/40 rounded pointer-events-none"></div>
+
+    <h2 class="font-serif text-2xl text-navy text-center mb-1">Weka Namba ya OTP</h2>
+    <p class="text-center text-sm text-gray-500 mb-1">{{ school.name|default:"ShulePlusERP" }}</p>
+
+    <p class="text-center text-xs text-gray-500 mb-6">
+      Tumetuma namba 6 za OTP
+      {% if masked_phone %}kwa simu <span class="font-semibold">{{ masked_phone }}</span>{% endif %}
+      {% if masked_phone and masked_email %} na {% endif %}
+      {% if masked_email %}kwa email <span class="font-semibold">{{ masked_email }}</span>{% endif %}.
+      Inaisha muda dakika 5.
+    </p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="text-sm rounded px-3 py-2 mb-4
+            {% if message.tags == 'error' %}bg-red-50 border border-red-600 text-red-700
+            {% else %}bg-green-50 border border-green-600 text-green-700{% endif %}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" action="{% url 'accounts:otp_verify' %}">
+      {% csrf_token %}
+      <div class="mb-5">
+        <label class="block text-xs uppercase tracking-wide text-gray-500 mb-1">Namba ya OTP</label>
+        <input type="text" name="otp" inputmode="numeric" pattern="[0-9]*" maxlength="6" required autofocus
+               placeholder="000000"
+               class="w-full border border-gray-300 rounded px-3 py-2.5 text-center text-2xl tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-navy2/40 focus:border-navy2">
+      </div>
+      <button type="submit" class="w-full bg-navy2 hover:bg-navy text-white font-semibold py-3 rounded transition">
+        Thibitisha
+      </button>
+    </form>
+
+    <form method="POST" action="{% url 'accounts:otp_resend' %}" class="mt-4 text-center">
+      {% csrf_token %}
+      <button type="submit" class="text-sm text-navy2 hover:underline">
+        Sikupata OTP? Tuma tena
+      </button>
+    </form>
+
+    <a href="{% url 'accounts:login' %}" class="block text-center text-xs text-gray-400 hover:underline mt-4">
+      Rudi kwenye Login
+    </a>
+  </div>
+</div>
+{% endblock %}

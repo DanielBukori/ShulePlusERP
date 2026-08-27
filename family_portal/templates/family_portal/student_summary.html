@@ -1,0 +1,132 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}{{ summary.student }}{% endblock %}
+{% block page_tag %}Matokeo na Maendeleo{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto px-4 py-6 space-y-5">
+
+  <div class="bg-white border border-gray-200 rounded p-4 flex items-center gap-3">
+    <div class="h-14 w-14 rounded-full bg-navy2/10 flex items-center justify-center text-navy2 font-serif font-bold text-xl">
+      {{ summary.student.first_name|slice:":1" }}{{ summary.student.last_name|slice:":1" }}
+    </div>
+    <div>
+      <div class="font-serif font-bold text-navy">{{ summary.student.first_name }} {{ summary.student.last_name }}</div>
+      <div class="text-xs text-gray-500">{{ summary.student.school_class }} &middot; Reg: {{ summary.student.reg_number }}</div>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <h3 class="font-serif text-navy mb-3">Matokeo ya Hivi Karibuni</h3>
+    {% if summary.results_summary %}
+      <p class="text-xs text-gray-400 mb-3">{{ summary.results_summary.exam_type }} &middot; {{ summary.results_summary.term }} &middot; {{ summary.results_summary.academic_year }}</p>
+      <div class="grid grid-cols-3 gap-3 text-center">
+        <div><div class="text-xl font-bold text-navy font-serif">{{ summary.results_summary.average }}</div><div class="text-[10px] uppercase text-gray-500">Wastani</div></div>
+        <div><div class="text-xl font-bold text-navy font-serif">{{ summary.results_summary.position }}/{{ summary.results_summary.total_students }}</div><div class="text-[10px] uppercase text-gray-500">Nafasi</div></div>
+        <div><div class="text-xl font-bold text-green-700 font-serif">{{ summary.results_summary.division }}</div><div class="text-[10px] uppercase text-gray-500">Division</div></div>
+      </div>
+    {% else %}
+      <p class="text-sm text-gray-400">Hakuna matokeo yaliyochapishwa bado.</p>
+    {% endif %}
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <h3 class="font-serif text-navy mb-2">Ada / Malipo</h3>
+    <div class="flex items-center justify-between text-sm">
+      <span class="text-gray-500">Deni la Jumla</span>
+      <span class="font-bold {% if summary.debt > 0 %}text-red-600{% else %}text-green-700{% endif %}">TZS {{ summary.debt }}</span>
+    </div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <h3 class="font-serif text-navy mb-2">Nidhamu</h3>
+    <div class="flex items-center justify-between text-sm">
+      <span class="text-gray-500">Alama za Sasa</span>
+      <span class="font-bold {% if summary.discipline_alert %}text-red-600{% else %}text-green-700{% endif %}">{{ summary.discipline_score }} / 100</span>
+    </div>
+    {% if summary.discipline_alert %}
+      <p class="text-xs text-red-600 mt-2">&#9888; Alama zimeshuka chini ya kiwango - tafadhali wasiliana na shule.</p>
+    {% endif %}
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <h3 class="font-serif text-navy mb-2">Michango ya Vifaa (Store)</h3>
+    {% if summary.pending_contributions %}
+      <div class="space-y-1">
+        {% for c in summary.pending_contributions %}
+          <div class="flex items-center justify-between text-sm">
+            <span>{{ c.requirement.item_name }}</span>
+            <span class="text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-semibold">Anadaiwa {{ c.quantity_owed }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-sm text-green-700">Michango yote imekamilika.</p>
+    {% endif %}
+  </div>
+  {% if summary.series_results %}
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <h3 class="font-serif text-navy mb-1">Mitihani ya Maandalizi (Series)</h3>
+    <p class="text-[10px] text-gray-400 mb-3">Haya ni matokeo ya maandalizi tu - hayaathiri Division/matokeo rasmi.</p>
+    <div class="space-y-1">
+      {% for r in summary.series_results %}
+        <div class="flex items-center justify-between text-sm border-b border-gray-50 pb-1">
+          <span>{{ r.subject.name }} <span class="text-xs text-gray-400">({{ r.get_exam_type_display }})</span></span>
+          <span class="font-bold text-navy2">{{ r.score }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if summary.conduct %}
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <h3 class="font-serif text-navy mb-3">Tabia/Mwenendo</h3>
+    {% if summary.conduct.conduct_items %}
+      <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm mb-3">
+        {% for label, grade in summary.conduct.conduct_items %}
+          <div class="flex justify-between border-b border-gray-50 py-0.5">
+            <span class="text-gray-500">{{ label }}</span><span class="font-bold text-navy2">{{ grade }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% if summary.conduct.general_behavior %}
+      <p class="text-xs mb-2"><span class="text-gray-500">Mwenendo kwa Ujumla:</span> <b>{{ summary.conduct.general_behavior }}</b></p>
+    {% endif %}
+    {% if summary.conduct.class_teacher_remarks %}
+      <p class="text-xs text-gray-600 mb-1"><b>Maoni ya Mwalimu wa Darasa:</b> {{ summary.conduct.class_teacher_remarks }}</p>
+    {% endif %}
+    {% if summary.conduct.headteacher_remarks %}
+      <p class="text-xs text-gray-600"><b>Maoni ya Mkuu wa Shule:</b> {{ summary.conduct.headteacher_remarks }}</p>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if request.user.role == 'STUDENT' %}
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <h3 class="font-serif text-navy mb-2">Kazi za Likizo (Home Package)</h3>
+    {% if summary.home_packages %}
+      <div class="space-y-2">
+        {% for p in summary.home_packages %}
+          <a href="{{ p.file.url }}" target="_blank" class="flex items-center justify-between text-sm border-b border-gray-100 pb-2 last:border-0 hover:text-navy2">
+            <span>
+              <span class="font-medium">{{ p.title }}</span>
+              <span class="text-xs text-gray-400 block">{{ p.subject.name }} &middot; {{ p.get_term_display }} {{ p.academic_year }}</span>
+            </span>
+            <span class="text-navy2 text-xs font-semibold">Pakua &darr;</span>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-sm text-gray-400">Hakuna kazi za likizo zilizopakiwa bado.</p>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <a href="{% url 'family_portal:preview_consolidated_report' summary.student.id %}"
+     class="block text-center bg-gold text-amber-950 font-semibold py-3 rounded">
+    &#128065; Ona Ripoti Kamili (Preview)
+  </a>
+
+</div>
+{% endblock %}

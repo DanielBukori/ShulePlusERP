@@ -1,0 +1,25 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Hariri Kifaa{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <div class="flex items-center justify-between mb-5">
+    <h1 class="font-serif text-xl text-navy">Hariri: {{ facility.name }}</h1>
+    <a href="{% url 'branding:manage_facilities' %}" class="text-sm text-navy2 hover:underline">&larr; Rudi</a>
+  </div>
+  <div class="bg-white border border-gray-200 rounded p-5 md:p-8">
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+      {% csrf_token %}
+      {% for field in form %}
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ field.label }}</label>
+          {{ field }}
+          {% if field.name == 'image' and facility.image %}<img src="{{ facility.image.url }}" class="h-16 rounded mt-2">{% endif %}
+          {% for e in field.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="bg-gold text-amber-950 font-semibold px-6 py-2.5 rounded">Hifadhi</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

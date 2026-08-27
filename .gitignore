@@ -1,0 +1,47 @@
+# === SIRI - KAMWE usiruhusu hizi kwenye GitHub ===
+.env
+*.env
+secrets.json
+
+# === Virtual environment ===
+venv/
+env/
+.venv/
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+
+# === Django ===
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+/staticfiles
+
+# === MEDIA - data halisi ya wanafunzi/shule (SIYO code) ===
+# Hii ni MUHIMU SANA: risiti, picha za wanafunzi, evidence za discipline,
+# ripoti za matokeo - zote ni taarifa binafsi za watu halisi (baadhi ni
+# watoto chini ya miaka 18). KAMWE zisiende kwenye GitHub, hata kama repo
+# ni "private" - GitHub siyo mahali pa kuhifadhi database ya uzalishaji.
+media/
+
+# === Logs ===
+*.log
+backup.log
+
+# === Editor/OS ===
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# === SSH keys ulizopakua (kama zitakuwa ndani ya project kwa bahati mbaya) ===
+*.key
+*.pem

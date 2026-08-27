@@ -1,0 +1,82 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Sajili Mwanafunzi{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <h1 class="font-serif text-xl text-navy mb-1">Sajili Mwanafunzi Mpya</h1>
+  <p class="text-sm text-gray-500 mb-5">Akaunti za mzazi na mwanafunzi zitatengenezwa kiotomatiki baada ya kusajili.</p>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="bg-white border border-gray-200 rounded p-5 md:p-8">
+    <form method="POST">
+      {% csrf_token %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.first_name.label }}</label>
+          {{ form.first_name }}
+          {% for e in form.first_name.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.middle_name.label }}</label>
+          {{ form.middle_name }}
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.last_name.label }}</label>
+          {{ form.last_name }}
+          {% for e in form.last_name.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.reg_number.label }}</label>
+          {{ form.reg_number }}
+          {% for e in form.reg_number.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.school_class.label }}</label>
+          {{ form.school_class }}
+          {% for e in form.school_class.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div id="combination-wrap">
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.combination.label }}</label>
+          {{ form.combination }}
+          {% for e in form.combination.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.parent_name.label }}</label>
+          {{ form.parent_name }}
+          {% for e in form.parent_name.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.parent_phone.label }}</label>
+          {{ form.parent_phone }}
+          {% for e in form.parent_phone.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+      </div>
+      <button type="submit" class="w-full md:w-auto bg-gold text-amber-950 font-semibold px-6 py-3 rounded mt-6">Sajili Mwanafunzi</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  const classSelect = document.getElementById('id_school_class');
+  const comboWrap = document.getElementById('combination-wrap');
+
+  function toggleCombination() {
+    if (!classSelect || !comboWrap) return;
+    const selected = classSelect.options[classSelect.selectedIndex];
+    const level = selected ? selected.getAttribute('data-level') : null;
+    comboWrap.style.display = (level === 'A') ? '' : 'none';
+  }
+
+  if (classSelect) {
+    classSelect.addEventListener('change', toggleCombination);
+    toggleCombination();
+  }
+</script>
+{% endblock %}

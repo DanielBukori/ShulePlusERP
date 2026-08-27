@@ -1,0 +1,42 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Walimu wa Darasa{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="bg-white border border-gray-200 rounded-xl p-5">
+    <h3 class="font-serif text-navy mb-2">Teua Mwalimu wa Darasa</h3>
+    <p class="text-sm text-gray-500 mb-5">Mwalimu wa Darasa ndiye pekee mwenye ruhusa ya kuandika mahudhurio ya darasa hilo.</p>
+
+    <form method="POST" class="space-y-3">
+      {% csrf_token %}
+      {% for c in classes %}
+        <div class="flex items-center gap-3 border border-gray-200 rounded-lg p-3">
+          <div class="flex-1">
+            <div class="font-serif font-bold text-navy">{{ c }}</div>
+            <div class="text-xs text-gray-400">{{ c.get_level_display }}</div>
+          </div>
+          <select name="class_teacher_{{ c.id }}" class="border border-gray-300 rounded px-3 py-2 text-sm w-56">
+            <option value="">-- Hakuna --</option>
+            {% for t in teachers %}
+              <option value="{{ t.id }}" {% if c.class_teacher_id == t.id %}selected{% endif %}>{{ t.get_full_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-400">Hakuna madarasa bado.</p>
+      {% endfor %}
+
+      {% if classes %}
+        <button type="submit" class="w-full bg-gold text-amber-950 font-semibold py-3 rounded-xl mt-2">Hifadhi</button>
+      {% endif %}
+    </form>
+  </div>
+</div>
+{% endblock %}

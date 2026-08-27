@@ -1,0 +1,56 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Hariri Chapisho{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <div class="flex items-center justify-between mb-5">
+    <h1 class="font-serif text-xl text-navy">Hariri: {{ post.title }}</h1>
+    <a href="{% url 'branding:manage_posts' %}" class="text-sm text-navy2 hover:underline">&larr; Rudi Machapisho</a>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="bg-white border border-gray-200 rounded p-5 md:p-8">
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+      {% csrf_token %}
+      {% for field in form %}
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ field.label }}</label>
+          {{ field }}
+          {% if field.name == 'image' and post.image %}<img src="{{ post.image.url }}" class="h-20 rounded mt-2">{% endif %}
+          {% for e in field.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+      {% endfor %}
+
+      {% if extra_images %}
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-2">Picha za Ziada Zilizopo</label>
+          <div class="grid grid-cols-4 gap-3">
+            {% for img in extra_images %}
+              <div class="relative">
+                <img src="{{ img.image.url }}" class="w-full h-20 object-cover rounded">
+                <form method="POST" action="{% url 'branding:delete_post_image' img.id %}" class="absolute top-1 right-1"
+                      onsubmit="return confirm('Futa picha hii?');">
+                  {% csrf_token %}
+                  <button type="submit" class="bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">&times;</button>
+                </form>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">Ongeza Picha Zaidi (hiari)</label>
+        <input type="file" name="extra_images" multiple class="border border-gray-300 rounded px-3 py-2 text-sm w-full">
+      </div>
+
+      <button type="submit" class="bg-gold text-amber-950 font-semibold px-6 py-2.5 rounded">Hifadhi Mabadiliko</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

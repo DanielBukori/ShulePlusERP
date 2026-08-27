@@ -1,0 +1,44 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Chapisha Matokeo{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-4 py-6">
+
+  <h1 class="font-serif text-xl text-navy mb-1">Chapisha Matokeo kwa Wazazi na Wanafunzi</h1>
+  <p class="text-sm text-gray-500 mb-5">Chagua darasa na mtihani, kisha thibitisha kabla ya kutuma.</p>
+
+  {% if published %}
+    <div class="bg-white border border-gray-200 rounded p-8 text-center mb-5">
+      <span class="bg-green-100 text-green-700 border border-green-600 font-bold text-sm px-4 py-2 rounded-full">&#10003; Matokeo Yamechapishwa</span>
+      <p class="text-sm text-gray-500 mt-4">Wazazi na wanafunzi wa darasa hili sasa wanaweza kuona matokeo yao.</p>
+    </div>
+  {% endif %}
+
+  <div class="bg-white border border-gray-200 rounded p-5 md:p-8">
+    <form method="POST" class="grid grid-cols-1 gap-3">
+      {% csrf_token %}
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.school_class.label }}</label>
+        {{ form.school_class }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.term.label }}</label>
+        {{ form.term }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.exam_type.label }}</label>
+        {{ form.exam_type }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.academic_year.label }}</label>
+        {{ form.academic_year }}
+      </div>
+      <label class="flex items-center gap-2 text-sm mt-1">
+        {{ form.confirm }} <span>{{ form.confirm.label }}</span>
+      </label>
+      {% for e in form.confirm.errors %}<p class="text-red-600 text-xs">{{ e }}</p>{% endfor %}
+      <button type="submit" class="bg-gold text-amber-950 font-semibold py-3 rounded mt-2">Chapisha Matokeo Sasa</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

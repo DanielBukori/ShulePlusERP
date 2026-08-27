@@ -1,0 +1,38 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Tafuta - {{ query }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+
+  <form method="GET" class="mb-6">
+    <input type="text" name="q" value="{{ query }}" placeholder="Tafuta mwanafunzi (jina/reg number) au mwalimu..."
+           class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm">
+  </form>
+
+  {% if query %}
+    <div class="bg-white border border-gray-200 rounded-xl p-5 mb-5">
+      <h3 class="font-serif text-navy mb-3">Wanafunzi ({{ students_found|length }})</h3>
+      {% for s in students_found %}
+        <div class="flex items-center justify-between text-sm border-b border-gray-100 py-2 last:border-0">
+          <span>{{ s.first_name }} {{ s.last_name }} <span class="text-xs text-gray-400">({{ s.reg_number }})</span></span>
+          <span class="text-xs text-gray-500">{{ s.school_class|default:"-" }}</span>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-400">Hakuna mwanafunzi aliyepatikana.</p>
+      {% endfor %}
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-xl p-5">
+      <h3 class="font-serif text-navy mb-3">Wafanyakazi ({{ staff_found|length }})</h3>
+      {% for u in staff_found %}
+        <div class="flex items-center justify-between text-sm border-b border-gray-100 py-2 last:border-0">
+          <span>{{ u.get_full_name|default:u.username }}</span>
+          <span class="text-xs text-gray-500">{{ u.get_role_display }}</span>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-400">Hakuna mfanyakazi aliyepatikana.</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

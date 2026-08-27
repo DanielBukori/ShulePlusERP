@@ -1,0 +1,77 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Sajili Shule{% endblock %}
+{% block page_tag %}Sajili Shule Mpya{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-10">
+  <div class="bg-white border border-gray-200 rounded p-6 md:p-8">
+    <h2 class="font-serif text-2xl text-navy text-center mb-6">Sajili Shule Yako</h2>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 border-b pb-2">Taarifa za Shule</h3>
+      <div class="grid grid-cols-1 gap-3 mb-6">
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.name.label }}</label>
+          {{ form.name }}
+          {% for e in form.name.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.school_level.label }}</label>
+          {{ form.school_level }}
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.address.label }}</label>
+          {{ form.address }}
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.phone.label }}</label>
+            {{ form.phone }}
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.email.label }}</label>
+            {{ form.email }}
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 items-end">
+          <div>
+            <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.logo.label }}</label>
+            {{ form.logo }}
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.primary_color.label }}</label>
+            {{ form.primary_color }}
+          </div>
+        </div>
+      </div>
+
+      <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 border-b pb-2">Akaunti ya Mkuu wa Shule</h3>
+      <div class="grid grid-cols-1 gap-3 mb-6">
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.headmaster_username.label }}</label>
+          {{ form.headmaster_username }}
+          {% for e in form.headmaster_username.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.headmaster_password.label }}</label>
+          {{ form.headmaster_password }}
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.headmaster_phone.label }}</label>
+          {{ form.headmaster_phone }}
+        </div>
+      </div>
+
+      <button type="submit" class="w-full bg-gold text-amber-950 font-semibold py-3 rounded">Sajili Shule</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

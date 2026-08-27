@@ -1,0 +1,38 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Aina za Makosa{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-4 py-6">
+  <h1 class="font-serif text-xl text-navy mb-5">Weka Aina ya Kosa</h1>
+
+  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
+    <form method="POST" class="grid grid-cols-1 gap-3">
+      {% csrf_token %}
+      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.name.label }}</label>{{ form.name }}{% for e in form.name.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}</div>
+      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.points_deducted.label }}</label>{{ form.points_deducted }}</div>
+      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.description.label }}</label>{{ form.description }}</div>
+      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded py-2.5 mt-2">Ongeza</button>
+    </form>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded p-5 overflow-x-auto">
+    <h3 class="font-serif text-navy mb-3">Orodha ya Makosa</h3>
+    <table class="w-full text-sm min-w-[420px]">
+      <thead><tr class="bg-navy text-white text-xs uppercase">
+        <th class="p-2 text-left">Kosa</th><th class="p-2">Alama</th><th class="p-2 text-left">Maelezo</th>
+      </tr></thead>
+      <tbody>
+        {% for o in offense_types %}
+          <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
+            <td class="p-2 font-medium">{{ o.name }}</td>
+            <td class="p-2 text-center text-red-600">-{{ o.points_deducted }}</td>
+            <td class="p-2">{{ o.description|default:"-" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="3" class="text-center text-gray-400 py-6">Hakuna bado.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

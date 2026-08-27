@@ -1,0 +1,229 @@
+{% extends 'branding/public_base.html' %}
+{% block title %}{{ school.name }}{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="relative text-white overflow-hidden"
+  style="background: linear-gradient(to bottom right, rgba(11,37,69,.92), rgba(15,52,96,.88)){% if profile.cover_image %}, url('{{ profile.cover_image.url }}') center/cover{% endif %};">
+  <div class="max-w-5xl mx-auto px-4 py-20 text-center">
+    {% if school.logo %}
+      <img src="{{ school.logo.url }}" class="h-20 w-20 rounded-full border-4 border-gold object-cover mx-auto mb-5">
+    {% endif %}
+    <h1 class="font-serif text-3xl md:text-5xl font-bold mb-3">{{ school.name }}</h1>
+    {% if profile.motto %}
+      <p class="text-gold italic text-lg mb-6">"{{ profile.motto }}"</p>
+    {% endif %}
+    <div class="flex flex-col sm:flex-row gap-3 justify-center mt-6">
+      <a href="{% if subdomain %}{% url 'branding:admissions_local' subdomain=subdomain %}{% else %}{% url 'branding:admissions' %}{% endif %}"
+         class="bg-gold text-amber-950 font-semibold px-8 py-3 rounded-full">Jiunge na Shule Yetu</a>
+      <a href="/accounts/login/" class="border border-white/40 text-white font-semibold px-8 py-3 rounded-full hover:bg-white/10">Ingia</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<section class="bg-navy2 text-white">
+  <div class="max-w-5xl mx-auto px-4 py-6 grid grid-cols-3 gap-4 text-center">
+    <div>
+      <div class="text-3xl font-serif font-bold text-gold">{{ stats.students }}+</div>
+      <div class="text-xs uppercase tracking-wide text-gray-300 mt-1">Wanafunzi</div>
+    </div>
+    <div>
+      <div class="text-3xl font-serif font-bold text-gold">{{ stats.teachers }}+</div>
+      <div class="text-xs uppercase tracking-wide text-gray-300 mt-1">Walimu</div>
+    </div>
+    <div>
+      <div class="text-3xl font-serif font-bold text-gold">{{ stats.programs }}</div>
+      <div class="text-xs uppercase tracking-wide text-gray-300 mt-1">Programu/Michepuo</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / MISSION / VISION -->
+{% if profile.about_text or profile.mission or profile.vision %}
+<section id="about" class="max-w-5xl mx-auto px-4 py-16">
+  {% if profile.about_text %}
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="text-gold text-xs uppercase font-bold tracking-widest">Kuhusu Sisi</span>
+      <p class="text-gray-700 leading-relaxed mt-3">{{ profile.about_text }}</p>
+    </div>
+  {% endif %}
+
+  {% if profile.mission or profile.vision %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {% if profile.vision %}
+        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+          <div class="text-gold text-2xl mb-2">&#127919;</div>
+          <h3 class="font-serif font-bold text-navy text-lg mb-2">Dira Yetu (Vision)</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">{{ profile.vision }}</p>
+        </div>
+      {% endif %}
+      {% if profile.mission %}
+        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+          <div class="text-gold text-2xl mb-2">&#128737;</div>
+          <h3 class="font-serif font-bold text-navy text-lg mb-2">Dhamira Yetu (Mission)</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">{{ profile.mission }}</p>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+{% endif %}
+
+<!-- LEADERSHIP PREVIEW -->
+{% if leadership %}
+<section class="bg-white border-y border-gray-100">
+  <div class="max-w-5xl mx-auto px-4 py-16">
+    <div class="text-center mb-10">
+      <span class="text-gold text-xs uppercase font-bold tracking-widest">Uongozi</span>
+      <h2 class="font-serif text-2xl md:text-3xl font-bold text-navy mt-2">Wanaoongoza Shule Yetu</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {% for m in leadership %}
+        <div class="text-center">
+          {% if m.photo %}
+            <img src="{{ m.photo.url }}" class="w-24 h-24 rounded-full object-cover mx-auto mb-3 border-2 border-gold">
+          {% else %}
+            <div class="w-24 h-24 rounded-full bg-navy/10 mx-auto mb-3 flex items-center justify-center text-navy font-serif font-bold text-2xl">{{ m.full_name|slice:":1" }}</div>
+          {% endif %}
+          <div class="font-semibold text-navy text-sm">{{ m.full_name }}</div>
+          <div class="text-gray-500 text-xs">{{ m.role_title }}</div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-8">
+      <a href="{% if subdomain %}{% url 'branding:leadership_list_local' subdomain=subdomain %}{% else %}{% url 'branding:leadership_list' %}{% endif %}"
+         class="text-navy2 font-semibold text-sm hover:underline">Ona Uongozi Wote &rarr;</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- PROGRAMS -->
+{% if programs %}
+<section class="max-w-5xl mx-auto px-4 py-16">
+  <div class="text-center mb-10">
+    <span class="text-gold text-xs uppercase font-bold tracking-widest">Taaluma</span>
+    <h2 class="font-serif text-2xl md:text-3xl font-bold text-navy mt-2">Programu Zetu za Kitaaluma</h2>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for p in programs %}
+      <div class="border border-gray-200 rounded-xl p-6 hover:shadow-md">
+        <span class="inline-block bg-navy/10 text-navy text-xs font-bold px-3 py-1 rounded-full mb-3">{{ p.get_level_display }}</span>
+        <h3 class="font-serif font-bold text-navy text-lg mb-2">{{ p.name }}</h3>
+        {% if p.description %}<p class="text-gray-600 text-sm leading-relaxed">{{ p.description }}</p>{% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- FACILITIES -->
+{% if facilities %}
+<section class="bg-white border-y border-gray-100">
+  <div class="max-w-5xl mx-auto px-4 py-16">
+    <div class="text-center mb-10">
+      <span class="text-gold text-xs uppercase font-bold tracking-widest">Miundombinu</span>
+      <h2 class="font-serif text-2xl md:text-3xl font-bold text-navy mt-2">Vifaa Tulivyonavyo</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+      {% for f in facilities %}
+        <div class="text-center border border-gray-100 rounded-xl overflow-hidden hover:shadow-md">
+          {% if f.image %}
+            <img src="{{ f.image.url }}" class="w-full h-32 object-cover">
+          {% else %}
+            <div class="w-full h-32 bg-navy/5 flex items-center justify-center text-4xl">{{ f.icon|default:"&#127963;" }}</div>
+          {% endif %}
+          <div class="p-3">
+            <div class="font-semibold text-navy text-sm">{{ f.name }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- TESTIMONIALS -->
+{% if testimonials %}
+<section class="max-w-5xl mx-auto px-4 py-16">
+  <div class="text-center mb-10">
+    <span class="text-gold text-xs uppercase font-bold tracking-widest">Maoni</span>
+    <h2 class="font-serif text-2xl md:text-3xl font-bold text-navy mt-2">Wanachosema Wazazi na Wahitimu</h2>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for t in testimonials %}
+      <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+        <div class="text-gold text-3xl mb-2">&#8220;</div>
+        <p class="text-gray-600 text-sm italic leading-relaxed mb-4">{{ t.quote }}</p>
+        <div class="flex items-center gap-3">
+          {% if t.photo %}
+            <img src="{{ t.photo.url }}" class="w-10 h-10 rounded-full object-cover">
+          {% else %}
+            <div class="w-10 h-10 rounded-full bg-navy/10 flex items-center justify-center text-navy font-bold text-sm">{{ t.author_name|slice:":1" }}</div>
+          {% endif %}
+          <div>
+            <div class="font-semibold text-navy text-sm">{{ t.author_name }}</div>
+            <div class="text-gray-400 text-xs">{{ t.get_author_role_display }}</div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- LATEST NEWS -->
+{% if posts %}
+<section class="bg-white border-y border-gray-100">
+  <div class="max-w-5xl mx-auto px-4 py-16">
+    <div class="text-center mb-10">
+      <span class="text-gold text-xs uppercase font-bold tracking-widest">Habari</span>
+      <h2 class="font-serif text-2xl md:text-3xl font-bold text-navy mt-2">Habari na Matukio ya Hivi Karibuni</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for post in posts %}
+        <a href="{% if subdomain %}{% url 'branding:post_detail_local' subdomain=subdomain post_id=post.id %}{% else %}{% url 'branding:post_detail' post_id=post.id %}{% endif %}"
+           class="block border border-gray-200 rounded-xl overflow-hidden hover:shadow-md">
+          {% if post.image %}
+            <img src="{{ post.image.url }}" class="w-full h-40 object-cover">
+          {% endif %}
+          <div class="p-4">
+            <span class="text-xs uppercase text-gold font-semibold">{{ post.get_category_display }}</span>
+            <h3 class="font-serif font-bold text-navy mt-1">{{ post.title }}</h3>
+            <p class="text-gray-400 text-xs mt-2">{{ post.created_at|date:"d/m/Y" }}</p>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-8">
+      <a href="{% if subdomain %}{% url 'branding:post_list_local' subdomain=subdomain %}{% else %}{% url 'branding:post_list' %}{% endif %}"
+         class="text-navy2 font-semibold text-sm hover:underline">Ona Habari Zote &rarr;</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ADMISSIONS CTA -->
+<section class="bg-gradient-to-br from-navy to-navy2 text-white">
+  <div class="max-w-3xl mx-auto px-4 py-16 text-center">
+    <h2 class="font-serif text-2xl md:text-3xl font-bold mb-3">Uko Tayari Kujiunga Nasi?</h2>
+    <p class="text-gray-300 mb-8">Jaza fomu fupi ya maombi, na uongozi wa shule utawasiliana nawe.</p>
+    <a href="{% if subdomain %}{% url 'branding:admissions_local' subdomain=subdomain %}{% else %}{% url 'branding:admissions' %}{% endif %}"
+       class="bg-gold text-amber-950 font-semibold px-8 py-3 rounded-full inline-block">Omba Kujiunga Sasa</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="max-w-5xl mx-auto px-4 py-16 text-center">
+  <span class="text-gold text-xs uppercase font-bold tracking-widest">Mawasiliano</span>
+  <h2 class="font-serif text-2xl font-bold text-navy mt-2 mb-6">Tupigie au Tutembelee</h2>
+  <div class="flex flex-col sm:flex-row justify-center gap-6 text-gray-600 text-sm">
+    {% if profile.contact_phone %}<div>&#128222; {{ profile.contact_phone }}</div>{% endif %}
+    {% if profile.contact_email %}<div>&#9993; {{ profile.contact_email }}</div>{% endif %}
+    {% if school.address %}<div>&#128205; {{ school.address }}</div>{% endif %}
+  </div>
+</section>
+
+{% endblock %}

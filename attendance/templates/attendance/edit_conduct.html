@@ -1,0 +1,57 @@
+{% extends "shule_core/base_tailwind.html" %}
+{% block title %}Tabia - {{ student }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto py-8 px-4">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-xl font-bold text-gray-800">Tabia/Mwenendo - {{ student }}</h1>
+        <a href="{% url 'attendance:conduct_list' school_class.id %}?term={{ term }}&academic_year={{ academic_year }}"
+           class="text-sm text-indigo-600 hover:underline">&larr; Rudi</a>
+    </div>
+    <p class="text-sm text-gray-500 mb-6">{{ term }} - {{ academic_year }}. Jaza kile unachotaka tu - kila kipengele ni hiari.</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mb-4 p-3 rounded-lg text-sm bg-green-100 text-green-700">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" class="bg-white border border-gray-200 rounded-xl p-6">
+        {% csrf_token %}
+        <input type="hidden" name="term" value="{{ term }}">
+        <input type="hidden" name="academic_year" value="{{ academic_year }}">
+
+        <h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">Vigezo vya Tabia (hiari)</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+            {% for field in form %}
+                {% if field.name not in "general_behavior,class_teacher_remarks,headteacher_remarks" %}
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-xs text-gray-600 mb-1">{{ form.general_behavior.label }}</label>
+            {{ form.general_behavior }}
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-xs text-gray-600 mb-1">{{ form.class_teacher_remarks.label }}</label>
+            {{ form.class_teacher_remarks }}
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-xs text-gray-600 mb-1">{{ form.headteacher_remarks.label }}</label>
+            {{ form.headteacher_remarks }}
+            <p class="text-xs text-gray-400 mt-1">Hiari - kawaida hujazwa na Mkuu wa Shule, lakini unaweza kuweka hapa kama umepewa ruhusa.</p>
+        </div>
+
+        <button type="submit" class="bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-indigo-700">
+            Hifadhi
+        </button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Ingia{% endblock %}
+{% block page_tag %}Mfumo Rasmi wa Shule{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center px-4 py-16 min-h-[70vh]">
+  <div class="w-full max-w-sm bg-white border border-gray-200 rounded shadow-lg p-8 relative">
+    <div class="absolute inset-2 border border-gold/40 rounded pointer-events-none"></div>
+
+    <h2 class="font-serif text-2xl text-navy text-center mb-1">Karibu, Ingia</h2>
+    <p class="text-center text-sm text-gray-500 mb-6">{{ school.name|default:"ShulePlus ERP" }}</p>
+
+    {% if form.errors %}
+      <div class="text-sm bg-red-50 border border-red-600 text-red-700 rounded px-3 py-2 mb-4">
+        Jina la mtumiaji au nywila si sahihi. Jaribu tena.
+      </div>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="mb-4">
+        <label class="block text-xs uppercase tracking-wide text-gray-500 mb-1">Jina la Mtumiaji</label>
+        <input type="text" name="username" required
+               class="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-navy2/40 focus:border-navy2">
+      </div>
+      <div class="mb-5">
+        <label class="block text-xs uppercase tracking-wide text-gray-500 mb-1">Nywila</label>
+        <input type="password" name="password" required
+               class="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-navy2/40 focus:border-navy2">
+      </div>
+      <button type="submit" class="w-full bg-navy2 hover:bg-navy text-white font-semibold py-3 rounded transition">Ingia</button>
+      <input type="hidden" name="next" value="{{ next }}">
+    </form>
+  </div>
+</div>
+{% endblock %}

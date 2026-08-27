@@ -1,0 +1,77 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Uchambuzi wa Somo{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+
+  <h1 class="font-serif text-xl text-navy mb-1">Uchambuzi wa Somo (Subject-wise)</h1>
+  <p class="text-sm text-gray-500 mb-5">Tazama jinsi somo lilivyofanya vizuri au vibaya kwa kila mwanafunzi.</p>
+
+  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
+    <form method="GET" class="grid grid-cols-2 gap-3 items-end">
+      <div class="col-span-2">
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.subject.label }}</label>
+        {{ form.subject }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.term.label }}</label>
+        {{ form.term }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.exam_type.label }}</label>
+        {{ form.exam_type }}
+      </div>
+      <div class="col-span-2">
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.academic_year.label }}</label>
+        {{ form.academic_year }}
+      </div>
+      <button type="submit" class="col-span-2 bg-navy2 text-white text-sm font-semibold rounded py-2.5">Changanua</button>
+    </form>
+  </div>
+
+  {% if stats %}
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+      <div class="bg-white border border-gray-200 rounded p-3 text-center">
+        <div class="text-lg font-bold text-navy font-serif">{{ stats.highest }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Juu Kabisa</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-3 text-center">
+        <div class="text-lg font-bold text-navy font-serif">{{ stats.lowest }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Chini Kabisa</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-3 text-center">
+        <div class="text-lg font-bold text-navy font-serif">{{ stats.average }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Wastani</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-3 text-center">
+        <div class="text-lg font-bold text-green-700 font-serif">{{ stats.passed }}/{{ stats.total_students }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Waliofaulu</div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="bg-white border border-gray-200 rounded p-5 overflow-x-auto">
+    <table class="w-full text-sm min-w-[420px]">
+      <thead>
+        <tr class="bg-navy text-white text-xs uppercase">
+          <th class="p-2">Namba</th><th class="p-2">Reg Number</th><th class="p-2 text-left">Jina</th>
+          <th class="p-2">Alama</th><th class="p-2">Daraja</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for res in subject_results %}
+          <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100 text-center">
+            <td class="p-2">{{ forloop.counter }}</td>
+            <td class="p-2">{{ res.student.reg_number }}</td>
+            <td class="p-2 text-left font-medium">{{ res.student.first_name }} {{ res.student.last_name }}</td>
+            <td class="p-2 font-bold text-navy">{{ res.score }}</td>
+            <td class="p-2">{{ res.grade }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-gray-400 py-6">Chagua somo na aina ya mtihani hapo juu.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

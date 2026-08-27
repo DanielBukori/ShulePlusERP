@@ -1,0 +1,60 @@
+{% extends 'branding/public_base.html' %}
+{% block title %}Admissions - {{ school.name }}{% endblock %}
+
+{% block content %}
+<section class="bg-gradient-to-br from-navy to-navy2 text-white">
+  <div class="max-w-4xl mx-auto px-4 py-16 text-center">
+    <span class="text-gold text-xs uppercase font-bold tracking-widest">Jiunge Nasi</span>
+    <h1 class="font-serif text-3xl md:text-4xl font-bold mt-2">Admissions - {{ school.name }}</h1>
+  </div>
+</section>
+
+<section class="max-w-5xl mx-auto px-4 py-14 grid grid-cols-1 md:grid-cols-2 gap-10">
+
+  <div>
+    {% for p in admission_posts %}
+      <div class="prose text-gray-700 leading-relaxed mb-6 whitespace-pre-line">{{ p.body }}</div>
+    {% endfor %}
+
+    {% if programs %}
+      <h2 class="font-serif font-bold text-navy text-xl mb-4">Programu Zinazopatikana</h2>
+      <div class="space-y-4">
+        {% for p in programs %}
+          <div class="border border-gray-200 rounded-xl p-4">
+            <span class="inline-block bg-navy/10 text-navy text-xs font-bold px-3 py-1 rounded-full mb-2">{{ p.get_level_display }}</span>
+            <h3 class="font-serif font-bold text-navy">{{ p.name }}</h3>
+            {% if p.description %}<p class="text-gray-600 text-sm mt-1">{{ p.description }}</p>{% endif %}
+            {% if p.requirements %}
+              <p class="text-gray-500 text-xs mt-2"><b>Masharti:</b> {{ p.requirements }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-xl p-6 h-fit shadow-sm">
+    <h2 class="font-serif font-bold text-navy text-xl mb-1">Fomu ya Maombi</h2>
+    <p class="text-gray-500 text-sm mb-5">Jaza fomu hii, tutakupigia haraka iwezekanavyo.</p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" class="space-y-4">
+      {% csrf_token %}
+      {% for field in form %}
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ field.label }}</label>
+          {{ field }}
+          {% for e in field.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="w-full bg-gold text-amber-950 font-semibold py-3 rounded">Tuma Ombi</button>
+    </form>
+  </div>
+
+</section>
+{% endblock %}

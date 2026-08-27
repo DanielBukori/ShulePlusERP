@@ -1,0 +1,38 @@
+; ============================================================
+; ShulePlusERP - Gunicorn systemd service (SELF-HEALING)
+; Weka: /etc/systemd/system/shuleplus.service
+;
+; Amri za kuwasha:
+;   sudo systemctl daemon-reload
+;   sudo systemctl enable shuleplus
+;   sudo systemctl start shuleplus
+;   sudo systemctl status shuleplus   <- angalia hali
+;
+; MUHIMU: Restart=always ndiyo "self-healing" halisi - process
+; ikianguka kwa sababu yoyote (crash, out-of-memory, error), systemd
+; inairudisha ndani ya sekunde 3 bila wewe kuingia SSH.
+; ============================================================
+
+[Unit]
+Description=ShulePlusERP Gunicorn Daemon
+After=network.target postgresql.service
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/shuleplus_erp
+ExecStart=/home/ubuntu/shuleplus_erp/venv/bin/gunicorn \
+    --workers 3 \
+    --timeout 30 \
+    --bind unix:/home/ubuntu/shuleplus_erp/shuleplus.sock \
+    shuleplus_erp.wsgi:application
+
+; --- SELF-HEALING: hii ndiyo sehemu muhimu zaidi ---
+Restart=always
+RestartSec=3
+
+; Kama worker ikikwama (query ndefu isiyoisha), Gunicorn --timeout 30
+; hapo juu inaiua yenyewe na kuanzisha mpya - hauhitaji systemd kwa hilo.
+
+[Install]
+WantedBy=multi-user.target

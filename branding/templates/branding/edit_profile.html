@@ -1,0 +1,38 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Wasifu wa Tovuti{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <h1 class="font-serif text-xl text-navy mb-1">Wasifu wa Tovuti ya Shule</h1>
+  <p class="text-sm text-gray-500 mb-5">Hii ndiyo taarifa inayoonekana kwenye ukurasa wa umma wa shule yako.</p>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  {% if not profile.is_complete %}
+    <div class="text-sm bg-amber-50 border border-amber-400 text-amber-800 rounded px-3 py-2 mb-4">
+      &#9888; Wasifu wako haujakamilika - jaza "Kuhusu Shule", "Dira", "Dhamira" na Picha Kuu ili tovuti yako ionekane kamili.
+    </div>
+  {% endif %}
+
+  <div class="bg-white border border-gray-200 rounded p-5 md:p-8">
+    <form method="POST" enctype="multipart/form-data" class="space-y-5">
+      {% csrf_token %}
+      {% for field in form %}
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ field.label }}</label>
+          {{ field }}
+          {% if field.name == 'cover_image' and profile.cover_image %}
+            <img src="{{ profile.cover_image.url }}" class="h-20 rounded mt-2">
+          {% endif %}
+          {% for e in field.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="bg-gold text-amber-950 font-semibold px-6 py-2.5 rounded">Hifadhi Wasifu</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

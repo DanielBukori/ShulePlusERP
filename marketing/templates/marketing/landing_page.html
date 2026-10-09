@@ -1,15 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="sw">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShulePlusERP - Mfumo Kamili wa Usimamizi wa Shule</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = { theme: { extend: { colors: {
-    navy:'#0B2545', navy2:'#0F3460', gold:'#D4AF37', green:'#146B3A', paper:'#FBFAF7'
-  }, fontFamily: { serif:['Georgia','Times New Roman','serif'] } } } }
-</script>
+<link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
 </head>
 <style>
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

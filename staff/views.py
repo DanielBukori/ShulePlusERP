@@ -9,6 +9,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 
 from shule_core.models import CustomUser, Staff, SubjectAssignment
+from shule_core.sms_service import send_sms
 from .forms import TeacherRegistrationForm, SubjectAssignmentForm, StaffRoleForm
 from audit.utils import log_action
 
@@ -70,6 +71,7 @@ def register_teacher_view(request):
                         first_name=form.cleaned_data['first_name'],
                         last_name=form.cleaned_data['last_name'],
                         must_change_password=True,
+                        is_active=False,
                     )
                     staff = Staff.objects.create(
                         user=user,
@@ -88,11 +90,26 @@ def register_teacher_view(request):
                 )
                 return redirect('staff:register_teacher')
 
-            messages.success(
-                request,
-                f"{user.get_role_display()} {user.get_full_name()} amesajiliwa. Akaunti: {username} / {temp_password} "
-                f"(mtumie sasa hivi). Sasa mpangie masomo/madarasa."
+            sms_result = send_sms(
+                school,
+                [phone_digits],
+                f"ShulePlusERP: Akaunti yako ni {username}, PIN {temp_password}. "
+                "Badilisha PIN baada ya kuingia.",
             )
+            if sms_result['sent']:
+                user.is_active = True
+                user.save(update_fields=['is_active'])
+                messages.success(
+                    request,
+                    f"{user.get_role_display()} {user.get_full_name()} amesajiliwa; PIN imetumwa kwa SMS. "
+                    "Sasa mpangie masomo/madarasa.",
+                )
+            else:
+                messages.warning(
+                    request,
+                    f"{user.get_role_display()} {user.get_full_name()} amesajiliwa lakini SMS ya PIN haikutumwa; "
+                    "akaunti imefungwa hadi admin atatue tatizo la SMS.",
+                )
             log_action(
                 request.user, school, 'TEACHER_REGISTERED',
                 f"Amesajili {user.get_role_display()} {user.get_full_name()} ({username})."
@@ -212,5 +229,4 @@ def assign_class_teacher_view(request):
 
     context = {'school': School, 'classes': classes, 'teachers': teachers}
     return render(request, 'staff/assign_class_teacher.html', context)
-
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import login as auth_login
+from django.db import transaction
 from .forms import SchoolRegistrationForm
 from .models import CustomUser
 
@@ -14,35 +14,36 @@ def register_school(request):
     if request.method == 'POST':
         form = SchoolRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
-            school = form.save()
-
-            headmaster = CustomUser.objects.create_user(
-                username=form.cleaned_data['headmaster_username'],
-                password=form.cleaned_data['headmaster_password'],
-                phone=form.cleaned_data['headmaster_phone'],
-                email=form.cleaned_data['headmaster_email'],
-                role='HEADMASTER',
-                school=school,
-                is_staff=True,
-            )
-
-            # Mwingize Mkuu MOJA KWA MOJA (hahitaji kuingia tena kwa mkono) -
-            # backend inatajwa waziwazi kwa sababu create_user() haiweki
-            # user.backend, ambayo login() inahitaji.
-            auth_login(request, headmaster, backend='django.contrib.auth.backends.ModelBackend')
+            with transaction.atomic():
+                school = form.save(commit=False)
+                school.is_approved = False
+                school.save()
+                CustomUser.objects.create_user(
+                    username=form.cleaned_data['headmaster_username'],
+                    password=form.cleaned_data['headmaster_password'],
+                    phone=form.cleaned_data['headmaster_phone'],
+                    email=form.cleaned_data['headmaster_email'],
+                    role='HEADMASTER',
+                    school=school,
+                    is_active=False,
+                    is_staff=False,
+                    must_change_password=False,
+                    school_registration_pending=True,
+                )
 
             messages.success(
                 request,
-                f"Shule ya {school.name} imesajiliwa kikamilifu! Karibu kwenye dashibodi yako."
+                "Ombi lako limepokelewa. Akaunti itafunguliwa baada ya ukaguzi na idhini ya admin."
             )
-            # post_login_redirect_view ndiyo chanzo kimoja cha ukweli cha
-            # 'role gani inaenda dashibodi gani' - tumia hiyo hiyo badala ya
-            # kuandika URL ya dashibodi moja kwa moja hapa (DRY).
-            return redirect('accounts:post_login_redirect')
+            return redirect('shule_core:registration_received')
     else:
         form = SchoolRegistrationForm()
 
     return render(request, 'shule_core/register_school.html', {'form': form})
+
+
+def school_registration_received(request):
+    return render(request, 'shule_core/registration_received.html')
 
 
 def health_check_view(request):

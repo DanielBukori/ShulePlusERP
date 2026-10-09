@@ -88,12 +88,18 @@ class PaymentForm(forms.ModelForm):
 
     def __init__(self, *args, school=None, **kwargs):
         super().__init__(*args, **kwargs)
+        self.school = school
         if school:
             self.fields['student'].queryset = Student.objects.filter(school=school)
 
     def clean_receipt_number(self):
         number = self.cleaned_data['receipt_number']
-        if Payment.objects.filter(receipt_number=number).exists():
+        payments = Payment.objects.filter(receipt_number=number)
+        if self.school:
+            payments = payments.filter(school=self.school)
+        if self.instance.pk:
+            payments = payments.exclude(pk=self.instance.pk)
+        if payments.exists():
             raise ValidationError('Namba hii ya risiti tayari imetumika.')
         return number
 

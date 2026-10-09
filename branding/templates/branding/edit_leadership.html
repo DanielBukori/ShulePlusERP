@@ -1,4 +1,5 @@
 {% extends 'shule_core/base_tailwind.html' %}
+{% load school_media %}
 {% block title %}Hariri Mwanauongozi{% endblock %}
 
 {% block content %}
@@ -14,7 +15,7 @@
         <div>
           <label class="block text-xs uppercase text-gray-500 mb-1">{{ field.label }}</label>
           {{ field }}
-          {% if field.name == 'photo' and member.photo %}<img src="{{ member.photo.url }}" class="h-16 rounded-full mt-2">{% endif %}
+          {% if field.name == 'photo' and member.photo %}<img src="{% school_media_url member 'photo' %}" class="h-16 rounded-full mt-2">{% endif %}
           {% for e in field.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
         </div>
       {% endfor %}

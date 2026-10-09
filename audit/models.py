@@ -24,7 +24,9 @@ class AuditLog(models.Model):
         ('TEACHER_REGISTERED', 'Mwalimu Amesajiliwa'),
         ('STOCK_ADJUSTED', 'Stock Imerekebishwa'),
         ('CONTRIBUTION_RECORDED', 'Mchango wa Mwanafunzi Umerekodiwa'),
+        ('CONTRIBUTION_PUBLISHED', 'Michango Imechapishwa'),
         ('BRANDING_POST_CREATED', 'Chapisho la Tovuti Limeongezwa'),
+        ('STAFF_ROLE_CHANGED', 'Cheo cha Mfanyakazi Kimebadilishwa'),
         ('OTHER', 'Kingine'),
     ]
 

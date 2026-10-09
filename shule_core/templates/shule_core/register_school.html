@@ -6,6 +6,9 @@
 <div class="max-w-2xl mx-auto px-4 py-10">
   <div class="bg-white border border-gray-200 rounded p-6 md:p-8">
     <h2 class="font-serif text-2xl text-navy text-center mb-6">Sajili Shule Yako</h2>
+    <p class="text-sm text-gray-600 text-center mb-6">
+      Taarifa zitakaguliwa na admin. Akaunti ya Mkuu itafunguliwa baada ya ombi kuidhinishwa.
+    </p>
 
     {% if messages %}
       {% for message in messages %}
@@ -75,6 +78,7 @@
         <div>
           <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.headmaster_password.label }}</label>
           {{ form.headmaster_password }}
+          {% for e in form.headmaster_password.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
         </div>
         <div>
           <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.headmaster_phone.label }}</label>

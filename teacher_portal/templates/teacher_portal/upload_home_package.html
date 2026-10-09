@@ -30,7 +30,7 @@
       {% for p in my_packages %}
         <div class="flex items-center justify-between text-sm">
           <span>{{ p.title }} &middot; {{ p.subject.name }} ({{ p.school_class }})</span>
-          <a href="{{ p.file.url }}" class="text-navy2 text-xs font-semibold">Fungua</a>
+          <a href="{% url 'teacher_portal:download_home_package' p.pk %}" class="text-navy2 text-xs font-semibold">Fungua</a>
         </div>
       {% empty %}
         <p class="text-sm text-gray-400">Hakuna bado.</p>

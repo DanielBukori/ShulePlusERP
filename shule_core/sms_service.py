@@ -11,8 +11,8 @@ code, hasa ukitumia Git - zitumie .env au server environment):
     export BEEM_API_KEY="xxxx"
     export BEEM_SECRET_KEY="xxxx"
 
-Bila hizo mbili, send_sms() haitavunja mfumo - itaandika kwenye console
-tu kwamba "haijatumwa" na kurudisha {'sent': False, 'reason': 'no_credentials'}.
+Bila hizo mbili, send_sms() haitavunja mfumo - itarudisha
+{'sent': False, 'reason': 'no_credentials'} bila kuandika ujumbe wenye PIN kwenye log.
 Hii inaruhusu maendeleo ya local bila akaunti ya Beem, na itaanza kutuma
 SMS halisi mara utakapoweka hizo credentials - hakuna code itakayobadilika.
 """
@@ -49,7 +49,6 @@ def send_sms(school, recipients, message):
         return {'sent': False, 'reason': 'no_recipients'}
 
     if not api_key or not secret_key:
-        print(f"[SMS - HAIJATUMWA: hakuna BEEM_API_KEY/BEEM_SECRET_KEY] Kwa {recipients}: {message}")
         return {'sent': False, 'reason': 'no_credentials'}
 
     source_addr = getattr(school, 'sender_id', None) or 'INFO'
@@ -76,11 +75,15 @@ def send_sms(school, recipients, message):
             },
             timeout=10,
         )
+        response.raise_for_status()
         data = response.json()
+        if not isinstance(data, dict):
+            return {'sent': False, 'reason': 'invalid_response'}
         return {'sent': bool(data.get('successful')), 'raw': data}
-    except requests.RequestException as e:
-        print(f"[SMS ERROR] {e}")
-        return {'sent': False, 'reason': str(e)}
+    except requests.RequestException:
+        return {'sent': False, 'reason': 'request_error'}
+    except ValueError:
+        return {'sent': False, 'reason': 'invalid_response'}
 
 
 def send_sms_to_user(school, user, message):

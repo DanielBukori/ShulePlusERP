@@ -1,4 +1,5 @@
 {% extends 'branding/public_base.html' %}
+{% load school_media %}
 {% block title %}Habari - {{ school.name }}{% endblock %}
 
 {% block content %}
@@ -24,7 +25,7 @@
       {% for post in posts %}
         <a href="{% if subdomain %}{% url 'branding:post_detail_local' subdomain=subdomain post_id=post.id %}{% else %}{% url 'branding:post_detail' post_id=post.id %}{% endif %}"
            class="block border border-gray-200 rounded-xl overflow-hidden hover:shadow-md">
-          {% if post.image %}<img src="{{ post.image.url }}" class="w-full h-40 object-cover">{% endif %}
+          {% if post.image %}<img src="{% school_media_url post 'image' %}" class="w-full h-40 object-cover">{% endif %}
           <div class="p-4">
             <span class="text-xs uppercase text-gold font-semibold">{{ post.get_category_display }}</span>
             <h3 class="font-serif font-bold text-navy mt-1">{{ post.title }}</h3>

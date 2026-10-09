@@ -108,7 +108,7 @@
     {% if summary.home_packages %}
       <div class="space-y-2">
         {% for p in summary.home_packages %}
-          <a href="{{ p.file.url }}" target="_blank" class="flex items-center justify-between text-sm border-b border-gray-100 pb-2 last:border-0 hover:text-navy2">
+          <a href="{% url 'teacher_portal:download_home_package' p.pk %}" class="flex items-center justify-between text-sm border-b border-gray-100 pb-2 last:border-0 hover:text-navy2">
             <span>
               <span class="font-medium">{{ p.title }}</span>
               <span class="text-xs text-gray-400 block">{{ p.subject.name }} &middot; {{ p.get_term_display }} {{ p.academic_year }}</span>

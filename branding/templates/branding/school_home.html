@@ -1,14 +1,15 @@
 {% extends 'branding/public_base.html' %}
+{% load school_media %}
 {% block title %}{{ school.name }}{% endblock %}
 
 {% block content %}
 
 <!-- HERO -->
 <section class="relative text-white overflow-hidden"
-  style="background: linear-gradient(to bottom right, rgba(11,37,69,.92), rgba(15,52,96,.88)){% if profile.cover_image %}, url('{{ profile.cover_image.url }}') center/cover{% endif %};">
+  style="background: linear-gradient(to bottom right, rgba(11,37,69,.92), rgba(15,52,96,.88)){% if profile.cover_image %}, url('{% school_media_url profile 'cover_image' %}') center/cover{% endif %};">
   <div class="max-w-5xl mx-auto px-4 py-20 text-center">
     {% if school.logo %}
-      <img src="{{ school.logo.url }}" class="h-20 w-20 rounded-full border-4 border-gold object-cover mx-auto mb-5">
+      <img src="{% school_media_url school 'logo' %}" class="h-20 w-20 rounded-full border-4 border-gold object-cover mx-auto mb-5">
     {% endif %}
     <h1 class="font-serif text-3xl md:text-5xl font-bold mb-3">{{ school.name }}</h1>
     {% if profile.motto %}
@@ -83,7 +84,7 @@
       {% for m in leadership %}
         <div class="text-center">
           {% if m.photo %}
-            <img src="{{ m.photo.url }}" class="w-24 h-24 rounded-full object-cover mx-auto mb-3 border-2 border-gold">
+            <img src="{% school_media_url m 'photo' %}" class="w-24 h-24 rounded-full object-cover mx-auto mb-3 border-2 border-gold">
           {% else %}
             <div class="w-24 h-24 rounded-full bg-navy/10 mx-auto mb-3 flex items-center justify-center text-navy font-serif font-bold text-2xl">{{ m.full_name|slice:":1" }}</div>
           {% endif %}
@@ -131,7 +132,7 @@
       {% for f in facilities %}
         <div class="text-center border border-gray-100 rounded-xl overflow-hidden hover:shadow-md">
           {% if f.image %}
-            <img src="{{ f.image.url }}" class="w-full h-32 object-cover">
+            <img src="{% school_media_url f 'image' %}" class="w-full h-32 object-cover">
           {% else %}
             <div class="w-full h-32 bg-navy/5 flex items-center justify-center text-4xl">{{ f.icon|default:"&#127963;" }}</div>
           {% endif %}
@@ -159,7 +160,7 @@
         <p class="text-gray-600 text-sm italic leading-relaxed mb-4">{{ t.quote }}</p>
         <div class="flex items-center gap-3">
           {% if t.photo %}
-            <img src="{{ t.photo.url }}" class="w-10 h-10 rounded-full object-cover">
+            <img src="{% school_media_url t 'photo' %}" class="w-10 h-10 rounded-full object-cover">
           {% else %}
             <div class="w-10 h-10 rounded-full bg-navy/10 flex items-center justify-center text-navy font-bold text-sm">{{ t.author_name|slice:":1" }}</div>
           {% endif %}
@@ -187,7 +188,7 @@
         <a href="{% if subdomain %}{% url 'branding:post_detail_local' subdomain=subdomain post_id=post.id %}{% else %}{% url 'branding:post_detail' post_id=post.id %}{% endif %}"
            class="block border border-gray-200 rounded-xl overflow-hidden hover:shadow-md">
           {% if post.image %}
-            <img src="{{ post.image.url }}" class="w-full h-40 object-cover">
+            <img src="{% school_media_url post 'image' %}" class="w-full h-40 object-cover">
           {% endif %}
           <div class="p-4">
             <span class="text-xs uppercase text-gold font-semibold">{{ post.get_category_display }}</span>

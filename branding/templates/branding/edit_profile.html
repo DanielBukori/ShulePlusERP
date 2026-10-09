@@ -1,4 +1,5 @@
 {% extends 'shule_core/base_tailwind.html' %}
+{% load school_media %}
 {% block title %}Wasifu wa Tovuti{% endblock %}
 
 {% block content %}
@@ -26,7 +27,7 @@
           <label class="block text-xs uppercase text-gray-500 mb-1">{{ field.label }}</label>
           {{ field }}
           {% if field.name == 'cover_image' and profile.cover_image %}
-            <img src="{{ profile.cover_image.url }}" class="h-20 rounded mt-2">
+            <img src="{% school_media_url profile 'cover_image' %}" class="h-20 rounded mt-2">
           {% endif %}
           {% for e in field.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
         </div>

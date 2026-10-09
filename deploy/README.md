@@ -158,6 +158,10 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/example.co.tz/privkey.pem;
     client_max_body_size 10m;
 
+    location ^~ /media/ {
+        return 404;
+    }
+
     location /static/ {
         alias /home/ubuntu/shuleplus_erp/staticfiles/;
     }
@@ -179,7 +183,9 @@ kwenye hatua hiyo.
 Hii config **haifungui `media/` kama public static files**: folder hiyo inaweza
 kuwa na risiti, ushahidi na taarifa za wanafunzi. Tumia data ya majaribio
 kwanza; kabla ya production yenye taarifa halisi, hakiki njia salama ya kuhudumia
-mafaili hayo pamoja na backup ya database na media.
+mafaili hayo pamoja na backup ya database na media. `Nginx` huzuia direct
+requests za `/media/`; picha za branding na mafaili ya risiti, ushahidi na kazi
+za nyumbani huhudumiwa na Django views zenye uthibitishaji wa shule/ruhusa.
 
 ## 6. Weka HTTPS
 
@@ -221,6 +227,17 @@ rekodi ya shule kwenye **Schools**, kisha tumia subdomain iliyowekwa kwenye
 rekodi hiyo, kwa mfano `https://sehisco.example.co.tz/`. Hakikisha DNS wildcard
 inaelekea kwenye server na jina la subdomain linalingana kabisa na rekodi ya
 shule.
+
+## Backfill ya mara moja kwa matokeo ya A-Level
+
+Baada ya deploy ya code yenye marekebisho ya A-Level, kagua idadi ya rekodi
+zitakazobadilishwa kisha endesha backfill. Command inaweka combination ya
+mwanafunzi kwenye rekodi za A-Level ambazo combination bado ni `NULL`.
+
+```bash
+sudo -u ubuntu bash -c 'set -a; . /etc/shuleplus.env; set +a; cd /home/ubuntu/shuleplus_erp && ./venv/bin/python manage.py backfill_a_level_result_combinations --dry-run'
+sudo -u ubuntu bash -c 'set -a; . /etc/shuleplus.env; set +a; cd /home/ubuntu/shuleplus_erp && ./venv/bin/python manage.py backfill_a_level_result_combinations'
+```
 
 ## 7. Ukaguzi, update na backup
 

@@ -1,4 +1,5 @@
 {% extends 'shule_core/base_tailwind.html' %}
+{% load school_media %}
 {% block title %}Uongozi wa Tovuti{% endblock %}
 
 {% block content %}
@@ -27,7 +28,7 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
     {% for m in members %}
       <div class="bg-white border border-gray-200 rounded p-4 text-center">
-        {% if m.photo %}<img src="{{ m.photo.url }}" class="w-16 h-16 rounded-full object-cover mx-auto mb-2">{% endif %}
+        {% if m.photo %}<img src="{% school_media_url m 'photo' %}" class="w-16 h-16 rounded-full object-cover mx-auto mb-2">{% endif %}
         <div class="font-semibold text-navy text-sm">{{ m.full_name }}</div>
         <div class="text-gray-500 text-xs mb-3">{{ m.role_title }}</div>
         {% if not m.is_published %}<span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Rasimu</span>{% endif %}

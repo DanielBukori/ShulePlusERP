@@ -3,8 +3,8 @@ from functools import wraps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.http import HttpResponseForbidden
-from django.shortcuts import render, redirect
+from django.http import FileResponse, Http404, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, render, redirect
 
 from shule_core.models import AcademicResult, SubjectAssignment, Student
 from .forms import (
@@ -161,7 +161,13 @@ def enter_marks_view(request):
                         AcademicResult.objects.update_or_create(
                             student=s, subject=subject, exam_type=code,
                             term=term, academic_year=academic_year,
-                            defaults={'school': school, 'school_class': school_class, 'score': score_val, 'recorded_by': request.user},
+                            defaults={
+                                'school': school,
+                                'school_class': school_class,
+                                'combination': combination,
+                                'score': score_val,
+                                'recorded_by': request.user,
+                            },
                         )
                         saved_count += 1
                         # Series haziathiri MID_TERM/TERMINAL/ANNUAL - recompute
@@ -171,7 +177,10 @@ def enter_marks_view(request):
 
                 for s in student_qs:
                     if s.id in touched_students:
-                        recompute_derived_results(school, s, subject, term, academic_year, school_class)
+                        recompute_derived_results(
+                            school, s, subject, term, academic_year, school_class,
+                            combination=combination,
+                        )
 
             messages.success(request, f"Marks {saved_count} zimehifadhiwa - {subject.name} ({school_class}).")
             log_action(
@@ -250,3 +259,44 @@ def upload_home_package_view(request):
     my_packages = HomePackage.objects.filter(teacher=request.user)
     context = {'school': school, 'form': form, 'my_packages': my_packages}
     return render(request, 'teacher_portal/upload_home_package.html', context)
+
+
+@login_required
+def download_home_package_view(request, package_id):
+    school = _get_school(request)
+    if not school:
+        return HttpResponseForbidden("Hauruhusiwi kufikia faili hili.")
+
+    package = get_object_or_404(
+        HomePackage.objects.select_related('school_class'),
+        pk=package_id,
+        school=school,
+    )
+    user = request.user
+    allowed = user.school_id == school.pk and user.role in ('HEADMASTER', 'SECOND_MASTER', 'ACADEMIC')
+
+    if user.role == 'TEACHER':
+        allowed = allowed or package.teacher_id == user.pk
+    elif user.role == 'STUDENT':
+        allowed = Student.objects.filter(
+            user=user,
+            school=school,
+            school_class=package.school_class,
+        ).exists()
+    elif user.role == 'PARENT':
+        allowed = Student.objects.filter(
+            parent=user,
+            school=school,
+            school_class=package.school_class,
+        ).exists()
+
+    if not allowed:
+        return HttpResponseForbidden("Hauruhusiwi kufikia faili hili.")
+    if not package.file:
+        raise Http404("Faili la kazi hii halipo.")
+
+    return FileResponse(
+        package.file.open('rb'),
+        as_attachment=True,
+        filename=package.file.name.rsplit('/', 1)[-1],
+    )

@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import ResultFilterForm, SubjectScoreFilterForm, AcademicStatisticsFilterForm, ReportPublishForm, StudentRegistrationForm
 from shule_core.models import AcademicResult, CustomUser, SchoolClass, Student, Subject, Combination
-from shule_core.sms_service import send_sms_to_user
+from shule_core.sms_service import send_sms
 from notifications.utils import notify
 from audit.utils import log_action
 
@@ -181,7 +181,7 @@ def academic_dashboard_view(request):
     if request.user.role in ('HEADMASTER', 'SECOND_MASTER'):
         from discipline.models import DisciplineAlert
         from store.models import StoreStock
-        from accountant.models import get_student_debt
+        from accountant.models import get_student_debts
         from audit.models import AuditLog
 
         context['open_discipline_alerts'] = DisciplineAlert.objects.filter(
@@ -190,11 +190,8 @@ def academic_dashboard_view(request):
         context['low_stock_count'] = sum(
             1 for s in StoreStock.objects.filter(school=school) if s.is_low
         )
-        # NOTE: hesabu hii ni ya moja kwa moja (siyo cached) - kwa shule
-        # kubwa sana (wanafunzi 1000+), fikiria kuongeza caching baadaye.
-        context['total_outstanding_debt'] = sum(
-            get_student_debt(s) for s in Student.objects.filter(school=school)
-        )
+        student_ids = Student.objects.filter(school=school).values_list('pk', flat=True)
+        context['total_outstanding_debt'] = sum(get_student_debts(student_ids).values())
         context['recent_activity'] = AuditLog.objects.filter(school=school).select_related('actor')[:8]
         context['total_teachers'] = CustomUser.objects.filter(
             school=school, role__in=['TEACHER', 'ACADEMIC', 'SECOND_MASTER', 'DISCIPLINE', 'ACCOUNTANT']
@@ -619,10 +616,13 @@ def academic_publish_results_view(request):
                                 )
                                 auto_f_count += 1
 
-                AcademicResult.objects.filter(
-                    school=school, student__school_class=school_class,
-                    term=term, exam_type=exam_type, academic_year=academic_year,
-                ).update(is_published=True)
+                    AcademicResult.objects.filter(
+                        school=school,
+                        student__in=students_qs,
+                        term=term,
+                        exam_type=exam_type,
+                        academic_year=academic_year,
+                    ).update(is_published=True)
 
             published = True
 
@@ -652,7 +652,8 @@ def register_student_view(request):
     """
     Sajili mwanafunzi mpya, na kiotomatiki:
       - tengeneza/unganisha akaunti ya Mzazi (username = namba ya simu)
-      - tengeneza akaunti ya Mwanafunzi (username = reg_number, password = reg_number)
+      - tengeneza akaunti ya Mwanafunzi yenye PIN ya nasibu
+      - tuma taarifa za kuingia kwa SMS kwenye namba ya mzazi
     Username zote zina prefix ya subdomain ya shule ili zisigongane
     na shule nyingine (CustomUser.username ni unique kwa mfumo mzima).
     """
@@ -686,36 +687,51 @@ def register_student_view(request):
                         school=school,
                         first_name=form.cleaned_data['parent_name'],
                         must_change_password=True,
+                        is_active=False,
                     )
                 student.parent = parent_user
 
                 student_username = f"{school.subdomain}{student.reg_number}"
+                student_temp_password = f"{secrets.randbelow(900000) + 100000}"
                 student_user = CustomUser.objects.create_user(
                     username=student_username,
-                    password=student.reg_number,
+                    password=student_temp_password,
                     email=f"{student_username}@no-email.shulepluserp.local",
                     role='STUDENT',
                     school=school,
                     first_name=student.first_name,
                     last_name=student.last_name,
                     must_change_password=True,
+                    is_active=False,
                 )
                 student.user = student_user
                 student.save()
 
-            success_msg = (
-                f"Mwanafunzi {student} amesajiliwa kikamilifu. "
-                f"Akaunti ya mwanafunzi: {student_username} / {student.reg_number}. "
+            sms_message = (
+                f"ShulePlusERP: Akaunti ya mwanafunzi {student_username}, PIN {student_temp_password}. "
+                "Badilisha PIN baada ya kuingia."
             )
             if parent_temp_password:
-                success_msg += (
-                    f"Akaunti mpya ya mzazi: {parent_username} / {parent_temp_password} "
-                    f"(mtumie kwa SMS sasa hivi)."
+                sms_message += (
+                    f" Akaunti ya mzazi {parent_user.username}, PIN {parent_temp_password}."
+                )
+            sms_result = send_sms(school, [student.parent_phone], sms_message)
+            if sms_result['sent']:
+                student_user.is_active = True
+                student_user.save(update_fields=['is_active'])
+                if parent_temp_password:
+                    parent_user.is_active = True
+                    parent_user.save(update_fields=['is_active'])
+                messages.success(
+                    request,
+                    f"Mwanafunzi {student} amesajiliwa. PIN zimetumwa kwa SMS kwenye simu ya mzazi.",
                 )
             else:
-                success_msg += "Mzazi tayari ana akaunti (ameshaunganishwa na mtoto mwingine)."
-
-            messages.success(request, success_msg)
+                messages.warning(
+                    request,
+                    f"Mwanafunzi {student} amesajiliwa, lakini SMS ya PIN haikutumwa "
+                    "(akaunti zimefungwa). Wasiliana na admin ili akague huduma ya SMS na akaunti.",
+                )
             log_action(
                 request.user, school, 'STUDENT_REGISTERED',
                 f"Amesajili mwanafunzi {student} ({student.reg_number}) - {student.school_class}."
@@ -876,6 +892,8 @@ def bulk_register_students_view(request):
 
     created = []
     errors = []
+    sms_sent_count = 0
+    sms_failures = []
 
     if request.method == 'POST' and request.FILES.get('excel_file'):
         excel_file = request.FILES['excel_file']
@@ -901,13 +919,18 @@ def bulk_register_students_view(request):
                     continue
 
                 reg_number = str(reg_number).strip()
-                if Student.objects.filter(school=school, reg_number=reg_number).exists():
-                    errors.append(f"Mstari {i}: Reg Number '{reg_number}' tayari ipo.")
-                    continue
-
                 school_class = SchoolClass.objects.filter(school=school, name__iexact=str(class_name).strip()).first()
                 if not school_class:
                     errors.append(f"Mstari {i}: Darasa '{class_name}' halipo kwenye mfumo.")
+                    continue
+                if Student.objects.filter(
+                    school=school,
+                    school_class=school_class,
+                    reg_number=reg_number,
+                ).exists():
+                    errors.append(
+                        f"Mstari {i}: Reg Number '{reg_number}' tayari ipo kwenye darasa '{school_class}'."
+                    )
                     continue
 
                 combination = None
@@ -936,15 +959,18 @@ def bulk_register_students_view(request):
                             email=f"{parent_username}@no-email.shulepluserp.local",
                             phone=phone_digits, role='PARENT', school=school,
                             first_name=str(parent_name), must_change_password=True,
+                            is_active=False,
                         )
 
                     student_username = f"{school.subdomain}{reg_number}"
+                    student_temp_password = f"{secrets.randbelow(900000) + 100000}"
                     student_user = CustomUser.objects.create_user(
-                        username=student_username, password=reg_number,
+                        username=student_username, password=student_temp_password,
                         email=f"{student_username}@no-email.shulepluserp.local",
                         role='STUDENT', school=school,
                         first_name=str(first_name), last_name=str(last_name),
                         must_change_password=True,
+                        is_active=False,
                     )
 
                     student = Student.objects.create(
@@ -956,10 +982,29 @@ def bulk_register_students_view(request):
                         parent_phone=phone_digits,
                     )
 
+                sms_message = (
+                    f"ShulePlusERP: Akaunti ya mwanafunzi {student_username}, PIN {student_temp_password}. "
+                    "Badilisha PIN baada ya kuingia."
+                )
+                if parent_temp_password:
+                    sms_message += (
+                        f" Akaunti ya mzazi {parent_user.username}, PIN {parent_temp_password}."
+                    )
+                sms_result = send_sms(school, [phone_digits], sms_message)
+                if sms_result['sent']:
+                    student_user.is_active = True
+                    student_user.save(update_fields=['is_active'])
+                    if parent_temp_password:
+                        parent_user.is_active = True
+                        parent_user.save(update_fields=['is_active'])
+                    sms_sent_count += 1
+                else:
+                    sms_failures.append(i)
+
                 created.append({
                     'student': student, 'student_username': student_username,
-                    'parent_username': parent_username if parent_temp_password else None,
-                    'parent_password': parent_temp_password,
+                    'parent_username': parent_username,
+                    'sms_sent': sms_result['sent'],
                 })
             except Exception as e:
                 errors.append(f"Mstari {i}: hitilafu isiyotarajiwa - {e}")
@@ -969,11 +1014,20 @@ def bulk_register_students_view(request):
                 request.user, school, 'STUDENT_REGISTERED',
                 f"Bulk import: amesajili wanafunzi {len(created)} kwa mkupuo (Excel)."
             )
-            messages.success(request, f"Wanafunzi {len(created)} wamesajiliwa kikamilifu.")
+            messages.success(
+                request,
+                f"Wanafunzi {len(created)} wamesajiliwa; SMS za PIN zimetumwa kwa {sms_sent_count}.",
+            )
+        if sms_failures:
+            messages.warning(
+                request,
+                f"SMS za PIN hazikutumwa kwa mistari {', '.join(map(str, sms_failures))}; "
+                "akaunti husika zimefungwa hadi admin atatue tatizo la SMS.",
+            )
         if errors:
             messages.warning(request, f"Mistari {len(errors)} imeruka - angalia maelezo hapa chini.")
 
-    context = {'school': school, 'created': created, 'errors': errors}
+    context = {'school': school, 'created': created, 'errors': errors, 'sms_failures': sms_failures}
     return render(request, 'academic/bulk_register_students.html', context)
 
 

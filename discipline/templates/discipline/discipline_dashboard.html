@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="max-w-3xl mx-auto px-4 py-6">
-  <p class="text-sm text-gray-500 mb-5">Kiwango cha Alert: chini ya {{ school.discipline_alert_threshold }}</p>
+  <p class="text-sm text-gray-500 mb-5">Kiwango cha Alert: chini ya {{ school.discipline_alert_score }}</p>
 
   {% if open_alerts %}
     <div class="bg-white border border-red-200 border-l-4 border-l-red-600 rounded p-5 mb-6 overflow-x-auto">

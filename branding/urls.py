@@ -6,6 +6,7 @@ app_name = 'branding'
 urlpatterns = [
     # --- Umma (Public) ---
     path('', views.school_home_view, name='school_home'),
+    path('assets/<str:subdomain>/<str:kind>/<int:object_id>/', views.school_asset_view, name='school_asset'),
     path('s/<str:subdomain>/', views.school_home_local_view, name='school_home_local'),
 
     path('news/', views.post_list_view, name='post_list'),

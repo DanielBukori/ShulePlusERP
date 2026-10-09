@@ -1,22 +1,11 @@
+{% load static school_media %}
 <!DOCTYPE html>
 <html lang="sw">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}ShulePlus ERP{% endblock %} &middot; {{ school.name|default:"ShulePlus ERP" }}</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          navy:'#0B2545', navy2:'#0F3460', gold:'#D4AF37', green:'#146B3A', paper:'#FBFAF7'
-        },
-        fontFamily: { serif:['Georgia','Times New Roman','serif'] }
-      }
-    }
-  }
-</script>
+<link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
 {% block extra_head %}{% endblock %}
 <style>
   /* ============================================================
@@ -78,7 +67,7 @@
 
   <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10">
     {% if school.logo %}
-      <img src="{{ school.logo.url }}" class="h-9 w-9 rounded-full border-2 border-gold object-cover" alt="logo">
+      <img src="{% school_media_url school 'logo' %}" class="h-9 w-9 rounded-full border-2 border-gold object-cover" alt="logo">
     {% else %}
       <div class="h-9 w-9 rounded-full bg-white/20 border-2 border-gold flex items-center justify-center text-gold font-bold text-sm">
         {{ school.name|default:"S"|slice:":1" }}

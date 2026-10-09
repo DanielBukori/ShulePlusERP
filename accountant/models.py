@@ -52,8 +52,8 @@ class StudentFeeAssessment(models.Model):
     """
     'Invoice' ya mwaka mmoja kwa mwanafunzi mmoja - inatengenezwa (snapshot)
     kutoka FeeStructure + OtherCharge zilizopo wakati wa kuizalisha.
-    HAIBADILIKI baadaye hata mwanafunzi akipanda darasa - ndiyo maana deni
-    linaendelea kuonekana/kufuatiliwa mwaka hadi mwaka.
+    Haibadiliki yenyewe ada ikibadilika au mwanafunzi akipanda darasa;
+    kuendesha tena utengenezaji wa tathmini husasisha snapshot iliyopo.
     """
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='fee_assessments', db_index=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='fee_assessments', db_index=True)
@@ -69,15 +69,38 @@ class StudentFeeAssessment(models.Model):
         return f"{self.student} - {self.academic_year}: {self.amount_required}"
 
 
+def get_student_debts(student_ids):
+    student_ids = list(student_ids)
+    if not student_ids:
+        return {}
+
+    total_required = dict(
+        StudentFeeAssessment.objects.filter(
+            student_id__in=student_ids,
+            school_id=models.F('student__school_id'),
+        )
+        .values('student_id')
+        .annotate(total=models.Sum('amount_required'))
+        .values_list('student_id', 'total')
+    )
+    total_paid = dict(
+        Payment.objects.filter(
+            student_id__in=student_ids,
+            school_id=models.F('student__school_id'),
+        )
+        .values('student_id')
+        .annotate(total=models.Sum('amount'))
+        .values_list('student_id', 'total')
+    )
+    return {
+        student_id: total_required.get(student_id, 0) - total_paid.get(student_id, 0)
+        for student_id in student_ids
+    }
+
+
 def get_student_debt(student):
     """
     Deni la jumla la mwanafunzi (all-time, linalofuatana naye hadi
     anapopanda darasa): jumla ya tathmini zote - jumla ya malipo yote.
     """
-    total_required = StudentFeeAssessment.objects.filter(student=student).aggregate(
-        total=models.Sum('amount_required')
-    )['total'] or 0
-    total_paid = Payment.objects.filter(student=student).aggregate(
-        total=models.Sum('amount')
-    )['total'] or 0
-    return total_required - total_paid
+    return get_student_debts([student.pk])[student.pk]

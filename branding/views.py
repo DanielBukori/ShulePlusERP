@@ -1,8 +1,9 @@
 from functools import wraps
+import mimetypes
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import FileResponse, Http404, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
 
@@ -24,6 +25,8 @@ def branding_manager_required(view_func):
     @wraps(view_func)
     @login_required
     def wrapper(request, *args, **kwargs):
+        if not getattr(request, 'school', None):
+            return HttpResponseForbidden("Hauruhusiwi kufikia ukurasa huu.")
         if request.user.role not in MANAGER_ROLES:
             return HttpResponseForbidden("Hauruhusiwi kufikia ukurasa huu.")
         return view_func(request, *args, **kwargs)
@@ -32,7 +35,7 @@ def branding_manager_required(view_func):
 
 def _resolve_school(request, subdomain=None):
     if subdomain:
-        return get_object_or_404(School, subdomain=subdomain)
+        return get_object_or_404(School, subdomain=subdomain, is_approved=True)
     return getattr(request, 'school', None)
 
 
@@ -163,6 +166,76 @@ def admissions_local_view(request, subdomain):
 
 def school_not_found_view(request):
     return render(request, 'branding/school_not_found.html', status=404)
+
+
+def school_asset_view(request, subdomain, kind, object_id):
+    school = _resolve_school(request, subdomain)
+    if not school or (request.school and request.school.pk != school.pk):
+        raise Http404
+
+    assets = {
+        'school-logo': (
+            School.objects.filter(pk=object_id, subdomain=school.subdomain),
+            'logo',
+            None,
+        ),
+        'profile-cover': (SchoolProfile.objects.filter(school=school, pk=object_id), 'cover_image', None),
+        'post-image': (BrandingPost.objects.filter(school=school, pk=object_id), 'image', 'is_published'),
+        'gallery-image': (
+            PostImage.objects.filter(post__school=school, pk=object_id).select_related('post'),
+            'image',
+            'post',
+        ),
+        'leadership-photo': (
+            LeadershipMember.objects.filter(school=school, pk=object_id),
+            'photo',
+            'is_published',
+        ),
+        'facility-image': (
+            Facility.objects.filter(school=school, pk=object_id),
+            'image',
+            'is_published',
+        ),
+        'testimonial-photo': (
+            Testimonial.objects.filter(school=school, pk=object_id),
+            'photo',
+            'is_published',
+        ),
+    }
+    asset_config = assets.get(kind)
+    if not asset_config:
+        raise Http404
+
+    queryset, field_name, published_attr = asset_config
+    instance = get_object_or_404(queryset)
+    asset = getattr(instance, field_name)
+    if not asset:
+        raise Http404
+
+    is_manager = (
+        request.user.is_authenticated
+        and request.user.school_id == school.pk
+        and request.user.role in MANAGER_ROLES
+    )
+    is_public = (
+        published_attr is None
+        or (
+            getattr(instance, published_attr).is_published
+            if published_attr == 'post'
+            else getattr(instance, published_attr)
+        )
+    )
+    if not is_public and not is_manager:
+        raise Http404
+
+    response = FileResponse(
+        asset.open('rb'),
+        content_type=mimetypes.guess_type(asset.name)[0] or 'application/octet-stream',
+    )
+    response['X-Content-Type-Options'] = 'nosniff'
+    response['Content-Security-Policy'] = "default-src 'none'; sandbox"
+    response['Cache-Control'] = 'public, max-age=3600' if is_public else 'private, no-store'
+    return response
 
 
 # ============================================================

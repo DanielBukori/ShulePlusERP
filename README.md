@@ -59,6 +59,13 @@ Mwongozo wa hatua kwa hatua wa Ubuntu VPS/Oracle Cloud uko kwenye
 [`deploy/README.md`](./deploy/README.md). Settings za uzalishaji hutumia
 PostgreSQL, husoma siri kutoka environment, na huzima `DEBUG`.
 
+Kwa majaribio ya bure kwenye Render + Neon, fuata mwongozo wa
+[`deploy/render.md`](./deploy/render.md). UI (Django templates/Tailwind) na
+backend vinaishi pamoja kwenye Render; Neon inahifadhi PostgreSQL. Render Free
+ina filesystem ya muda tu, hivyo usiweke data halisi au kutegemea uploads
+kubaki hapo baada ya restart. Kwa subdomain za shule na matumizi ya uzalishaji,
+unahitaji domain yako mwenyewe na hifadhi ya media ya kudumu.
+
 Faili za deployment kwenye `deploy/`:
 - `deploy/shuleplus.service.txt` — systemd unit (self-healing, `Restart=always`)
 - `deploy/backup.sh` — pg_dump + media backup ya kila siku (cron), cleanup ya siku 7
@@ -67,6 +74,21 @@ Faili za deployment kwenye `deploy/`:
 Domain inahitaji DNS records za apex na wildcard subdomains. Wildcard TLS ya
 Let's Encrypt inahitaji DNS-01 challenge. Usitumie taarifa halisi za wanafunzi
 mpaka uhakikishe hifadhi na ruhusa za mafaili ya `media/`.
+
+## Tailwind CSS
+
+CSS ya Tailwind hujengwa kutoka templates na kuhifadhiwa kwenye
+`static/css/tailwind.css`. Baada ya kuongeza au kubadilisha Tailwind classes,
+jenga upya kabla ya kuendesha app au kukusanya static files:
+
+```bash
+npm install
+npm run build:css
+python manage.py collectstatic --noinput
+```
+
+CSS iliyojengwa iko kwenye repo; production server haitaji Node.js ili
+kuhudumia tovuti.
 
 ## Usalama
 

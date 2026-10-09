@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
+import dj_database_url
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,12 +38,22 @@ ALLOWED_HOSTS = [
     for host in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.localhost').split(',')
     if host.strip()
 ]
+render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if render_hostname and render_hostname not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(render_hostname)
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
     if origin.strip()
 ]
-BASE_DOMAIN = os.environ.get('BASE_DOMAIN', 'shulepluserp.co.tz')
+if render_hostname:
+    render_origin = f'https://{render_hostname}'
+    if render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(render_origin)
+BASE_DOMAIN = os.environ.get(
+    'BASE_DOMAIN',
+    render_hostname or 'shulepluserp.co.tz',
+)
 
 
 # Application definition
@@ -54,6 +65,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'axes',
     'shule_core', #app yetu ya biashara
     'accounts',
     'academic',
@@ -75,10 +87,12 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'axes.middleware.AxesMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #MLINZI WETU WA SUBDOMAIN HUYU HAPA
@@ -110,7 +124,17 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if DEBUG:
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+                conn_max_age=0,
+                conn_health_checks=True,
+                ssl_require=not DEBUG,
+            )
+    }
+elif DEBUG:
     # LOCAL: TUMIA SQLITE - HAKUNA KUINSTALL KITU
     DATABASES = {
         'default': {
@@ -169,7 +193,15 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"] # Tutaweka CSS ya Purple hapa
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media' # Hapa ndio picha na PDF zitahifadhiwa
+MEDIA_ROOT = Path(os.environ.get('MEDIA_ROOT', BASE_DIR / 'media'))
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 # Default primary key fizeld type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -185,6 +217,15 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
 
 AUTH_USER_MODEL = 'shule_core.CustomUser'
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF_TIME = 1
+AXES_RESET_ON_SUCCESS = True
+AXES_LOCKOUT_PARAMETERS = ['ip_address', 'username']
+AXES_IPWARE_PROXY_COUNT = 1
 
 BEEM_API_KEY = os.environ.get('BEEM_API_KEY')
 BEEM_SECRET_KEY = os.environ.get('BEEM_SECRET_KEY')

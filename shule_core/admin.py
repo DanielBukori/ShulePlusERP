@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib import messages
+from django.db import transaction
 from .models import *
 
 # 1. KUREKEBISHA ADMIN YA USER WETU
@@ -11,17 +13,58 @@ class CustomUserAdmin(UserAdmin):
     
     fieldsets = UserAdmin.fieldsets + (
         ('Taarifa za Shule', {'fields': ('role', 'school', 'phone')}),
+        ('Usajili wa Shule', {'fields': ('school_registration_pending',)}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('Taarifa za Shule', {'fields': ('role', 'school', 'phone')}),
+        ('Usajili wa Shule', {'fields': ('school_registration_pending',)}),
     )
 
 # 2. ADMIN YA SHULE
 @admin.register(School)
 class SchoolAdmin(admin.ModelAdmin):
-    list_display = ('name', 'school_level', 'subdomain', 'created_at')
+    list_display = ('name', 'school_level', 'subdomain', 'is_approved', 'created_at')
+    list_filter = ('is_approved', 'school_level')
     search_fields = ('name', 'subdomain')
     prepopulated_fields = {'subdomain': ('name',)} # Itajaza subdomain yenyewe
+    readonly_fields = ('is_approved',)
+    actions = ('approve_pending_registrations',)
+
+    @admin.action(description='Approve selected pending school registrations')
+    def approve_pending_registrations(self, request, queryset):
+        approved = []
+        skipped = []
+        with transaction.atomic():
+            for school in queryset.filter(is_approved=False).select_for_update():
+                pending_owners = school.users.filter(
+                    role='HEADMASTER',
+                    school_registration_pending=True,
+                    is_active=False,
+                )
+                if not pending_owners.exists():
+                    skipped.append(school.name)
+                    continue
+
+                pending_owners.update(
+                    is_active=True,
+                    school_registration_pending=False,
+                )
+                school.is_approved = True
+                school.save(update_fields=('is_approved',))
+                approved.append(school.name)
+
+        if approved:
+            self.message_user(
+                request,
+                f"Shule zimeidhinishwa na akaunti za wakuu zimewezeshwa: {', '.join(approved)}.",
+                level=messages.SUCCESS,
+            )
+        if skipped:
+            self.message_user(
+                request,
+                f"Hazijaidhinishwa kwa kuwa akaunti ya mwombaji haipo au tayari imewezeshwa: {', '.join(skipped)}.",
+                level=messages.WARNING,
+            )
 
 # 3. ADMIN YA MADARASA, MASOMO, COMBINATION
 @admin.register(SchoolClass)
@@ -74,4 +117,3 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = ('student', 'amount', 'date_paid', 'receipt_number', 'bank_name')
     list_filter = ('school', 'bank_name', 'date_paid')
     search_fields = ('student__reg_number', 'receipt_number')
-

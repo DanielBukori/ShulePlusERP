@@ -1,4 +1,5 @@
 {% extends 'shule_core/base_tailwind.html' %}
+{% load school_media %}
 {% block title %}Miundombinu{% endblock %}
 
 {% block content %}
@@ -27,7 +28,7 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
     {% for f in facilities %}
       <div class="bg-white border border-gray-200 rounded overflow-hidden">
-        {% if f.image %}<img src="{{ f.image.url }}" class="w-full h-24 object-cover">{% endif %}
+        {% if f.image %}<img src="{% school_media_url f 'image' %}" class="w-full h-24 object-cover">{% endif %}
         <div class="p-3">
           <div class="font-semibold text-navy text-sm">{{ f.icon }} {{ f.name }}</div>
           {% if not f.is_published %}<span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Rasimu</span>{% endif %}

@@ -1,6 +1,6 @@
 """
 DISCIPLINE MODELS - inaenda kwenye 'discipline/models.py'
-Inatumia School.discipline_starting_score na School.discipline_alert_threshold
+Inatumia School.discipline_starting_score na School.discipline_alert_score
 (ongeza hizo kwenye shule_core/models.py -> School, kama ilivyoelekezwa).
 """
 from django.db import models
@@ -53,7 +53,7 @@ class DisciplineIncident(models.Model):
 class DisciplineAlert(models.Model):
     """
     Inaundwa MARA MOJA TU kwa kila (student, academic_year) pale alama za
-    mwanafunzi zinapopita chini ya School.discipline_alert_threshold.
+    mwanafunzi zinapopita chini ya School.discipline_alert_score.
     Discipline Officer/Headmaster wanaweza ku-'resolve' baada ya kuchukua
     hatua (mfano bodi imekaa, mzazi ameitwa).
     """

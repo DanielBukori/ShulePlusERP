@@ -1,4 +1,5 @@
 {% extends 'branding/public_base.html' %}
+{% load school_media %}
 {% block title %}Uongozi - {{ school.name }}{% endblock %}
 
 {% block content %}
@@ -15,7 +16,7 @@
       {% for m in members %}
         <div class="text-center bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
           {% if m.photo %}
-            <img src="{{ m.photo.url }}" class="w-28 h-28 rounded-full object-cover mx-auto mb-4 border-2 border-gold">
+            <img src="{% school_media_url m 'photo' %}" class="w-28 h-28 rounded-full object-cover mx-auto mb-4 border-2 border-gold">
           {% else %}
             <div class="w-28 h-28 rounded-full bg-navy/10 mx-auto mb-4 flex items-center justify-center text-navy font-serif font-bold text-3xl">{{ m.full_name|slice:":1" }}</div>
           {% endif %}

@@ -12,6 +12,7 @@ MANTIKI:
     - subdomain isiyopatikana -> ukurasa mzuri wa 'school_not_found', siyo Http404 mbaya
 """
 from django.conf import settings
+from django.http import HttpResponseForbidden
 from django.shortcuts import render
 from django.utils.deprecation import MiddlewareMixin
 from .models import School
@@ -46,8 +47,17 @@ class TenantMiddleware(MiddlewareMixin):
             return None  # marketing/apex page - request.school inabaki None
 
         try:
-            request.school = School.objects.get(subdomain=subdomain)
+            request.school = School.objects.get(subdomain=subdomain, is_approved=True)
         except School.DoesNotExist:
             return render(request, 'branding/school_not_found.html', status=404)
+
+        user = getattr(request, 'user', None)
+        if (
+            user
+            and user.is_authenticated
+            and user.school_id
+            and user.school_id != request.school.pk
+        ):
+            return HttpResponseForbidden("Akaunti hii si ya shule hii.")
 
         return None

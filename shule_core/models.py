@@ -23,6 +23,7 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=15, blank=True, null=True, db_index=True)
     email = models.EmailField(max_length=50, unique=True, blank=True, null=True) 
     must_change_password = models.BooleanField(default=True)
+    school_registration_pending = models.BooleanField(default=False, db_index=True)
     class Meta:
         indexes = [ models.Index(fields=['school', 'role']) ]
 
@@ -45,6 +46,7 @@ class School(models.Model):
     phone = models.CharField(max_length=15, unique=True)
     discipline_starting_score = models.PositiveIntegerField(default=100)
     discipline_alert_score = models.PositiveIntegerField(default=50)
+    is_approved = models.BooleanField(default=True, db_index=True)
 
     def save(self, *args, **kwargs):
         if not self.subdomain:
@@ -156,8 +158,7 @@ class Staff(models.Model):
     is_store_keeper = models.BooleanField(default=False)
     class Meta:
         unique_together = ('user', 'school') # Mtu hawezi kuwa staff mara 2 shule 1
-        indexes = [ models.Index(fields=['school', 'is_teaching_staff']) ]
-        indexes = [ models.Index(fields=['school', 'is_store_keeper']) ]
+        indexes = [models.Index(fields=['school', 'is_store_keeper'])]
     def __str__(self):
         return f"{self.user.get_full_name()} - {self.school.name}"
 
@@ -208,6 +209,11 @@ class AcademicResult(models.Model):
 
     score = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0.00), MaxValueValidator(100.00)])
     is_published = models.BooleanField(default=False, db_index=True)   #  ONGEZA HII
+    is_auto_absent = models.BooleanField(
+        default=False,
+        db_index=True,
+        help_text='Alama F(0) iliwekwa kiotomatiki wakati wa Publish - mwanafunzi hakuwa na alama ya somo hili lililofanyiwa mtihani (siyo F halisi aliyoipata).',
+    )
     recorded_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True) 
     
     created_at = models.DateField(auto_now_add=True)
@@ -250,7 +256,7 @@ class AcademicResult(models.Model):
             grades = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'F': 5}
             return grades.get(g, 5)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.student.reg_number} - {self.subject.name}: {self.score}"
 
 # 9. MALIPO V1
@@ -260,12 +266,16 @@ class Payment(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date_paid = models.DateField(db_index=True)
     bank_name = models.CharField(max_length=50)
-    receipt_number = models.CharField(max_length=100, unique=True, db_index=True)
+    receipt_number = models.CharField(max_length=100)
     receipt_file = models.FileField(upload_to=receipt_upload_path)
     recorded_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta: indexes = [ models.Index(fields=['school', 'date_paid']) ]
+    class Meta:
+        unique_together = ('school', 'receipt_number')
+        indexes = [
+            models.Index(fields=['school', 'date_paid']),
+        ]
 
 # Ongeza hii kwenye shule_core/models.py (mwishoni, baada ya AcademicResult)
 

@@ -10,7 +10,13 @@ from django.utils import timezone
 
 from shule_core.models import Student, Payment
 from .forms import FeeStructureForm, OtherChargeForm, PaymentForm, PaymentSpreadsheetFilterForm
-from .models import FeeStructure, OtherCharge, StudentFeeAssessment, get_student_debt
+from .models import (
+    FeeStructure,
+    OtherCharge,
+    StudentFeeAssessment,
+    get_student_debt,
+    get_student_debts,
+)
 
 
 ACCOUNTANT_ROLES = ['HEADMASTER', 'SECOND_MASTER', 'ACCOUNTANT']
@@ -214,9 +220,18 @@ def full_report_view(request):
         school=school, student__in=[a.student_id for a in assessments]
     ).aggregate(total=dj_models.Sum('amount'))['total'] or 0
 
+    paid_by_student = dict(
+        Payment.objects.filter(
+            school=school,
+            student_id__in=assessments.values('student_id'),
+        )
+        .values('student_id')
+        .annotate(total=dj_models.Sum('amount'))
+        .values_list('student_id', 'total')
+    )
     debtor_rows = []
     for a in assessments:
-        paid = Payment.objects.filter(student=a.student).aggregate(total=dj_models.Sum('amount'))['total'] or 0
+        paid = paid_by_student.get(a.student_id, 0)
         debt = a.amount_required - paid
         if debt > 0:
             debtor_rows.append({
@@ -245,11 +260,12 @@ def accountant_dashboard_view(request):
     if not school:
         return HttpResponseForbidden("Hauruhusiwi kufikia ukurasa huu.")
 
-    students = Student.objects.filter(school=school).select_related('school_class')
+    students = list(Student.objects.filter(school=school).select_related('school_class'))
+    debts_by_student = get_student_debts(student.pk for student in students)
     debtors = []
     total_outstanding = 0
     for s in students:
-        debt = get_student_debt(s)
+        debt = debts_by_student[s.pk]
         if debt > 0:
             debtors.append({'student': s, 'debt': debt})
             total_outstanding += debt
@@ -310,8 +326,9 @@ def record_payment_spreadsheet_view(request):
 
     TOFAUTI na Marks Entry: hakuna 'Muhula' hapa - ada ni ya MWAKA
     MZIMA (FeeStructure ni ya mwaka, siyo muhula). Kila mstari una
-    safu 4: Kiasi Kipya, Namba ya Risiti (LAZIMA, ya kipekee), Benki,
-    na Picha ya Risiti (hiari) - safu iliyoachwa bila Kiasi inarukwa.
+    safu 4: Kiasi Kipya, Namba ya Risiti (LAZIMA, ya kipekee ndani ya
+    shule), Benki, na Picha ya Risiti (hiari) - safu iliyoachwa bila
+    Kiasi inarukwa.
 
     Kila malipo yanayotumwa hapa ni REKODI MPYA kabisa (ledger entry -
     kama Payment zote), YAANI hayabadilishi/kufuta malipo ya awali ya
@@ -332,11 +349,29 @@ def record_payment_spreadsheet_view(request):
         academic_year = filter_form.cleaned_data['academic_year']
 
         student_qs = Student.objects.filter(school=school, school_class=school_class)
+        student_list = list(student_qs)
+        assessments_by_student = {
+            assessment.student_id: assessment
+            for assessment in StudentFeeAssessment.objects.filter(
+                school=school,
+                academic_year=academic_year,
+                student_id__in=[student.pk for student in student_list],
+            )
+        }
+        paid_by_student = dict(
+            Payment.objects.filter(
+                school=school,
+                student_id__in=[student.pk for student in student_list],
+            )
+            .values('student_id')
+            .annotate(total=dj_models.Sum('amount'))
+            .values_list('student_id', 'total')
+        )
 
-        for s in student_qs:
-            assessment = StudentFeeAssessment.objects.filter(student=s, academic_year=academic_year).first()
+        for s in student_list:
+            assessment = assessments_by_student.get(s.pk)
             required = assessment.amount_required if assessment else 0
-            paid_total = Payment.objects.filter(student=s).aggregate(total=dj_models.Sum('amount'))['total'] or 0
+            paid_total = paid_by_student.get(s.pk, 0)
             students.append({
                 'student': s,
                 'required': required,
@@ -350,7 +385,7 @@ def record_payment_spreadsheet_view(request):
             skipped_no_receipt = []
 
             with transaction.atomic():
-                for s in student_qs:
+                for s in student_list:
                     amount_raw = request.POST.get(f'amount_{s.id}', '').strip()
                     if not amount_raw:
                         continue
@@ -366,7 +401,7 @@ def record_payment_spreadsheet_view(request):
                         skipped_no_receipt.append(str(s))
                         continue
 
-                    if Payment.objects.filter(receipt_number=receipt_no).exists():
+                    if Payment.objects.filter(school=school, receipt_number=receipt_no).exists():
                         skipped_duplicate.append(f"{s} (risiti {receipt_no})")
                         continue
 

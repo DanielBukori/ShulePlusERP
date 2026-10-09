@@ -2,7 +2,7 @@
 
 **Aina ya Mfumo:** Django Multi-Tenant School ERP
 **Lugha:** Kiswahili (UI/violezo), Kiingereza (code)
-**Toleo:** Agosti 2026 - baada ya MVP push + vipengele vya ziada
+**Toleo:** Septemba 2026 - baada ya MVP push + vipengele vya ziada
 
 ---
 
@@ -89,7 +89,7 @@ Hii ndiyo app inayoshikilia models zinazotumiwa na apps zote nyingine.
 ## 2.1 Models Muhimu
 
 - **`School`** - jina, subdomain, phone, email, `discipline_starting_score`,
-  `discipline_alert_threshold`, logo/branding fields.
+  `discipline_alert_score`, logo/branding fields.
 - **`CustomUser`** - AbstractUser iliyoongezwa `role`, `phone`, `school` (FK).
   ⚠️ `email` LAZIMA iwe `null=True` (tazama Sehemu ya 10, kosa #9).
 - **`SchoolClass`** - jina la darasa, `level` ('O' au 'A'), `class_teacher`
@@ -109,7 +109,7 @@ Hii ndiyo app inayoshikilia models zinazotumiwa na apps zote nyingine.
   `recorded_by`. `unique_together = ('student', 'subject', 'exam_type',
   'term', 'academic_year')`.
 - **`Payment`** - `student`, `amount`, `date_paid`, `bank_name`,
-  `receipt_number` (unique shule nzima - siyo kwa mwanafunzi mmoja tu),
+  `receipt_number` (unique ndani ya shule, inaweza kurudiwa shule nyingine),
   `receipt_file`, `recorded_by`. Hii ni **ledger** - kila malipo ni safu
   mpya, HAKUNA "jumla inayosasishwa" hapa.
 
@@ -130,12 +130,14 @@ inayobadilika kutegemea `request.user.role`, search bar, notification bell.
 ## 3.2 Uingizaji wa Alama (CA Cascading) - `grading.py`
 Mwalimu anaingiza alama za vipengele (Test 1/2 A/B, Midterm/Terminal/Annual
 Exam) kupitia `teacher_portal:enter_marks` (spreadsheet). `grading.py` kisha
-inakokotoa (`recompute_derived_results()`) alama za mwisho zilizojumuishwa:
+inakokotoa (`recompute_derived_results()`) wastani wa vipengele vilivyopo
+(si jumla yake), ikipuuza vipengele ambavyo havijaingizwa:
 
 ```
-MID_TERM   = Test1_A + Test2_A + MidtermExam
-TERMINAL   = MID_TERM + Test1_B + Test2_B + TerminalExam
-ANNUAL     = TERMINAL + AnnualExam
+MID_TERM   = wastani(Test1_A, Test2_A, MidtermExam)
+Robo-2     = wastani(Test1_B, Test2_B, TerminalExam)
+TERMINAL   = wastani(MID_TERM, Robo-2)
+ANNUAL     = wastani(TERMINAL ya Muhula 1, AnnualExam ya Muhula 2)
 ```
 
 Hizi tatu (`MID_TERM`, `TERMINAL`, `ANNUAL`) ndizo AcademicResult zenye
@@ -279,7 +281,7 @@ ya somo sasa inaonyesha `{{ choice.name }}` badala ya default object repr).
   `date_occurred`, `notes`, `evidence_file`, `recorded_by`. HII NI LEDGER
   (hakuna unique_together - kosa moja linaweza kutokea mara nyingi).
 - **`DisciplineAlert`** - inaundwa kiotomatiki alama zikishuka chini ya
-  `school.discipline_alert_threshold`. `unique_together = (student,
+  `school.discipline_alert_score`. `unique_together = (student,
   academic_year)` - alert MOJA tu kwa mwaka (haiandikiwi mara mbili).
 
 ## 6.2 Alama (Score)
@@ -323,24 +325,26 @@ huo.
 1. Headmaster/Second Master anaweka **FeeStructure** (`accountant:
    set_fee_structure`) kwa kila darasa+mwaka.
 2. Anabonyeza **"Tengeneza Tathmini"** (`accountant:generate_assessments`) -
-   hii ndiyo "Publish" ya ada: inatengeneza `StudentFeeAssessment` kwa kila
-   mwanafunzi wa shule, ikichanganya FeeStructure + OtherCharge zote
-   zinazomhusu. **Haiandiki mara mbili** - inaruka (`continue`) yeyote
-   ambaye tayari ana assessment ya mwaka huo. Wanafunzi wasio na
-   FeeStructure ya darasa lao mwaka huo wanaripotiwa kama "wameruka".
+   hii ndiyo "Publish" ya ada: inatengeneza au inasasisha
+   `StudentFeeAssessment` kwa kila mwanafunzi mwenye FeeStructure ya mwaka
+   huo, ikichanganya FeeStructure + OtherCharge zote zinazomhusu. Kuendesha
+   tena baada ya kubadilisha ada/michango husasisha kiasi cha assessment
+   iliyopo. Wanafunzi wasio na FeeStructure ya darasa lao mwaka huo
+   wanaripotiwa kama "wameruka".
 3. Accountant anarekodi malipo - njia mbili:
    - **Mmoja mmoja** (`accountant:record_payment`) - na picha ya risiti.
    - **Kwa Wingi** (`accountant:record_payment_spreadsheet`) - chagua
      Darasa+Mwaka, jedwali la wanafunzi wote, safu 4 kwa kila mmoja: Kiasi
-     Kipya, Namba ya Risiti (LAZIMA, ya kipekee shule nzima), Benki, Picha
+     Kipya, Namba ya Risiti (LAZIMA, ya kipekee ndani ya shule husika), Benki, Picha
      ya Risiti (hiari).
 4. **MUHIMU (tofauti na Store):** `Payment` ni LEDGER kamili - kila malipo
    ni rekodi MPYA kabisa, SIYO update ya jumla iliyopo. Deni linahesabiwa
    moja kwa moja: `get_student_debt = jumla_ya_assessment - jumla_ya_
    malipo_yote`. Kwa hiyo HAKUNA hatari ya "malipo kufutana" kama
    iliyokuwepo Store - muundo huu ulikuwa SAHIHI tangu awali.
-5. Namba za risiti zinazorudia (ndani ya wingi mmoja au dhidi ya
-   zilizopo tayari) zinarukwa na kuripotiwa bila kuharibu zilizofanikiwa.
+5. Namba za risiti zinazojirudia ndani ya shule (ndani ya wingi mmoja au
+   dhidi ya zilizopo tayari) zinarukwa na kuripotiwa bila kuharibu
+   zilizofanikiwa; shule tofauti zinaweza kutumia namba ileile.
 6. `view_receipt_view` - risiti (faili) inapatikana TU na Accountant/
    Headmaster/Second Master, AU mzazi wa mwanafunzi husika mwenyewe -
    haipatikani kwa `MEDIA_URL` ya wazi.
@@ -483,11 +487,11 @@ ZOTE zinazohitajika na NOT NULL constraints za model - siyo tu zile
 # Field mpya kwenye ContributionRequirement (store): is_published, published_at
 python manage.py makemigrations store
 
-# Field mpya kwenye AcademicResult (shule_core): is_auto_absent
-python manage.py makemigrations shule_core
-
 python manage.py migrate
 ```
+
+`AcademicResult.is_auto_absent` ipo kwenye migration `0020`; usitengeneze
+migration nyingine kwa field hiyo.
 
 ---
 
@@ -496,20 +500,36 @@ python manage.py migrate
 1. **Notifications wiring kamili** - `notify()` haijawekwa sehemu zote
    (mfano low-stock alert ya Store bado haijaunganishwa na `notify()`).
 2. **Password change flow** kamili.
-3. **Media file security** - hakikisha risiti/evidence ZOTE zinapitia views
-   zenye ukaguzi wa ruhusa (`view_receipt_view`, `view_evidence_view`),
-   siyo `MEDIA_URL` ya wazi popote.
+3. **Ukaguzi wa media** - Nginx inazuia ufikiaji wa moja kwa moja kwa
+   `/media/`; faili za branding, risiti na vifurushi vya kazi zinatolewa
+   kupitia views zenye ukaguzi wa ruhusa.
 4. **Backups + self-healing**.
 5. **Idara (Departments)** - uhusiano wake na Store/Class Teacher (mtumiaji
    amesema "baadaye tutaweka idara") - bado haijaanza kabisa.
 
 ---
 
-# SEHEMU YA 13: MAAGIZO YA KIUFUNDI YA HARAKA (Quick Reference)
+# SEHEMU YA 13: MABADILIKO YA SEPTEMBA 2026
+
+- Usajili wa shule unasubiri idhini ya msimamizi; shule na akaunti ya Mkuu
+  huwashwa baada ya idhini.
+- PIN za mwanafunzi/staff ni za nasibu na hutumwa kwa SMS; akaunti mpya
+  huwashwa baada ya SMS kufanikiwa, na PIN haionyeshwi kwenye ukurasa.
+- Jaribio la kuingia limewekewa kikomo; tenant middleware hukataa mtumiaji
+  wa shule tofauti.
+- Namba ya risiti ni ya kipekee kwa kila shule; madeni na ripoti huchuja
+  malipo kwa shule.
+- A-Level derived results huhifadhi combination, na matokeo yanayokosekana
+  baada ya kuchapisha huwekewa `is_auto_absent` kwa Auto-Absent Report.
+- `discipline_alert_score` ndiyo jina sahihi la threshold ya tahadhari.
+- Production hutumia mazingira (`.env`), Gunicorn/systemd, CSS ya Tailwind
+  iliyojengwa ndani, na Nginx huzuia `/media/` ya moja kwa moja.
+
+# SEHEMU YA 14: MAAGIZO YA KIUFUNDI YA HARAKA (Quick Reference)
 
 | Kitu | Sheria |
 |---|---|
-| `School` | Inahitaji `phone`, `email`, `discipline_starting_score`, `discipline_alert_threshold` |
+| `School` | Inahitaji `phone`, `email`, `discipline_starting_score`, `discipline_alert_score` |
 | `Staff` | Inahitaji `is_store_keeper` |
 | `CustomUser.email` | LAZIMA `null=True` |
 | `Student` | HAINA `is_active` - tumia `school_class__isnull=False` |
@@ -527,7 +547,7 @@ python manage.py migrate
 ---
 
 *Waraka huu unabeba KILA kitu kilichojengwa na kurekebishwa kwenye
-ShulePlusERP hadi Agosti 2026 - muundo, mantiki ya biashara, workflows
+ShulePlusERP hadi Septemba 2026 - muundo, mantiki ya biashara, workflows
 kamili, na makosa ya kimfumo ya kuepuka. Kwa msimbo halisi wa kila
 faili, rejea kwenye repo yako - waraka huu ni ramani ya jinsi kila
 kipande kinavyounganika, siyo nakala ya code yenyewe.*

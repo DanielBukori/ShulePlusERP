@@ -14,7 +14,7 @@
     <h3 class="font-serif text-navy mb-2">Sajili Wanafunzi Wengi Mara Moja (Excel)</h3>
     <p class="text-sm text-gray-500 mb-4">
       Pakua template hapa chini, jaza taarifa za wanafunzi (mstari mmoja = mwanafunzi mmoja), kisha pakia hapa.
-      Akaunti za mzazi na mwanafunzi zitatengenezwa kiotomatiki kwa kila mmoja.
+      PIN za akaunti zitatumwa kwa SMS kwenye namba ya mzazi; akaunti zitafunguliwa baada ya SMS kutumwa.
     </p>
     <a href="{% url 'academic:download_import_template' %}" class="inline-block bg-navy2 text-white text-sm font-semibold px-4 py-2 rounded mb-5">
       &#128190; Pakua Template ya Excel
@@ -35,22 +35,23 @@
       <div class="overflow-x-auto">
         <table class="w-full text-sm min-w-[500px]">
           <thead><tr class="bg-navy text-white text-xs uppercase">
-            <th class="p-2 text-left">Mwanafunzi</th><th class="p-2 text-left">Akaunti ya Mwanafunzi</th><th class="p-2 text-left">Akaunti ya Mzazi</th>
+            <th class="p-2 text-left">Mwanafunzi</th><th class="p-2 text-left">Akaunti ya Mwanafunzi</th><th class="p-2 text-left">Akaunti ya Mzazi</th><th class="p-2 text-left">SMS</th>
           </tr></thead>
           <tbody>
             {% for c in created %}
               <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
                 <td class="p-2 font-medium">{{ c.student }}</td>
-                <td class="p-2 text-xs">{{ c.student_username }} / {{ c.student.reg_number }}</td>
+                <td class="p-2 text-xs">{{ c.student_username }}</td>
                 <td class="p-2 text-xs">
-                  {% if c.parent_username %}{{ c.parent_username }} / {{ c.parent_password }}{% else %}Tayari alikuwa na akaunti{% endif %}
+                  {% if c.parent_username %}{{ c.parent_username }}{% else %}Tayari alikuwa na akaunti{% endif %}
                 </td>
+                <td class="p-2 text-xs">{% if c.sms_sent %}Imetumwa{% else %}Haikutumwa; akaunti imefungwa{% endif %}</td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
-      <p class="text-xs text-amber-700 mt-3">&#9888; Nakili orodha hii sasa - haitaonekana tena ukiondoka ukurasa huu (password hazihifadhiwi wazi popote).</p>
+      <p class="text-xs text-amber-700 mt-3">PIN hazionyeshwi kwenye ukurasa huu. Ikiwa SMS haikutumwa, wasiliana na admin.</p>
     </div>
   {% endif %}
 

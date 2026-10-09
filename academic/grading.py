@@ -32,7 +32,9 @@ def _average(*scores):
     return round(sum(valid) / len(valid), 2)
 
 
-def recompute_derived_results(school, student, subject, term, academic_year, school_class):
+def recompute_derived_results(
+    school, student, subject, term, academic_year, school_class, combination=None,
+):
     """
     Inaitwa baada ya kila raw score kuhifadhiwa (TEST_1_A, TEST_2_A,
     MID_TERM_EXAM, TEST_1_B, TEST_2_B, TERMINAL_EXAM/ANNUAL_EXAM).
@@ -51,7 +53,12 @@ def recompute_derived_results(school, student, subject, term, academic_year, sch
         AcademicResult.objects.update_or_create(
             student=student, subject=subject, exam_type='MID_TERM',
             term=term, academic_year=academic_year,
-            defaults={'school': school, 'school_class': school_class, 'score': midterm_score},
+            defaults={
+                'school': school,
+                'school_class': school_class,
+                'combination': combination,
+                'score': midterm_score,
+            },
         )
 
     # --- Robo 2 -> Terminal/Annual exam raw ---
@@ -67,7 +74,12 @@ def recompute_derived_results(school, student, subject, term, academic_year, sch
             AcademicResult.objects.update_or_create(
                 student=student, subject=subject, exam_type='TERMINAL',
                 term=term, academic_year=academic_year,
-                defaults={'school': school, 'school_class': school_class, 'score': terminal_score},
+                defaults={
+                    'school': school,
+                    'school_class': school_class,
+                    'combination': combination,
+                    'score': terminal_score,
+                },
             )
 
     elif term == 'TERM_2':
@@ -80,5 +92,10 @@ def recompute_derived_results(school, student, subject, term, academic_year, sch
             AcademicResult.objects.update_or_create(
                 student=student, subject=subject, exam_type='ANNUAL',
                 term=term, academic_year=academic_year,
-                defaults={'school': school, 'school_class': school_class, 'score': annual_score},
+                defaults={
+                    'school': school,
+                    'school_class': school_class,
+                    'combination': combination,
+                    'score': annual_score,
+                },
             )

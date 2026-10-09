@@ -1,4 +1,6 @@
 from django import forms
+from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
 from .models import School, CustomUser
 
 
@@ -14,6 +16,7 @@ class SchoolRegistrationForm(forms.ModelForm):
     )
     headmaster_password = forms.CharField(
         label="Nywila",
+        strip=False,
         widget=forms.PasswordInput(attrs={'class': 'w-full border border-gray-300 rounded px-3 py-2 text-sm'}),
     )
     headmaster_phone = forms.CharField(
@@ -75,3 +78,23 @@ class SchoolRegistrationForm(forms.ModelForm):
         if CustomUser.objects.filter(username=username).exists():
             raise forms.ValidationError('Jina hili la mtumiaji tayari limetumika.')
         return username
+
+    def clean_headmaster_email(self):
+        email = self.cleaned_data['headmaster_email']
+        if CustomUser.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError('Barua pepe hii tayari inatumika na akaunti nyingine.')
+        return email
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('headmaster_password')
+        if password:
+            user = CustomUser(
+                username=cleaned_data.get('headmaster_username', ''),
+                email=cleaned_data.get('headmaster_email', ''),
+            )
+            try:
+                validate_password(password, user)
+            except ValidationError as error:
+                self.add_error('headmaster_password', error)
+        return cleaned_data

@@ -1,4 +1,5 @@
 {% extends 'branding/public_base.html' %}
+{% load school_media %}
 {% block title %}{{ post.title }} - {{ school.name }}{% endblock %}
 
 {% block content %}
@@ -7,7 +8,7 @@
   <h1 class="font-serif text-3xl text-navy font-bold mt-2 mb-2">{{ post.title }}</h1>
   <p class="text-xs text-gray-400 mb-6">{{ post.created_at|date:"d/m/Y" }}</p>
   {% if post.image %}
-    <img src="{{ post.image.url }}" class="w-full rounded mb-6">
+    <img src="{% school_media_url post 'image' %}" class="w-full rounded mb-6">
   {% endif %}
   <div class="text-gray-700 leading-relaxed whitespace-pre-line">{{ post.body }}</div>
 
@@ -16,8 +17,8 @@
       <h3 class="font-serif font-bold text-navy text-sm uppercase tracking-wide mb-3">Picha Zaidi</h3>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
         {% for img in extra_images %}
-          <a href="{{ img.image.url }}" target="_blank" class="block rounded overflow-hidden border border-gray-200">
-            <img src="{{ img.image.url }}" class="w-full h-32 object-cover hover:scale-105 transition">
+          <a href="{% school_media_url img 'image' %}" target="_blank" class="block rounded overflow-hidden border border-gray-200">
+            <img src="{% school_media_url img 'image' %}" class="w-full h-32 object-cover hover:scale-105 transition">
             {% if img.caption %}<div class="text-xs text-gray-500 p-1.5">{{ img.caption }}</div>{% endif %}
           </a>
         {% endfor %}

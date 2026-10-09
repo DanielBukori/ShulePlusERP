@@ -47,6 +47,18 @@ class SchoolAssetViewTests(TestCase):
         self.assertEqual(response['X-Content-Type-Options'], 'nosniff')
         self.assertEqual(b''.join(response.streaming_content), b'public logo bytes')
 
+    def test_missing_uploaded_logo_returns_404_instead_of_server_error(self):
+        self.school.logo = SimpleUploadedFile('logo.png', b'public logo bytes', content_type='image/png')
+        self.school.save()
+        self.school.logo.storage.delete(self.school.logo.name)
+
+        response = self.client.get(
+            self.asset_url('school-logo', self.school.pk),
+            HTTP_HOST=self.host,
+        )
+
+        self.assertEqual(response.status_code, 404)
+
     def test_unpublished_branding_image_requires_same_school_manager(self):
         post = BrandingPost.objects.create(
             school=self.school,

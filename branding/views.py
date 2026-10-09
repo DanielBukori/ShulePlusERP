@@ -3,7 +3,7 @@ import mimetypes
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import FileResponse, Http404, HttpResponseForbidden
+from django.http import FileResponse, Http404, HttpResponseForbidden, HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
 
@@ -211,6 +211,8 @@ def school_asset_view(request, subdomain, kind, object_id):
     asset = getattr(instance, field_name)
     if not asset:
         raise Http404
+    if not asset.storage.exists(asset.name):
+        return HttpResponseNotFound()
 
     is_manager = (
         request.user.is_authenticated
@@ -228,8 +230,13 @@ def school_asset_view(request, subdomain, kind, object_id):
     if not is_public and not is_manager:
         raise Http404
 
+    try:
+        file_handle = asset.open('rb')
+    except FileNotFoundError:
+        return HttpResponseNotFound()
+
     response = FileResponse(
-        asset.open('rb'),
+        file_handle,
         content_type=mimetypes.guess_type(asset.name)[0] or 'application/octet-stream',
     )
     response['X-Content-Type-Options'] = 'nosniff'

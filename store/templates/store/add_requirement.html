@@ -19,9 +19,9 @@
 
   <div class="bg-white border border-gray-200 rounded p-5 overflow-x-auto">
     <h3 class="font-serif text-navy mb-3">Masharti Yaliyopo</h3>
-    <table class="w-full text-sm min-w-[420px]">
+    <table class="w-full text-sm min-w-[560px]">
       <thead><tr class="bg-navy text-white text-xs uppercase">
-        <th class="p-2">Muhula</th><th class="p-2">Mwaka</th><th class="p-2">Darasa</th><th class="p-2 text-left">Kifaa</th><th class="p-2">Kiasi</th>
+        <th class="p-2">Muhula</th><th class="p-2">Mwaka</th><th class="p-2">Darasa</th><th class="p-2 text-left">Kifaa</th><th class="p-2">Kiasi</th><th class="p-2">Hali</th><th class="p-2">Kitendo</th>
       </tr></thead>
       <tbody>
         {% for r in requirements %}
@@ -31,9 +31,27 @@
             <td class="p-2">{{ r.school_class|default:"Shule Nzima" }}</td>
             <td class="p-2 text-left font-medium">{{ r.item_name }}</td>
             <td class="p-2">{{ r.quantity_required }}</td>
+            <td class="p-2">
+              {% if r.is_published %}
+                <span class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-semibold">IMECHAPISHWA</span>
+              {% else %}
+                <span class="text-[10px] bg-gray-100 text-gray-500 px-2 py-1 rounded-full font-semibold">RASIMU</span>
+              {% endif %}
+            </td>
+            <td class="p-2">
+              {% if r.is_published %}
+                <span class="text-xs text-gray-400">&#10003; {{ r.published_at|date:"d/m/Y" }}</span>
+              {% else %}
+                <form method="POST" action="{% url 'store:publish_requirement' r.id %}"
+                      onsubmit="return confirm('Deni la {{ r.item_name }} litawekwa kwa wanafunzi wote wa {{ r.school_class|default:"shule nzima" }}. Endelea?');">
+                  {% csrf_token %}
+                  <button type="submit" class="bg-gold text-amber-950 text-xs font-semibold px-3 py-1.5 rounded-full hover:brightness-95">Chapisha</button>
+                </form>
+              {% endif %}
+            </td>
           </tr>
         {% empty %}
-          <tr><td colspan="5" class="text-center text-gray-400 py-6">Hakuna masharti bado.</td></tr>
+          <tr><td colspan="7" class="text-center text-gray-400 py-6">Hakuna masharti bado.</td></tr>
         {% endfor %}
       </tbody>
     </table>

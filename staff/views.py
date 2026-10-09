@@ -4,11 +4,12 @@ from functools import wraps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.db.utils import IntegrityError
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 
 from shule_core.models import CustomUser, Staff, SubjectAssignment
-from .forms import TeacherRegistrationForm, SubjectAssignmentForm
+from .forms import TeacherRegistrationForm, SubjectAssignmentForm, StaffRoleForm
 from audit.utils import log_action
 
 MANAGER_ROLES = ['HEADMASTER', 'SECOND_MASTER', 'ACADEMIC']
@@ -53,39 +54,48 @@ def register_teacher_view(request):
             return redirect('staff:register_teacher')
 
         if form.is_valid():
-            with transaction.atomic():
-                phone_digits = ''.join(ch for ch in form.cleaned_data['phone'] if ch.isdigit())
-                username = f"{school.subdomain}{phone_digits}"
-                temp_password = f"{secrets.randbelow(900000) + 100000}"  # PIN ya tarakimu 6
+            try:
+                with transaction.atomic():
+                    phone_digits = ''.join(ch for ch in form.cleaned_data['phone'] if ch.isdigit())
+                    username = f"{school.subdomain}{phone_digits}"
+                    temp_password = f"{secrets.randbelow(900000) + 100000}"  # PIN ya tarakimu 6
 
-                user = CustomUser.objects.create_user(
-                    username=username,
-                    password=temp_password,
-                    phone=phone_digits,
-                    email=email,
-                    role='TEACHER',
-                    school=school,
-                    first_name=form.cleaned_data['first_name'],
-                    last_name=form.cleaned_data['last_name'],
-                    must_change_password=True,
+                    user = CustomUser.objects.create_user(
+                        username=username,
+                        password=temp_password,
+                        phone=phone_digits,
+                        email=email,
+                        role=form.cleaned_data['role'],
+                        school=school,
+                        first_name=form.cleaned_data['first_name'],
+                        last_name=form.cleaned_data['last_name'],
+                        must_change_password=True,
+                    )
+                    staff = Staff.objects.create(
+                        user=user,
+                        school=school,
+                        email=email,
+                        tsc_number=form.cleaned_data.get('tsc_number') or None,
+                        qualification=form.cleaned_data.get('qualification'),
+                        is_teaching_staff=True,
+                        is_store_keeper=form.cleaned_data.get('is_store_keeper', False),
+                    )
+            except IntegrityError:
+                messages.error(
+                    request,
+                    "Namba ya simu au email hii tayari imesajiliwa (mgongano wa taarifa). "
+                    "Tafadhali angalia tena na ujaribu kusajili upya."
                 )
-                staff = Staff.objects.create(
-                    user=user,
-                    school=school,
-                    tsc_number=form.cleaned_data.get('tsc_number') or None,
-                    qualification=form.cleaned_data.get('qualification'),
-                    is_teaching_staff=True,
-                    is_store_keeper=form.cleaned_data.get('is_store_keeper', False),
-                )
+                return redirect('staff:register_teacher')
 
             messages.success(
                 request,
-                f"Mwalimu {user.get_full_name()} amesajiliwa. Akaunti: {username} / {temp_password} "
+                f"{user.get_role_display()} {user.get_full_name()} amesajiliwa. Akaunti: {username} / {temp_password} "
                 f"(mtumie sasa hivi). Sasa mpangie masomo/madarasa."
             )
             log_action(
                 request.user, school, 'TEACHER_REGISTERED',
-                f"Amesajili mwalimu {user.get_full_name()} ({username})."
+                f"Amesajili {user.get_role_display()} {user.get_full_name()} ({username})."
             )
             return redirect('staff:manage_assignments', staff_id=staff.id)
     else:
@@ -132,6 +142,46 @@ def teacher_list_view(request):
     teachers = Staff.objects.filter(school=school, is_teaching_staff=True).select_related('user')
     context = {'school': school, 'teachers': teachers}
     return render(request, 'staff/teacher_list.html', context)
+
+@staff_manager_required
+def edit_staff_role_view(request, staff_id):
+    """
+    Kumbadilisha cheo mfanyakazi ALIYESHASAJILIWA - kumpandisha (mfano
+    Mwalimu -> Academic Master/Second Master/Discipline/Accountant) au
+    kumvua cheo kwa kumrudisha kuwa 'Mwalimu' wa kawaida.
+    """
+    school = _get_school(request)
+    if not school:
+        return HttpResponseForbidden("Hauruhusiwi kufikia ukurasa huu.")
+
+    staff = get_object_or_404(Staff, id=staff_id, school=school)
+    user = staff.user
+
+    if request.method == 'POST':
+        form = StaffRoleForm(request.POST)
+        if form.is_valid():
+            old_role_display = user.get_role_display()
+            user.role = form.cleaned_data['role']
+            user.save(update_fields=['role'])
+
+            staff.is_store_keeper = form.cleaned_data['is_store_keeper']
+            staff.save(update_fields=['is_store_keeper'])
+
+            messages.success(
+                request,
+                f"Cheo cha {user.get_full_name()} kimebadilishwa: {old_role_display} \u2192 {user.get_role_display()}"
+                f"{' (Store Keeper)' if staff.is_store_keeper else ''}."
+            )
+            log_action(
+                request.user, school, 'STAFF_ROLE_CHANGED',
+                f"Amebadilisha cheo cha {user.get_full_name()} kutoka {old_role_display} kwenda {user.get_role_display()}."
+            )
+            return redirect('staff:teacher_list')
+    else:
+        form = StaffRoleForm(initial={'role': user.role, 'is_store_keeper': staff.is_store_keeper})
+
+    context = {'school': school, 'staff': staff, 'form': form}
+    return render(request, 'staff/edit_staff_role.html', context)
 
 @staff_manager_required
 def assign_class_teacher_view(request):

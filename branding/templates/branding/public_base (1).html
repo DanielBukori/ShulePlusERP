@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ school.name }}{% endblock %}</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: { colors: {
+    navy:'#0B2545', navy2:'#0F3460', gold:'#D4AF37', green:'#146B3A', paper:'#FBFAF7'
+  }, fontFamily: { serif:['Georgia','Times New Roman','serif'] } } } }
+</script>
+</head>
+<style>
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  section { animation: fadeInUp 0.5s ease-out; }
+  a, button { transition: transform 0.15s ease, background-color 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease; }
+  a:active, button:active { transform: scale(0.97); }
+  .hover\:shadow-md, .hover\:shadow-xl { transition: transform 0.2s ease, box-shadow 0.2s ease !important; }
+  a.block.border:hover, a.block.overflow-hidden:hover { transform: translateY(-3px); }
+</style>
+<body class="bg-paper text-gray-800">
+
+<header class="bg-gradient-to-r from-navy to-navy2 border-b-4 border-gold sticky top-0 z-30">
+  <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+    <a href="{% if subdomain %}{% url 'branding:school_home_local' subdomain=subdomain %}{% else %}{% url 'branding:school_home' %}{% endif %}"
+       class="flex items-center gap-3">
+      {% if school.logo %}
+        <img src="{{ school.logo.url }}" class="h-10 w-10 rounded-full border-2 border-gold object-cover" alt="logo">
+      {% else %}
+        <div class="h-10 w-10 rounded-full bg-white/20 border-2 border-gold flex items-center justify-center text-gold font-bold">
+          {{ school.name|slice:":1" }}
+        </div>
+      {% endif %}
+      <span class="text-white font-serif font-bold text-lg leading-tight">{{ school.name }}
+        {% if profile.motto %}<span class="block text-gold text-xs font-normal italic">"{{ profile.motto }}"</span>{% endif %}
+      </span>
+    </a>
+
+    <!-- Search icon (kama IAA) - inapeleka kwenye Gallery/Search ya baadaye -->
+    <div class="flex items-center gap-3">
+      <a href="/accounts/login/" class="hidden sm:inline-block bg-gold text-amber-950 text-sm font-semibold px-4 py-2 rounded">Ingia</a>
+      <button onclick="document.getElementById('mega-menu').classList.remove('translate-x-full')"
+              class="text-white flex items-center gap-2 text-sm font-semibold">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        Menu
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MEGA MENU (kama IAA) - full-screen overlay, inafunguka kutoka kulia -->
+<div id="mega-menu" class="fixed inset-0 z-40 bg-navy text-white translate-x-full transition-transform duration-300 overflow-y-auto">
+  <div class="max-w-5xl mx-auto px-6 py-6">
+    <div class="flex items-center justify-between mb-8">
+      <span class="font-serif font-bold text-lg">{{ school.name }}</span>
+      <button onclick="document.getElementById('mega-menu').classList.add('translate-x-full')" class="text-white">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-lg">
+      <div>
+        <h4 class="text-gold font-serif font-bold mb-3 text-sm uppercase tracking-wide">Kuhusu Shule</h4>
+        <ul class="space-y-2 text-gray-200 text-base">
+          <li><a href="{% if subdomain %}{% url 'branding:school_home_local' subdomain=subdomain %}{% else %}{% url 'branding:school_home' %}{% endif %}#about" class="hover:text-gold">Historia na Maelezo</a></li>
+          <li><a href="{% if subdomain %}{% url 'branding:school_home_local' subdomain=subdomain %}{% else %}{% url 'branding:school_home' %}{% endif %}#about" class="hover:text-gold">Dhamira na Dira</a></li>
+          <li><a href="{% if subdomain %}{% url 'branding:school_home_local' subdomain=subdomain %}{% else %}{% url 'branding:school_home' %}{% endif %}#contact" class="hover:text-gold">Mawasiliano</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-gold font-serif font-bold mb-3 text-sm uppercase tracking-wide">Taaluma</h4>
+        <ul class="space-y-2 text-gray-200 text-base">
+          <li>
+            <a href="{% if subdomain %}{% url 'branding:leadership_list_local' subdomain=subdomain %}{% else %}{% url 'branding:leadership_list' %}{% endif %}" class="hover:text-gold">
+              Uongozi wa Shule
+            </a>
+          </li>
+          <li>
+            <a href="{% if subdomain %}{% url 'branding:admissions_local' subdomain=subdomain %}{% else %}{% url 'branding:admissions' %}{% endif %}" class="hover:text-gold">
+              Admissions / Usajili
+            </a>
+          </li>
+          <li>
+            <a href="{% if subdomain %}{% url 'branding:post_list_local' subdomain=subdomain category='NECTA_RESULTS' %}{% else %}{% url 'branding:post_list' category='NECTA_RESULTS' %}{% endif %}" class="hover:text-gold">
+              Matokeo ya NECTA
+            </a>
+          </li>
+          <li><a href="/accounts/login/" class="hover:text-gold">Angalia Matokeo Yangu (Ingia)</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-gold font-serif font-bold mb-3 text-sm uppercase tracking-wide">Habari na Matukio</h4>
+        <ul class="space-y-2 text-gray-200 text-base">
+          <li>
+            <a href="{% if subdomain %}{% url 'branding:post_list_local' subdomain=subdomain category='EVENT' %}{% else %}{% url 'branding:post_list' category='EVENT' %}{% endif %}" class="hover:text-gold">
+              Matukio / Mahafali
+            </a>
+          </li>
+          <li>
+            <a href="{% if subdomain %}{% url 'branding:post_list_local' subdomain=subdomain category='ACHIEVEMENT' %}{% else %}{% url 'branding:post_list' category='ACHIEVEMENT' %}{% endif %}" class="hover:text-gold">
+              Mafanikio
+            </a>
+          </li>
+          <li>
+            <a href="{% if subdomain %}{% url 'branding:post_list_local' subdomain=subdomain category='GALLERY' %}{% else %}{% url 'branding:post_list' category='GALLERY' %}{% endif %}" class="hover:text-gold">
+              Gallery (Majengo/Picha)
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-gold font-serif font-bold mb-3 text-sm uppercase tracking-wide">Akaunti</h4>
+        <ul class="space-y-2 text-gray-200 text-base">
+          <li><a href="/accounts/login/" class="hover:text-gold">Ingia (Mzazi/Mwalimu/Mwanafunzi)</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 pt-6 border-t border-white/10 text-xs text-gray-400">
+      &copy; {% now "Y" %} {{ school.name }} &middot; Powered by ShulePlusERP
+    </div>
+  </div>
+</div>
+
+{% block content %}{% endblock %}
+
+<footer class="bg-navy text-gray-300 mt-10">
+  <div class="max-w-5xl mx-auto px-4 py-8 text-sm">
+    <div class="font-serif text-white text-lg mb-1">{{ school.name }}</div>
+    {% if profile.motto %}<div class="text-gold italic text-sm mb-3">"{{ profile.motto }}"</div>{% endif %}
+    {% if profile.contact_phone %}<div>Simu: {{ profile.contact_phone }}</div>{% endif %}
+    {% if profile.contact_email %}<div>Email: {{ profile.contact_email }}</div>{% endif %}
+    {% if school.address %}<div>{{ school.address }}</div>{% endif %}
+    <div class="text-gray-500 text-xs mt-4">&copy; {% now "Y" %} {{ school.name }} &middot; Powered by ShulePlusERP</div>
+  </div>
+</footer>
+
+</body>
+</html>

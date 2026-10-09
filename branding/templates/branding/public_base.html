@@ -67,9 +67,9 @@
       <div>
         <h4 class="text-gold font-serif font-bold mb-3 text-sm uppercase tracking-wide">Kuhusu Shule</h4>
         <ul class="space-y-2 text-gray-200 text-base">
-          <li><a href="#about" class="hover:text-gold">Historia na Maelezo</a></li>
-          <li><a href="#about" class="hover:text-gold">Dhamira na Dira</a></li>
-          <li><a href="#contact" class="hover:text-gold">Mawasiliano</a></li>
+          <li><a href="{% if subdomain %}{% url 'branding:school_home_local' subdomain=subdomain %}{% else %}{% url 'branding:school_home' %}{% endif %}#about" class="hover:text-gold">Historia na Maelezo</a></li>
+          <li><a href="{% if subdomain %}{% url 'branding:school_home_local' subdomain=subdomain %}{% else %}{% url 'branding:school_home' %}{% endif %}#about" class="hover:text-gold">Dhamira na Dira</a></li>
+          <li><a href="{% if subdomain %}{% url 'branding:school_home_local' subdomain=subdomain %}{% else %}{% url 'branding:school_home' %}{% endif %}#contact" class="hover:text-gold">Mawasiliano</a></li>
         </ul>
       </div>
 

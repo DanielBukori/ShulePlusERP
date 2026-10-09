@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth import login as auth_login
 from .forms import SchoolRegistrationForm
 from .models import CustomUser
 
@@ -15,16 +16,29 @@ def register_school(request):
         if form.is_valid():
             school = form.save()
 
-            CustomUser.objects.create_user(
+            headmaster = CustomUser.objects.create_user(
                 username=form.cleaned_data['headmaster_username'],
                 password=form.cleaned_data['headmaster_password'],
                 phone=form.cleaned_data['headmaster_phone'],
+                email=form.cleaned_data['headmaster_email'],
                 role='HEADMASTER',
                 school=school,
                 is_staff=True,
             )
-            messages.success(request, f"Shule ya {school.name} imesajiliwa kikamilifu! Sasa ingia.")
-            return redirect('accounts:login')
+
+            # Mwingize Mkuu MOJA KWA MOJA (hahitaji kuingia tena kwa mkono) -
+            # backend inatajwa waziwazi kwa sababu create_user() haiweki
+            # user.backend, ambayo login() inahitaji.
+            auth_login(request, headmaster, backend='django.contrib.auth.backends.ModelBackend')
+
+            messages.success(
+                request,
+                f"Shule ya {school.name} imesajiliwa kikamilifu! Karibu kwenye dashibodi yako."
+            )
+            # post_login_redirect_view ndiyo chanzo kimoja cha ukweli cha
+            # 'role gani inaenda dashibodi gani' - tumia hiyo hiyo badala ya
+            # kuandika URL ya dashibodi moja kwa moja hapa (DRY).
+            return redirect('accounts:post_login_redirect')
     else:
         form = SchoolRegistrationForm()
 

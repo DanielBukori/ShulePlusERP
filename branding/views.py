@@ -260,6 +260,20 @@ def delete_post_view(request, post_id):
 
 
 @branding_manager_required
+def toggle_publish_post_view(request, post_id):
+    school = request.school
+    post = get_object_or_404(BrandingPost, id=post_id, school=school)
+    if request.method == 'POST':
+        post.is_published = not post.is_published
+        post.save(update_fields=['is_published'])
+        if post.is_published:
+            messages.success(request, f'"{post.title}" imechapishwa - sasa inaonekana kwenye tovuti.')
+        else:
+            messages.success(request, f'"{post.title}" imerudishwa rasimu - haionekani tena kwa umma.')
+    return redirect('branding:manage_posts')
+
+
+@branding_manager_required
 def delete_post_image_view(request, image_id):
     school = request.school
     img = get_object_or_404(PostImage, id=image_id, post__school=school)

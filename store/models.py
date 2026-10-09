@@ -32,6 +32,11 @@ class ContributionRequirement(models.Model):
     academic_year = models.IntegerField(default=2026, db_index=True)
     item_name = models.CharField(max_length=100)  # mfano: Ream, Omo, Mfagio
     quantity_required = models.PositiveIntegerField(default=1)
+    is_published = models.BooleanField(
+        default=False,
+        help_text='Deni limewekwa kwa wanafunzi husika na linaonekana kwenye ripoti za wazazi + kwa Store Keeper'
+    )
+    published_at = models.DateTimeField(null=True, blank=True)
     created_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

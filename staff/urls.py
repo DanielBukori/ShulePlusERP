@@ -7,5 +7,6 @@ urlpatterns = [
     path('teachers/', views.teacher_list_view, name='teacher_list'),
     path('teachers/register/', views.register_teacher_view, name='register_teacher'),
     path('teachers/<int:staff_id>/assignments/', views.manage_assignments_view, name='manage_assignments'),
+    path('teachers/<int:staff_id>/role/', views.edit_staff_role_view, name='edit_staff_role'),
     path('assign-class-teacher/', views.assign_class_teacher_view, name='assign_class_teacher'),
 ]

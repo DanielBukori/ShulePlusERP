@@ -23,6 +23,18 @@
           {{ form.name }}
           {% for e in form.name.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
         </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.subdomain.label }}</label>
+            {{ form.subdomain }}
+            {% for e in form.subdomain.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.sender_id.label }}</label>
+            {{ form.sender_id }}
+            {% for e in form.sender_id.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+          </div>
+        </div>
         <div>
           <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.school_level.label }}</label>
           {{ form.school_level }}
@@ -67,6 +79,11 @@
         <div>
           <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.headmaster_phone.label }}</label>
           {{ form.headmaster_phone }}
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.headmaster_email.label }}</label>
+          {{ form.headmaster_email }}
+          {% for e in form.headmaster_email.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
         </div>
       </div>
 

@@ -58,6 +58,23 @@ class TeacherRegistrationForm(forms.Form):
         return tsc
 
 
+class StaffRoleForm(forms.Form):
+    """
+    Kubadilisha cheo cha mfanyakazi ALIYESHASAJILIWA - kumpandisha
+    (mfano Mwalimu -> Academic Master) au kumvua/kumrudisha kuwa
+    Mwalimu wa kawaida. Haiguzi HEADMASTER kwa makusudi (sawa na
+    TeacherRegistrationForm). Store Keeper ni hiari tofauti - siyo
+    role ya CustomUser, ni bendera (flag) kwenye Staff, kwa hiyo
+    inaweza kuwepo sambamba na role yoyote (mfano Mwalimu+Store Keeper).
+    """
+    role = forms.ChoiceField(
+        choices=TeacherRegistrationForm.STAFF_ROLE_CHOICES,
+        label='Cheo',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    is_store_keeper = forms.BooleanField(required=False, label='Store Keeper (anasimamia vifaa/michango)')
+
+
 class SubjectAssignmentForm(forms.ModelForm):
     """
     Kumpangia mwalimu somo + darasa moja. Inaitwa mara kadhaa (moja kwa

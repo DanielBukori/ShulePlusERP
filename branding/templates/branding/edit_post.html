@@ -15,6 +15,25 @@
   {% endif %}
 
   <div class="bg-white border border-gray-200 rounded p-5 md:p-8">
+
+    {% if extra_images %}
+      <div class="mb-6 pb-6 border-b border-gray-100">
+        <label class="block text-xs uppercase text-gray-500 mb-2">Picha za Ziada Zilizopo</label>
+        <div class="grid grid-cols-4 gap-3">
+          {% for img in extra_images %}
+            <div class="relative">
+              <img src="{{ img.image.url }}" class="w-full h-20 object-cover rounded">
+              <form method="POST" action="{% url 'branding:delete_post_image' img.id %}" class="absolute top-1 right-1"
+                    onsubmit="return confirm('Futa picha hii?');">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">&times;</button>
+              </form>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
     <form method="POST" enctype="multipart/form-data" class="space-y-4">
       {% csrf_token %}
       {% for field in form %}
@@ -25,24 +44,6 @@
           {% for e in field.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
         </div>
       {% endfor %}
-
-      {% if extra_images %}
-        <div>
-          <label class="block text-xs uppercase text-gray-500 mb-2">Picha za Ziada Zilizopo</label>
-          <div class="grid grid-cols-4 gap-3">
-            {% for img in extra_images %}
-              <div class="relative">
-                <img src="{{ img.image.url }}" class="w-full h-20 object-cover rounded">
-                <form method="POST" action="{% url 'branding:delete_post_image' img.id %}" class="absolute top-1 right-1"
-                      onsubmit="return confirm('Futa picha hii?');">
-                  {% csrf_token %}
-                  <button type="submit" class="bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">&times;</button>
-                </form>
-              </div>
-            {% endfor %}
-          </div>
-        </div>
-      {% endif %}
 
       <div>
         <label class="block text-xs uppercase text-gray-500 mb-1">Ongeza Picha Zaidi (hiari)</label>

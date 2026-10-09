@@ -15,6 +15,15 @@ urlpatterns = [
     # Uchambuzi wa somo kivyake (subject-wise analysis)
     path('analysis/subject/', views.academic_subject_analysis_view, name='subject_analysis'),
 
+    # Takwimu za Jumla - pie + bar chart (grade distribution kwa somo)
+    path('analysis/statistics/', views.academic_statistics_view, name='statistics'),
+
+    # Ripoti ya Alama Zinazokosekana - kufuatilia walimu wamalize kujaza
+    path('analysis/missing-marks/', views.missing_marks_report_view, name='missing_marks_report'),
+
+    # Ripoti ya F za Kiotomatiki (baada ya Publish) - kufuatilia waliokosa mtihani
+    path('analysis/auto-absent/', views.auto_absent_report_view, name='auto_absent_report'),
+
     # Kuchapisha matokeo kwa wazazi/wanafunzi
     path('publish/', views.academic_publish_results_view, name='publish_results'),
 

@@ -5,11 +5,18 @@
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 py-6 space-y-5">
 
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <a href="{% url 'accountant:record_payment_spreadsheet' %}" class="bg-white border-2 border-gold rounded p-4 hover:shadow-md">
+      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Wingi (Spreadsheet)</div>
+      <div class="text-navy font-serif text-lg font-bold">Rekodi Malipo Mengi</div>
+    </a>
     <a href="{% url 'accountant:record_payment' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
-      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Rekodi Malipo</div>
+      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Moja kwa Moja</div>
       <div class="text-navy font-serif text-lg font-bold">+ Malipo</div>
     </a>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
     <a href="{% url 'accountant:set_fee_structure' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
       <div class="text-[11px] uppercase text-gray-500 tracking-wide">Ada</div>
       <div class="text-navy font-serif text-lg font-bold">Fee Structure</div>
@@ -19,6 +26,24 @@
       <div class="text-navy font-serif text-lg font-bold">+ Charge</div>
     </a>
   </div>
+
+  <a href="{% url 'accountant:generate_assessments' %}" class="block bg-navy text-white rounded p-4 hover:brightness-110">
+    <div class="text-[11px] uppercase text-gray-300 tracking-wide">Hatua ya LAZIMA kabla ya kurekodi malipo</div>
+    <div class="font-serif text-lg font-bold">&#9889; Tengeneza Tathmini (Generate Assessments)</div>
+    <div class="text-xs text-gray-300 mt-1">Bonyeza hii KWANZA kwa kila mwaka mpya - ndipo "Anahitajika" itaonekana sahihi</div>
+  </a>
+
+  <a href="{% url 'accountant:full_report' %}" class="block bg-emerald-700 text-white rounded p-4 hover:brightness-110">
+    <div class="text-[11px] uppercase text-emerald-100 tracking-wide">Kwa Accountant, Headmaster na Second Master</div>
+    <div class="font-serif text-lg font-bold">&#128202; Ripoti Kamili ya Fedha</div>
+    <div class="text-xs text-emerald-100 mt-1">Ada + Michango Mingine + Waliolipa + Wenye Deni - yote mahali pamoja</div>
+  </a>
+
+  <a href="{% url 'accountant:student_debt_search' %}" class="block bg-red-700 text-white rounded p-4 hover:brightness-110 mb-6">
+    <div class="text-[11px] uppercase text-red-100 tracking-wide">Tangu Form One hadi Sasa</div>
+    <div class="font-serif text-lg font-bold">&#128269; Tafuta Deni la Mwanafunzi</div>
+    <div class="text-xs text-red-100 mt-1">Andika jina tu - taarifa za kifedha za miaka yote zinajionyesha</div>
+  </a>
 
   <div class="bg-white border border-gray-200 rounded p-5 text-center">
     <div class="text-2xl font-bold text-red-600 font-serif">TZS {{ total_outstanding }}</div>

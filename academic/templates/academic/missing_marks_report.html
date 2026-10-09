@@ -1,0 +1,79 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Alama Zinazokosekana{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-6">
+
+  <h1 class="font-serif text-xl text-navy mb-1">Ripoti ya Alama Zinazokosekana</h1>
+  <p class="text-sm text-gray-500 mb-5">Wanafunzi ambao bado hawajajaziwa alama ya somo fulani - fuatilia mwalimu husika amalizie.</p>
+
+  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
+    <form method="GET" class="grid grid-cols-2 gap-3 items-end">
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.term.label }}</label>
+        {{ form.term }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.exam_type.label }}</label>
+        {{ form.exam_type }}
+      </div>
+      <div class="col-span-2">
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.school_class.label }}</label>
+        {{ form.school_class }}
+      </div>
+      <div class="col-span-2">
+        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.academic_year.label }}</label>
+        {{ form.academic_year }}
+      </div>
+      {% if form.non_field_errors %}
+        <div class="col-span-2 text-red-600 text-xs">{{ form.non_field_errors|join:", " }}</div>
+      {% endif %}
+      <button type="submit" class="col-span-2 bg-navy2 text-white text-sm font-semibold rounded py-2.5">Angalia Waliokosa</button>
+    </form>
+  </div>
+
+  {% if missing_rows %}
+    <div class="grid grid-cols-2 gap-3 mb-5">
+      <div class="bg-white border border-red-200 rounded p-4 text-center">
+        <div class="text-2xl font-bold text-red-600 font-serif">{{ missing_students_count }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Wanafunzi Wenye Alama Zinazokosekana</div>
+      </div>
+      <div class="bg-white border border-red-200 rounded p-4 text-center">
+        <div class="text-2xl font-bold text-red-600 font-serif">{{ missing_count }}</div>
+        <div class="text-[10px] uppercase text-gray-500">Jumla ya Alama Zinazokosekana</div>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded p-5 overflow-x-auto">
+      <table class="w-full text-sm min-w-[520px]">
+        <thead>
+          <tr class="bg-navy text-white text-xs uppercase">
+            <th class="p-2 text-left">Darasa</th>
+            <th class="p-2 text-left">Reg Number</th>
+            <th class="p-2 text-left">Mwanafunzi</th>
+            <th class="p-2 text-left">Somo Lililokosekana</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in missing_rows %}
+            <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
+              <td class="p-2">{{ row.school_class }}{% if row.combination %} ({{ row.combination }}){% endif %}</td>
+              <td class="p-2">{{ row.student.reg_number }}</td>
+              <td class="p-2 font-medium">{{ row.student.first_name }} {{ row.student.last_name }}</td>
+              <td class="p-2 text-red-600 font-semibold">{{ row.subject.name }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% elif form.is_valid %}
+    <div class="bg-white border border-green-200 rounded p-8 text-center text-green-700 font-semibold">
+      &#10003; Wanafunzi wote wamekamilishiwa alama zote kwa mtihani huu - hakuna anayekosekana.
+    </div>
+  {% else %}
+    <div class="bg-white border border-gray-200 rounded p-8 text-center text-gray-400">
+      Chagua Muhula, Aina ya Mtihani, na Mwaka hapo juu kuona ripoti.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

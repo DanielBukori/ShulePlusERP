@@ -96,3 +96,26 @@ class PaymentForm(forms.ModelForm):
         if Payment.objects.filter(receipt_number=number).exists():
             raise ValidationError('Namba hii ya risiti tayari imetumika.')
         return number
+
+
+class PaymentSpreadsheetFilterForm(forms.Form):
+    """
+    Kuchagua Darasa + Mwaka kabla ya kuonyesha jedwali la wanafunzi
+    wote (spreadsheet ya malipo). Hakuna 'Muhula' kwa makusudi - ada
+    (FeeStructure/StudentFeeAssessment) ni ya MWAKA MZIMA, siyo muhula.
+    """
+    school_class = forms.ModelChoiceField(
+        queryset=SchoolClass.objects.none(),
+        widget=forms.Select(attrs={'class': TW}),
+        label='Darasa',
+    )
+    academic_year = forms.IntegerField(
+        min_value=2020, max_value=2100, initial=2026,
+        widget=forms.NumberInput(attrs={'class': TW}),
+        label='Mwaka wa Masomo',
+    )
+
+    def __init__(self, *args, school=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if school:
+            self.fields['school_class'].queryset = SchoolClass.objects.filter(school=school)

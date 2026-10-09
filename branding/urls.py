@@ -9,11 +9,11 @@ urlpatterns = [
     path('s/<str:subdomain>/', views.school_home_local_view, name='school_home_local'),
 
     path('news/', views.post_list_view, name='post_list'),
+    path('news/<int:post_id>/', views.post_detail_view, name='post_detail'),
     path('news/<str:category>/', views.post_list_view, name='post_list'),
     path('s/<str:subdomain>/news/', views.post_list_local_view, name='post_list_local'),
-    path('s/<str:subdomain>/news/<str:category>/', views.post_list_local_view, name='post_list_local'),
-    path('news/<int:post_id>/', views.post_detail_view, name='post_detail'),
     path('s/<str:subdomain>/news/<int:post_id>/', views.post_detail_local_view, name='post_detail_local'),
+    path('s/<str:subdomain>/news/<str:category>/', views.post_list_local_view, name='post_list_local'),
 
     path('leadership/', views.leadership_list_view, name='leadership_list'),
     path('s/<str:subdomain>/leadership/', views.leadership_list_local_view, name='leadership_list_local'),
@@ -30,6 +30,7 @@ urlpatterns = [
     path('cms/posts/', views.manage_posts_view, name='manage_posts'),
     path('cms/posts/<int:post_id>/edit/', views.edit_post_view, name='edit_post'),
     path('cms/posts/<int:post_id>/delete/', views.delete_post_view, name='delete_post'),
+    path('cms/posts/<int:post_id>/toggle-publish/', views.toggle_publish_post_view, name='toggle_publish_post'),
     path('cms/post-images/<int:image_id>/delete/', views.delete_post_image_view, name='delete_post_image'),
 
     path('cms/leadership/', views.manage_leadership_view, name='manage_leadership'),

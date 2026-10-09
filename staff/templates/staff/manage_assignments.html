@@ -41,7 +41,7 @@
       <select name="{{ form.subject.html_name }}" class="border border-gray-300 rounded px-2 py-2 text-sm">
         <option value="">Chagua Somo</option>
         {% for choice in form.subject.field.queryset %}
-          <option value="{{ choice.pk }}">{{ choice }}</option>
+          <option value="{{ choice.pk }}">{{ choice.name }}</option>
         {% endfor %}
       </select>
       <select name="{{ form.school_class.html_name }}" class="border border-gray-300 rounded px-2 py-2 text-sm">

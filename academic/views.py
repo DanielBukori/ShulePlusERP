@@ -7,7 +7,7 @@ from django.db import transaction
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import ResultFilterForm, SubjectScoreFilterForm, ReportPublishForm, StudentRegistrationForm
+from .forms import ResultFilterForm, SubjectScoreFilterForm, AcademicStatisticsFilterForm, ReportPublishForm, StudentRegistrationForm
 from shule_core.models import AcademicResult, CustomUser, SchoolClass, Student, Subject, Combination
 from shule_core.sms_service import send_sms_to_user
 from notifications.utils import notify
@@ -351,12 +351,222 @@ def academic_subject_analysis_view(request):
 
 
 @academic_role_required
+def academic_statistics_view(request):
+    """
+    Takwimu za Jumla: chagua Muhula + Aina ya Mtihani + Mwaka (na Darasa
+    la hiari), unapata:
+      1. Pie chart - muhtasari wa jumla wa madaraja (A/B/C/D/F...) - shule
+         nzima (au darasa moja ukilichagua).
+      2. Bar chart ya grouped - kila SOMO kwenye x-axis, na safu (bars)
+         za kila daraja ndani ya somo hilo, ili kuonyesha ni somo lipi
+         lina wanafunzi wengi wa A/B/C/D/F.
+
+    Daraja la kila result linakokotolewa kwa kutumia _score_to_grade()
+    (helper ile ile inayotumika kwenye broadsheet), kutegemea level ya
+    somo husika (O-Level ina A/B/C/D/F; A-Level ina A/B/C/D/E/S/F).
+    """
+    school = _get_school(request)
+    if not school:
+        return HttpResponseForbidden("Hauruhusiwi kufikia ukurasa huu.")
+
+    form = AcademicStatisticsFilterForm(request.GET or None, school=school)
+
+    GRADE_ORDER = ['A', 'B', 'C', 'D', 'E', 'S', 'F']
+    GRADE_COLORS = {
+        'A': '#16a34a', 'B': '#2563eb', 'C': '#ca8a04',
+        'D': '#ea580c', 'E': '#7c3aed', 'S': '#0891b2', 'F': '#dc2626',
+    }
+
+    pie_labels, pie_data, pie_colors = [], [], []
+    bar_subjects, bar_datasets = [], []
+    total_results = 0
+
+    if form.is_valid():
+        term = form.cleaned_data['term']
+        exam_type = form.cleaned_data['exam_type']
+        academic_year = form.cleaned_data['academic_year']
+        school_class = form.cleaned_data.get('school_class')
+
+        results_qs = AcademicResult.objects.filter(
+            school=school, term=term, exam_type=exam_type, academic_year=academic_year,
+        ).select_related('subject')
+        if school_class:
+            results_qs = results_qs.filter(student__school_class=school_class)
+
+        grade_totals = {}
+        by_subject = {}
+        for r in results_qs:
+            grade = _score_to_grade(float(r.score), r.subject.level)
+            grade_totals[grade] = grade_totals.get(grade, 0) + 1
+            by_subject.setdefault(r.subject.name, {})
+            by_subject[r.subject.name][grade] = by_subject[r.subject.name].get(grade, 0) + 1
+            total_results += 1
+
+        grades_present = [g for g in GRADE_ORDER if g in grade_totals]
+        pie_labels = grades_present
+        pie_data = [grade_totals[g] for g in grades_present]
+        pie_colors = [GRADE_COLORS[g] for g in grades_present]
+
+        bar_subjects = sorted(by_subject.keys())
+        for g in grades_present:
+            bar_datasets.append({
+                'label': g,
+                'color': GRADE_COLORS[g],
+                'data': [by_subject[s].get(g, 0) for s in bar_subjects],
+            })
+
+    context = {
+        'school': school,
+        'form': form,
+        'pie_labels': pie_labels,
+        'pie_data': pie_data,
+        'pie_colors': pie_colors,
+        'bar_subjects': bar_subjects,
+        'bar_datasets': bar_datasets,
+        'total_results': total_results,
+    }
+    return render(request, 'academic/statistics.html', context)
+
+
+@academic_role_required
+def missing_marks_report_view(request):
+    """
+    Ripoti ya wanafunzi ambao BADO hawajajaziwa alama ya somo fulani kwa
+    mtihani uliochaguliwa - kwa ajili ya kufuatilia walimu wamalize
+    kuingiza CA zao. TOFAUTI na broadsheet (ambayo inahitaji ukamilifu
+    kuhesabu Division), hapa lengo ni KUORODHESHA HASA WALIOKOSA - ili
+    Academic Master aweze kuwafuatilia walimu husika. Broadsheet na
+    Statistics zote mbili tayari zinaendelea kufanya kazi sahihi hata
+    kama baadhi ya alama hazijajazwa (huonyesha '-' badala ya kuzuia).
+    """
+    school = _get_school(request)
+    if not school:
+        return HttpResponseForbidden("Hauruhusiwi kufikia ukurasa huu.")
+
+    form = AcademicStatisticsFilterForm(request.GET or None, school=school)
+    missing_rows = []
+
+    if form.is_valid():
+        term = form.cleaned_data['term']
+        exam_type = form.cleaned_data['exam_type']
+        academic_year = form.cleaned_data['academic_year']
+        selected_class = form.cleaned_data.get('school_class')
+
+        classes = [selected_class] if selected_class else SchoolClass.objects.filter(school=school)
+
+        for c in classes:
+            level = c.level
+            if level == 'A':
+                combinations = Combination.objects.filter(students__school_class=c).distinct()
+                groups = [(comb, comb.name) for comb in combinations]
+            else:
+                groups = [(None, None)]
+
+            for combination, combo_name in groups:
+                students_qs = Student.objects.filter(school=school, school_class=c)
+                if combination:
+                    students_qs = students_qs.filter(combination=combination)
+                    subjects = list(Subject.objects.filter(school=school, level=level, combination=combination))
+                else:
+                    subjects = list(Subject.objects.filter(school=school, level=level, combination__isnull=True))
+
+                if not subjects:
+                    continue
+
+                for student in students_qs:
+                    existing_subject_ids = set(
+                        AcademicResult.objects.filter(
+                            student=student, subject__in=subjects,
+                            exam_type=exam_type, term=term, academic_year=academic_year,
+                        ).values_list('subject_id', flat=True)
+                    )
+                    for subject in subjects:
+                        if subject.id not in existing_subject_ids:
+                            missing_rows.append({
+                                'student': student, 'school_class': c,
+                                'combination': combo_name, 'subject': subject,
+                            })
+
+    missing_rows.sort(key=lambda r: (str(r['school_class']), r['student'].reg_number, r['subject'].name))
+    missing_students_count = len({r['student'].id for r in missing_rows})
+
+    context = {
+        'school': school,
+        'form': form,
+        'missing_rows': missing_rows,
+        'missing_count': len(missing_rows),
+        'missing_students_count': missing_students_count,
+    }
+    return render(request, 'academic/missing_marks_report.html', context)
+
+
+@academic_role_required
+def auto_absent_report_view(request):
+    """
+    Ripoti ya wanafunzi WALIOPEWA F(0) KIOTOMATIKO wakati wa Publish
+    (is_auto_absent=True) - TOFAUTI na F halisi aliyoipata mwanafunzi
+    kwa kufanya mtihani vibaya. Hii ni kwa ajili ya ufuatiliaji WA
+    BAADA YA PUBLISH - mfano: kuhakiki kama mwanafunzi alikuwa
+    mgonjwa/hayupo shuleni, au ni kosa la kuandika ambalo bado
+    linaweza kurekebishwa kupitia Marks Entry ya kawaida.
+    """
+    school = _get_school(request)
+    if not school:
+        return HttpResponseForbidden("Hauruhusiwi kufikia ukurasa huu.")
+
+    form = AcademicStatisticsFilterForm(request.GET or None, school=school)
+    auto_absent_results = []
+
+    if form.is_valid():
+        term = form.cleaned_data['term']
+        exam_type = form.cleaned_data['exam_type']
+        academic_year = form.cleaned_data['academic_year']
+        selected_class = form.cleaned_data.get('school_class')
+
+        results_qs = AcademicResult.objects.filter(
+            school=school, term=term, exam_type=exam_type, academic_year=academic_year,
+            is_auto_absent=True,
+        ).select_related('student', 'subject', 'student__school_class').order_by(
+            'student__school_class__name', 'student__reg_number', 'subject__name'
+        )
+        if selected_class:
+            results_qs = results_qs.filter(student__school_class=selected_class)
+
+        auto_absent_results = list(results_qs)
+
+    auto_absent_students_count = len({r.student_id for r in auto_absent_results})
+
+    context = {
+        'school': school,
+        'form': form,
+        'auto_absent_results': auto_absent_results,
+        'auto_absent_count': len(auto_absent_results),
+        'auto_absent_students_count': auto_absent_students_count,
+    }
+    return render(request, 'academic/auto_absent_report.html', context)
+
+
+@academic_role_required
 def academic_publish_results_view(request):
+    """
+    Kuchapisha matokeo ya darasa. KABLA ya kuchapisha, mfumo unafanya
+    ukaguzi wa 'wamekosa kufanya mtihani uliokuwepo':
+
+    - Kwa kila somo, kama LIPO angalau alama MOJA iliyorekodiwa kwa
+      darasa/combination hii (yaani mtihani wa somo hilo ULIFANYIKA),
+      basi mwanafunzi YEYOTE wa darasa hilo asiye na alama ya somo
+      hilo anapewa alama 0 (= daraja F) KIOTOMATIKO - kama alikosa
+      mtihani bila sababu ya maandishi.
+    - Kama somo halina alama YOYOTE kwa darasa hilo (yaani mtihani wa
+      somo hilo HAUKUFANYIKA kabisa mzunguko huu), halifanyiwi lolote -
+      halitaonekana popote kwenye ripoti kama kwamba mtihani haukuwepo.
+    """
     school = _get_school(request)
     if not school:
         return HttpResponseForbidden("Hauruhusiwi kufikia ukurasa huu.")
 
     published = False
+    auto_f_count = 0
 
     if request.method == 'POST':
         form = ReportPublishForm(request.POST, school=school)
@@ -365,11 +575,55 @@ def academic_publish_results_view(request):
             term = form.cleaned_data['term']
             exam_type = form.cleaned_data['exam_type']
             academic_year = form.cleaned_data['academic_year']
+            level = school_class.level
 
-            AcademicResult.objects.filter(
-                school=school, student__school_class=school_class,
-                term=term, exam_type=exam_type, academic_year=academic_year,
-            ).update(is_published=True)
+            with transaction.atomic():
+                if level == 'A':
+                    combinations = Combination.objects.filter(
+                        students__school_class=school_class
+                    ).distinct()
+                    groups = [(c, c.name) for c in combinations]
+                else:
+                    groups = [(None, None)]
+
+                for combination, combo_name in groups:
+                    students_qs = Student.objects.filter(school=school, school_class=school_class)
+                    if combination:
+                        students_qs = students_qs.filter(combination=combination)
+                        subjects = list(Subject.objects.filter(school=school, level=level, combination=combination))
+                    else:
+                        subjects = list(Subject.objects.filter(school=school, level=level, combination__isnull=True))
+
+                    for subject in subjects:
+                        base_filter = dict(
+                            school=school, subject=subject, school_class=school_class,
+                            term=term, exam_type=exam_type, academic_year=academic_year,
+                            combination=combination,
+                        )
+                        # Je, somo hili LILIFANYIWA mtihani (angalau alama moja
+                        # tayari ipo)? Kama HAPANA - ruka kabisa somo hili;
+                        # mtihani haukufanyika, si 'kila mtu amekosa'.
+                        if not AcademicResult.objects.filter(**base_filter).exists():
+                            continue
+
+                        existing_student_ids = set(
+                            AcademicResult.objects.filter(**base_filter).values_list('student_id', flat=True)
+                        )
+                        for student in students_qs:
+                            if student.id not in existing_student_ids:
+                                AcademicResult.objects.create(
+                                    school=school, student=student, subject=subject,
+                                    combination=combination, school_class=school_class,
+                                    exam_type=exam_type, term=term, academic_year=academic_year,
+                                    score=0, recorded_by=request.user, is_auto_absent=True,
+                                )
+                                auto_f_count += 1
+
+                AcademicResult.objects.filter(
+                    school=school, student__school_class=school_class,
+                    term=term, exam_type=exam_type, academic_year=academic_year,
+                ).update(is_published=True)
+
             published = True
 
             # Tuma SMS kwa wazazi wote wa darasa hili wenye akaunti
@@ -382,14 +636,14 @@ def academic_publish_results_view(request):
                 if student.parent:
                     notify(student.parent, school, message, link='/family/parent/dashboard/')
 
-            log_action(
-                request.user, school, 'RESULTS_PUBLISHED',
-                f"Amechapisha matokeo ya {school_class} - {exam_type}, {term}, {academic_year}."
-            )
+            log_msg = f"Amechapisha matokeo ya {school_class} - {exam_type}, {term}, {academic_year}."
+            if auto_f_count:
+                log_msg += f" Alama {auto_f_count} za 'F' ziliwekwa kiotomatiki kwa waliokosa mtihani uliokuwepo."
+            log_action(request.user, school, 'RESULTS_PUBLISHED', log_msg)
     else:
         form = ReportPublishForm(school=school)
 
-    context = {'school': school, 'form': form, 'published': published}
+    context = {'school': school, 'form': form, 'published': published, 'auto_f_count': auto_f_count}
     return render(request, 'academic/publish_results.html', context)
 
 
@@ -426,6 +680,7 @@ def register_student_view(request):
                     parent_user = CustomUser.objects.create_user(
                         username=parent_username,
                         password=parent_temp_password,
+                        email=f"{parent_username}@no-email.shulepluserp.local",
                         phone=phone_digits,
                         role='PARENT',
                         school=school,
@@ -438,6 +693,7 @@ def register_student_view(request):
                 student_user = CustomUser.objects.create_user(
                     username=student_username,
                     password=student.reg_number,
+                    email=f"{student_username}@no-email.shulepluserp.local",
                     role='STUDENT',
                     school=school,
                     first_name=student.first_name,
@@ -677,6 +933,7 @@ def bulk_register_students_view(request):
                         parent_temp_password = f"{secrets.randbelow(900000) + 100000}"
                         parent_user = CustomUser.objects.create_user(
                             username=parent_username, password=parent_temp_password,
+                            email=f"{parent_username}@no-email.shulepluserp.local",
                             phone=phone_digits, role='PARENT', school=school,
                             first_name=str(parent_name), must_change_password=True,
                         )
@@ -684,6 +941,7 @@ def bulk_register_students_view(request):
                     student_username = f"{school.subdomain}{reg_number}"
                     student_user = CustomUser.objects.create_user(
                         username=student_username, password=reg_number,
+                        email=f"{student_username}@no-email.shulepluserp.local",
                         role='STUDENT', school=school,
                         first_name=str(first_name), last_name=str(last_name),
                         must_change_password=True,

@@ -175,15 +175,15 @@
         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a4 4 0 00-8 0v2M5 9h14l1 12H4L5 9z"/></svg>
         Accountant
       </a>
+      <a href="{% url 'branding:branding_dashboard' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10">
+        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0zM3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 010 18M12 3a15 15 0 000 18"/></svg>
+        Tovuti ya Shule
+      </a>
       {% if request.user.role == 'HEADMASTER' %}
         <div class="border-t border-white/10 my-2"></div>
         <a href="{% url 'audit:audit_log' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10">
           <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           Audit Log
-        </a>
-        <a href="{% url 'branding:manage_posts' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10">
-          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0zM3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 010 18M12 3a15 15 0 000 18"/></svg>
-          Tovuti ya Shule
         </a>
       {% endif %}
 

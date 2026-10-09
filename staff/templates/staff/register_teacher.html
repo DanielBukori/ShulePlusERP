@@ -17,6 +17,11 @@
       {% csrf_token %}
       <div class="grid grid-cols-1 gap-3 mb-5">
         <div>
+          <label class="block text-sm text-gray-600 mb-1">{{ form.role.label }} <span class="text-red-500">*</span></label>
+          {{ form.role }}
+          {% for e in form.role.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div>
           {{ form.first_name }}
           {% for e in form.first_name.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
         </div>
@@ -28,8 +33,14 @@
           {{ form.phone }}
           {% for e in form.phone.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
         </div>
-        <div>{{ form.tsc_number }}</div>
-        <div>{{ form.qualification }}</div>
+        <div>
+          {{ form.tsc_number }}
+          {% for e in form.tsc_number.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
+        <div>
+          {{ form.qualification }}
+          {% for e in form.qualification.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        </div>
                     
         <div>
           <label class="block text-sm text-gray-600 mb-1">Email <span class="text-red-500">*</span></label>

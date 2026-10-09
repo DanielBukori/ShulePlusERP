@@ -1,0 +1,68 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Ripoti Kamili ya Nidhamu{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-6">
+
+  <div class="flex items-center justify-between mb-5">
+    <h1 class="font-serif text-xl text-navy">Ripoti Kamili ya Nidhamu - {{ academic_year }}</h1>
+    <form method="GET" class="flex gap-2">
+      <input type="number" name="academic_year" value="{{ academic_year }}"
+             class="border border-gray-300 rounded px-3 py-1.5 text-sm w-24">
+      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded px-4 py-1.5">Chagua Mwaka</button>
+    </form>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3 mb-6">
+    <div class="bg-white border border-gray-200 rounded p-4 text-center">
+      <div class="text-2xl font-bold text-navy font-serif">{{ total_students_involved }}</div>
+      <div class="text-[10px] uppercase text-gray-500">Wanafunzi Wenye Makosa</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded p-4 text-center">
+      <div class="text-2xl font-bold text-navy font-serif">{{ total_incidents }}</div>
+      <div class="text-[10px] uppercase text-gray-500">Jumla ya Makosa Yote</div>
+    </div>
+  </div>
+
+  {% if student_rows %}
+    {% for row in student_rows %}
+      <div class="bg-white border border-gray-200 rounded p-5 mb-4">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <div class="font-serif font-bold text-navy">{{ row.student.first_name }} {{ row.student.last_name }}</div>
+            <div class="text-xs text-gray-500">{{ row.school_class }} &middot; {{ row.student.reg_number }}</div>
+          </div>
+          <div class="text-right">
+            <div class="text-xl font-bold {% if row.score < 50 %}text-red-600{% else %}text-amber-600{% endif %} font-serif">
+              {{ row.score }}
+            </div>
+            <div class="text-[10px] uppercase text-gray-500">Alama za Sasa</div>
+          </div>
+        </div>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-gray-50 text-gray-500 text-xs uppercase">
+              <th class="p-2 text-left">Kosa</th>
+              <th class="p-2">Alama Zilizokatwa</th>
+              <th class="p-2">Tarehe</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for inc in row.incidents %}
+              <tr class="border-b border-gray-100">
+                <td class="p-2">{{ inc.offense_type.name }}</td>
+                <td class="p-2 text-center text-red-600 font-semibold">-{{ inc.offense_type.points_deducted }}</td>
+                <td class="p-2 text-center text-gray-500">{{ inc.date_occurred|date:"d/m/Y" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="bg-white border border-green-200 rounded p-8 text-center text-green-700 font-semibold">
+      &#10003; Hakuna makosa yaliyorekodiwa kwa mwaka huu - nidhamu njema kwa wote!
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

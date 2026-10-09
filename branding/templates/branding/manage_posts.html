@@ -56,6 +56,14 @@
           <td class="p-3 text-gray-400 text-xs">{{ post.created_at|date:"d/m/Y" }}</td>
           <td class="p-3 text-right whitespace-nowrap">
             <a href="{% url 'branding:edit_post' post.id %}" class="text-navy2 text-xs font-semibold hover:underline mr-3">Hariri</a>
+            <form method="POST" action="{% url 'branding:toggle_publish_post' post.id %}" class="inline mr-3">
+              {% csrf_token %}
+              {% if post.is_published %}
+                <button type="submit" class="text-gray-500 text-xs font-semibold hover:underline">Rudisha Rasimu</button>
+              {% else %}
+                <button type="submit" class="text-green-700 text-xs font-semibold hover:underline">Chapisha Sasa</button>
+              {% endif %}
+            </form>
             <form method="POST" action="{% url 'branding:delete_post' post.id %}" class="inline"
                   onsubmit="return confirm('Una uhakika unataka kufuta chapisho hili?');">
               {% csrf_token %}

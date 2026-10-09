@@ -1,0 +1,120 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Ripoti Kamili ya Fedha{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-6">
+
+  <div class="flex items-center justify-between mb-5">
+    <h1 class="font-serif text-xl text-navy">Ripoti Kamili ya Fedha - {{ academic_year }}</h1>
+    <form method="GET" class="flex gap-2">
+      <input type="number" name="academic_year" value="{{ academic_year }}"
+             class="border border-gray-300 rounded px-3 py-1.5 text-sm w-24">
+      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded px-4 py-1.5">Chagua Mwaka</button>
+    </form>
+  </div>
+
+  <!-- Muhtasari wa Fedha -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+    <div class="bg-white border border-gray-200 rounded p-4 text-center">
+      <div class="text-lg font-bold text-navy font-serif">{{ total_assessed_students }}</div>
+      <div class="text-[10px] uppercase text-gray-500">Wanafunzi Wenye Tathmini</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded p-4 text-center">
+      <div class="text-lg font-bold text-navy font-serif">{{ total_required }}</div>
+      <div class="text-[10px] uppercase text-gray-500">Jumla Inayotakiwa</div>
+    </div>
+    <div class="bg-white border border-green-200 rounded p-4 text-center">
+      <div class="text-lg font-bold text-green-700 font-serif">{{ total_collected }}</div>
+      <div class="text-[10px] uppercase text-gray-500">Jumla Iliyokusanywa</div>
+    </div>
+    <div class="bg-white border border-red-200 rounded p-4 text-center">
+      <div class="text-lg font-bold text-red-600 font-serif">{{ total_outstanding }}</div>
+      <div class="text-[10px] uppercase text-gray-500">Jumla Inayobaki (Deni)</div>
+    </div>
+  </div>
+
+  <!-- Fee Structure -->
+  <div class="bg-white border border-gray-200 rounded p-5 mb-5 overflow-x-auto">
+    <h3 class="font-serif text-navy mb-3">Ada Zilizowekwa (Fee Structure) - {{ academic_year }}</h3>
+    <table class="w-full text-sm min-w-[380px]">
+      <thead>
+        <tr class="bg-navy text-white text-xs uppercase">
+          <th class="p-2 text-left">Darasa</th>
+          <th class="p-2">Ada ya Mwaka</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fee in fee_structures %}
+          <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
+            <td class="p-2">{{ fee.school_class }}</td>
+            <td class="p-2 text-center font-semibold">{{ fee.amount }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="2" class="text-center text-gray-400 py-4">Hakuna Fee Structure ya mwaka huu bado.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Other Charges (Michango Mingine) -->
+  <div class="bg-white border border-gray-200 rounded p-5 mb-5 overflow-x-auto">
+    <h3 class="font-serif text-navy mb-3">Michango Mingine (Other Charges) - {{ academic_year }}</h3>
+    <table class="w-full text-sm min-w-[560px]">
+      <thead>
+        <tr class="bg-navy text-white text-xs uppercase">
+          <th class="p-2 text-left">Jina la Mchango</th>
+          <th class="p-2 text-left">Darasa</th>
+          <th class="p-2">Kiasi</th>
+          <th class="p-2 text-left">Imeidhinishwa Na</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for charge in other_charges %}
+          <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
+            <td class="p-2 font-medium">{{ charge.name }}</td>
+            <td class="p-2">{{ charge.school_class|default:"Shule Nzima" }}</td>
+            <td class="p-2 text-center font-semibold">{{ charge.amount }}</td>
+            <td class="p-2 text-gray-500">{{ charge.authorized_by|default:"-" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="text-center text-gray-400 py-4">Hakuna michango mingine ya mwaka huu bado.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="text-xs text-gray-400 mt-3">
+      Kiasi hiki tayari kimeongezwa kwenye "Jumla Inayotakiwa" ya kila mwanafunzi husika (angalia sehemu ya
+      Muhtasari juu) - baada ya "Tengeneza Tathmini" kubonyezwa upya.
+    </p>
+  </div>
+
+  <!-- Wanafunzi Wenye Deni -->
+  <div class="bg-white border border-gray-200 rounded p-5 overflow-x-auto">
+    <h3 class="font-serif text-navy mb-1">Wanafunzi Wenye Deni ({{ debtor_rows|length }})</h3>
+    <p class="text-xs text-gray-500 mb-3">Wamepangwa kwa deni kubwa kwenda dogo.</p>
+    <table class="w-full text-sm min-w-[560px]">
+      <thead>
+        <tr class="bg-navy text-white text-xs uppercase">
+          <th class="p-2 text-left">Mwanafunzi</th>
+          <th class="p-2 text-left">Darasa</th>
+          <th class="p-2">Anahitajika</th>
+          <th class="p-2">Amelipa</th>
+          <th class="p-2">Deni</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in debtor_rows %}
+          <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
+            <td class="p-2 font-medium">{{ row.student.first_name }} {{ row.student.last_name }}</td>
+            <td class="p-2">{{ row.school_class }}</td>
+            <td class="p-2 text-center">{{ row.required }}</td>
+            <td class="p-2 text-center text-green-700">{{ row.paid }}</td>
+            <td class="p-2 text-center text-red-600 font-bold">{{ row.debt }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-green-700 font-semibold py-6">Hakuna deni lolote - wote wamelipa kikamilifu!</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

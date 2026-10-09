@@ -36,6 +36,15 @@ class ContributionRequirementForm(forms.ModelForm):
 class StudentContributionForm(forms.ModelForm):
     """
     Store Keeper anarekodi mwanafunzi mmoja akileta kifaa fulani.
+
+    MUHIMU: tumezima validate_unique() kwa makusudi. Django ModelForm
+    kwa default inakataa fomu ikiwa (student, requirement) tayari ipo
+    kwenye database - lakini kwetu HII NI JAMBO LA KAWAIDA: baada ya
+    'Chapisha' (publish_requirement_view), kila mwanafunzi tayari ana
+    StudentContribution (quantity_brought=0) mapema. Store Keeper
+    'kurekodi' baadaye ni ku-UPDATE rekodi hiyo iliyopo (view yetu
+    inatumia update_or_create + kuongeza juu ya kilichopo), siyo
+    kuunda mpya - kwa hiyo 'already exists' siyo kosa hapa.
     """
     class Meta:
         model = StudentContribution
@@ -58,6 +67,30 @@ class StudentContributionForm(forms.ModelForm):
         if school:
             self.fields['student'].queryset = Student.objects.filter(school=school)
             self.fields['requirement'].queryset = ContributionRequirement.objects.filter(school=school)
+
+    def validate_unique(self):
+        """Zimwa kwa makusudi - tazama maelezo kwenye docstring ya juu."""
+        pass
+
+
+class ContributionSpreadsheetFilterForm(forms.Form):
+    """
+    Kuchagua Sharti (ContributionRequirement) - hii tayari inabeba
+    Kifaa + Darasa + Muhula + Mwaka kwa pamoja - kabla ya kuonyesha
+    jedwali la wanafunzi wote (spreadsheet ya mchango).
+    """
+    requirement = forms.ModelChoiceField(
+        queryset=ContributionRequirement.objects.none(),
+        widget=forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
+        label='Sharti (Kifaa / Darasa / Muhula / Mwaka)',
+    )
+
+    def __init__(self, *args, school=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if school:
+            self.fields['requirement'].queryset = ContributionRequirement.objects.filter(
+                school=school
+            ).order_by('-academic_year', 'term', 'item_name')
 
 
 class StockAdjustmentForm(forms.Form):

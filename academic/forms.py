@@ -132,6 +132,57 @@ class SubjectScoreFilterForm(forms.Form):
         return cleaned
 
 
+class AcademicStatisticsFilterForm(forms.Form):
+    """
+    Fomu ya kuchuja Takwimu za Jumla (Statistics) - Muhula + Aina ya
+    Mtihani + Mwaka, na Darasa la HIARI (ukiacha wazi, ni shule nzima).
+    Inatoa: pie chart ya muhtasari wa jumla + bar chart ya kila somo
+    kwa daraja (A/B/C/D/F).
+    """
+    term = forms.ChoiceField(
+        choices=AcademicResult.TERM_CHOICES,
+        widget=forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
+        label='Muhula (Term)',
+    )
+    exam_type = forms.ChoiceField(
+        choices=EXAM_CHOICES,
+        widget=forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
+        label='Aina ya Mtihani',
+    )
+    school_class = forms.ModelChoiceField(
+        queryset=SchoolClass.objects.none(),
+        required=False,
+        widget=forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
+        label='Darasa (acha wazi kwa Shule Nzima)',
+    )
+    academic_year = forms.IntegerField(
+        min_value=2020,
+        max_value=2100,
+        widget=forms.NumberInput(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full', 'placeholder': 'Mfano: 2026'}),
+        label='Mwaka wa Masomo',
+    )
+
+    def __init__(self, *args, school=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if school:
+            self.fields['school_class'].queryset = SchoolClass.objects.filter(school=school)
+
+    def clean(self):
+        cleaned = super().clean()
+        term = cleaned.get('term')
+        exam_type = cleaned.get('exam_type')
+
+        if term and exam_type:
+            ruhusiwa = TERM_EXAM_MAP.get(term, [])
+            if exam_type not in ruhusiwa:
+                jina_muhula = dict(AcademicResult.TERM_CHOICES).get(term)
+                self.add_error(
+                    'exam_type',
+                    f"Mtihani huu haupo kwenye '{jina_muhula}'. Chagua tena."
+                )
+        return cleaned
+
+
 class ReportPublishForm(forms.Form):
     """
     Fomu inayomruhusu Academic Master 'kufungua' (publish) matokeo

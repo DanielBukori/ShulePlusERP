@@ -27,16 +27,29 @@
     </div>
   {% endif %}
 
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+    <a href="{% url 'discipline:record_incident_spreadsheet' %}" class="bg-white border-2 border-gold rounded p-4 hover:shadow-md">
+      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Wingi (Spreadsheet)</div>
+      <div class="text-navy font-serif text-lg font-bold">Rekodi Makosa Mengi</div>
+    </a>
+    <a href="{% url 'discipline:record_incident' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
+      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Moja kwa Moja</div>
+      <div class="text-navy font-serif text-lg font-bold">+ Kosa</div>
+    </a>
+  </div>
+
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
     <a href="{% url 'discipline:add_offense_type' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
       <div class="text-[11px] uppercase text-gray-500 tracking-wide">Weka Aina ya Kosa</div>
       <div class="text-navy font-serif text-lg font-bold">+ Offense Type</div>
     </a>
-    <a href="{% url 'discipline:record_incident' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
-      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Rekodi Kosa</div>
-      <div class="text-navy font-serif text-lg font-bold">+ Kosa</div>
-    </a>
   </div>
+
+  <a href="{% url 'discipline:full_report' %}" class="block bg-emerald-700 text-white rounded p-4 hover:brightness-110 mb-6">
+    <div class="text-[11px] uppercase text-emerald-100 tracking-wide">Kwa Discipline, Headmaster na Second Master</div>
+    <div class="font-serif text-lg font-bold">&#128202; Ripoti Kamili ya Nidhamu</div>
+    <div class="text-xs text-emerald-100 mt-1">Kila mwanafunzi, makosa yake yote, na alama zake za sasa - mahali pamoja</div>
+  </a>
 
   <div class="bg-white border border-gray-200 rounded p-5 overflow-x-auto">
     <h3 class="font-serif text-navy mb-3">Makosa ya Karibuni</h3>

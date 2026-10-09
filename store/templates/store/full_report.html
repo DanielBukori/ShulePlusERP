@@ -1,0 +1,69 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Ripoti Kamili ya Michango{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-6">
+
+  <div class="flex items-center justify-between mb-5">
+    <h1 class="font-serif text-xl text-navy">Ripoti Kamili ya Michango - {{ academic_year }}</h1>
+    <form method="GET" class="flex gap-2">
+      <input type="number" name="academic_year" value="{{ academic_year }}"
+             class="border border-gray-300 rounded px-3 py-1.5 text-sm w-24">
+      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded px-4 py-1.5">Chagua Mwaka</button>
+    </form>
+  </div>
+
+  {% if report_groups %}
+    {% for group in report_groups %}
+      <div class="bg-white border border-gray-200 rounded p-5 mb-5 overflow-x-auto">
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+          <div>
+            <h3 class="font-serif text-navy font-bold">{{ group.requirement.item_name }}</h3>
+            <p class="text-xs text-gray-500">
+              {{ group.requirement.school_class|default:"Shule Nzima" }} &middot;
+              {{ group.requirement.get_term_display }} &middot;
+              Kila mmoja anahitajika: {{ group.requirement.quantity_required }}
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full font-semibold">
+              Wamekamilisha: {{ group.complete_count }}
+            </span>
+            <span class="text-xs bg-red-100 text-red-700 px-3 py-1.5 rounded-full font-semibold">
+              Bado Wanadaiwa: {{ group.incomplete_count }}
+            </span>
+          </div>
+        </div>
+
+        <table class="w-full text-sm min-w-[420px]">
+          <thead>
+            <tr class="bg-navy text-white text-xs uppercase">
+              <th class="p-2 text-left">Mwanafunzi</th>
+              <th class="p-2">Ameleta</th>
+              <th class="p-2">Bado Anadaiwa</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in group.rows %}
+              <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
+                <td class="p-2 font-medium">
+                  {{ row.student.first_name }} {{ row.student.last_name }}
+                  <span class="text-gray-400 text-[10px] block">{{ row.student.reg_number }}</span>
+                </td>
+                <td class="p-2 text-center text-green-700">{{ row.brought }}</td>
+                <td class="p-2 text-center font-bold {% if row.owed > 0 %}text-red-600{% else %}text-green-700{% endif %}">
+                  {% if row.owed > 0 %}{{ row.owed }}{% else %}&#10003;{% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="bg-white border border-gray-200 rounded p-8 text-center text-gray-400">
+      Hakuna masharti ya michango yaliyowekwa kwa mwaka huu.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

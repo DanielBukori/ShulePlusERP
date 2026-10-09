@@ -9,6 +9,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 
 from shule_core.models import CustomUser, Staff, SubjectAssignment
+from shule_core.class_setup import ensure_standard_classes
 from shule_core.sms_service import send_sms
 from .forms import TeacherRegistrationForm, SubjectAssignmentForm, StaffRoleForm
 from audit.utils import log_action
@@ -16,7 +17,16 @@ from audit.utils import log_action
 MANAGER_ROLES = ['HEADMASTER', 'SECOND_MASTER', 'ACADEMIC']
 
 def _get_school(request):
-    return getattr(request, 'school', None)
+    school = getattr(request, 'school', None)
+    if school:
+        ensure_standard_classes(school)
+        return school
+    if request.user.is_authenticated:
+        school = request.user.school
+        if school:
+            ensure_standard_classes(school)
+        return school
+    return None
 
 def staff_manager_required(view_func):
     @wraps(view_func)
@@ -229,4 +239,3 @@ def assign_class_teacher_view(request):
 
     context = {'school': School, 'classes': classes, 'teachers': teachers}
     return render(request, 'staff/assign_class_teacher.html', context)
-

@@ -4,7 +4,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
-from shule_core.models import CustomUser, School, SchoolClass, Subject
+from shule_core.models import Combination, CustomUser, School, SchoolClass, Subject
+from teacher_portal.forms import EmergencyMarksFilterForm
 from teacher_portal.models import HomePackage
 
 
@@ -72,3 +73,87 @@ class HomePackageDownloadTests(TestCase):
         response = self.client.get(self.url, HTTP_HOST='packagetest.localhost')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(b''.join(response.streaming_content), b'homework content')
+
+
+class EmergencyMarksFilterIntegrityFormTests(TestCase):
+    def setUp(self):
+        self.school = School.objects.create(
+            name='Emergency Marks School',
+            subdomain='emergencymarks',
+            email='emergencymarks@example.com',
+            phone='255700000091',
+        )
+        self.o_class = SchoolClass.objects.create(
+            school=self.school, name='Form One', level='O'
+        )
+        self.a_class = SchoolClass.objects.create(
+            school=self.school, name='Form Five', level='A'
+        )
+        self.combination = Combination.objects.create(name='CBG')
+        self.other_combination = Combination.objects.create(name='HGL')
+        self.o_subject = Subject.objects.create(
+            school=self.school, name='Mathematics', code='MATH', level='O'
+        )
+        self.a_subject = Subject.objects.create(
+            school=self.school,
+            name='Biology',
+            code='BIO',
+            level='A',
+            combination=self.combination,
+        )
+
+    def test_emergency_marks_rejects_class_subject_level_mismatch(self):
+        form = EmergencyMarksFilterForm(
+            {
+                'subject': self.o_subject.pk,
+                'school_class': self.a_class.pk,
+                'term': 'TERM_1',
+                'academic_year': 2026,
+            },
+            school=self.school,
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('school_class', form.errors)
+
+    def test_emergency_marks_rejects_wrong_combination(self):
+        form = EmergencyMarksFilterForm(
+            {
+                'subject': self.a_subject.pk,
+                'school_class': self.a_class.pk,
+                'combination': self.other_combination.pk,
+                'term': 'TERM_1',
+                'academic_year': 2026,
+            },
+            school=self.school,
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('combination', form.errors)
+
+    def test_emergency_marks_fields_are_limited_to_the_current_school(self):
+        other_school = School.objects.create(
+            name='Other Emergency School',
+            subdomain='otheremergencymarks',
+            email='otheremergencymarks@example.com',
+            phone='255700000092',
+        )
+        other_class = SchoolClass.objects.create(
+            school=other_school, name='Form One', level='O'
+        )
+        other_subject = Subject.objects.create(
+            school=other_school, name='Chemistry', code='CHEM', level='O'
+        )
+        form = EmergencyMarksFilterForm(
+            {
+                'subject': other_subject.pk,
+                'school_class': other_class.pk,
+                'term': 'TERM_1',
+                'academic_year': 2026,
+            },
+            school=self.school,
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('subject', form.errors)
+        self.assertIn('school_class', form.errors)

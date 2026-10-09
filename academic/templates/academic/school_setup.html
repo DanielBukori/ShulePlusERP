@@ -1,0 +1,103 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% block title %}Madarasa na Masomo{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-6">
+  <h1 class="font-serif text-2xl text-navy mb-1">Madarasa na Masomo</h1>
+  <p class="text-sm text-gray-500 mb-5">Madarasa ya kawaida ya Form I–VI yameandaliwa kulingana na kiwango cha shule. Ongeza mkondo au masomo hapa.</p>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="text-sm {% if message.tags == 'error' %}bg-red-50 border-red-500 text-red-700{% else %}bg-green-50 border-green-600 text-green-800{% endif %} border rounded px-3 py-2 mb-4">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="grid lg:grid-cols-3 gap-5">
+    <section class="bg-white border border-gray-200 rounded-xl p-5">
+      <h2 class="font-serif text-lg text-navy mb-1">Ongeza Darasa au Mkondo</h2>
+      <p class="text-xs text-gray-500 mb-4">Madarasa ya msingi yanajitengeneza. Tumia hapa kuongeza mkondo wa ziada kama Science au S1.</p>
+      <form method="post" class="space-y-3">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add_class">
+        <div>
+          <label for="{{ class_form.name.id_for_label }}" class="block text-xs uppercase text-gray-500 mb-1">{{ class_form.name.label }}</label>
+          {{ class_form.name }}
+          {% for error in class_form.name.errors %}<p class="text-xs text-red-600 mt-1">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          <label for="{{ class_form.stream.id_for_label }}" class="block text-xs uppercase text-gray-500 mb-1">{{ class_form.stream.label }}</label>
+          {{ class_form.stream }}
+          {% for error in class_form.stream.errors %}<p class="text-xs text-red-600 mt-1">{{ error }}</p>{% endfor %}
+        </div>
+        {% for error in class_form.non_field_errors %}<p class="text-xs text-red-600">{{ error }}</p>{% endfor %}
+        <button type="submit" class="w-full bg-navy2 text-white font-semibold py-2.5 rounded">Ongeza Darasa</button>
+      </form>
+    </section>
+
+    <section class="bg-white border border-gray-200 rounded-xl p-5">
+      <h2 class="font-serif text-lg text-navy mb-1">Ongeza Somo</h2>
+      <p class="text-xs text-gray-500 mb-4">Somo litaunganishwa na shule hii pekee. Kwa A-Level, chagua combination yake.</p>
+      <form method="post" class="space-y-3">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add_subject">
+        {% for field in subject_form %}
+          <div>
+            <label for="{{ field.id_for_label }}" class="block text-xs uppercase text-gray-500 mb-1">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}<p class="text-xs text-red-600 mt-1">{{ error }}</p>{% endfor %}
+          </div>
+        {% endfor %}
+        {% for error in subject_form.non_field_errors %}<p class="text-xs text-red-600">{{ error }}</p>{% endfor %}
+        <button type="submit" class="w-full bg-gold text-amber-950 font-semibold py-2.5 rounded">Ongeza Somo</button>
+      </form>
+    </section>
+
+    {% if school.school_level != 'O' %}
+      <section class="bg-white border border-gray-200 rounded-xl p-5">
+        <h2 class="font-serif text-lg text-navy mb-1">Combination za A-Level</h2>
+        <p class="text-xs text-gray-500 mb-4">Orodha hii ni ya pamoja kwa shule zote; admin wa mfumo ndiye anayeisimamia.</p>
+        <div class="flex flex-wrap gap-2">
+          {% for combination in combinations %}
+            <span class="bg-gray-100 rounded px-2 py-1 text-xs">{{ combination.name }}</span>
+          {% empty %}
+            <span class="text-xs text-gray-500">Hakuna combination bado. Wasiliana na admin wa mfumo.</span>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  </div>
+
+  <section class="bg-white border border-gray-200 rounded-xl p-5 mt-5">
+    <h2 class="font-serif text-lg text-navy mb-3">Madarasa Yaliyopo</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+      {% for school_class in classes %}
+        <div class="border border-gray-100 bg-gray-50 rounded px-3 py-2 text-sm">
+          {{ school_class }} <span class="text-xs text-gray-500">({{ school_class.get_level_display }})</span>
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-500">Hakuna madarasa bado.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="bg-white border border-gray-200 rounded-xl p-5 mt-5">
+    <h2 class="font-serif text-lg text-navy mb-3">Masomo Yaliyopo</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead><tr class="bg-navy text-white"><th class="text-left p-2">Code</th><th class="text-left p-2">Somo</th><th class="text-left p-2">Kiwango</th><th class="text-left p-2">Combination</th></tr></thead>
+        <tbody>
+          {% for subject in subjects %}
+            <tr class="border-b border-gray-100">
+              <td class="p-2">{{ subject.code }}</td><td class="p-2">{{ subject.name }}</td>
+              <td class="p-2">{{ subject.get_level_display }}</td>
+              <td class="p-2">{{ subject.combination|default:"-" }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4" class="p-3 text-center text-gray-500">Hakuna masomo bado.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}

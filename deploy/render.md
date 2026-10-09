@@ -84,6 +84,43 @@ templates ndani ya `*/templates/`, na CSS iliyojengwa iko `static/css/`.
 Gunicorn inahudumia backend na kurasa hizo kwenye service moja; WhiteNoise
 inahudumia static CSS/JS. Kwa hiyo usitengeneze Vercel project kwa sasa.
 
+## Kuingia kwenye shule na kuandaa madarasa/masomo
+
+Kwa sasa Render URL ya kawaida (`https://<jina-la-service>.onrender.com/`)
+haiwezi kuwa na subdomain tofauti kwa kila shule. Baada ya admin kuidhinisha
+shule na Mkuu kuingia, mfumo hutumia shule iliyounganishwa na akaunti hiyo kama
+tenant kwenye base URL. Mtumiaji wa shule nyingine akiingia kwa akaunti yake
+ataona shule yake tu; subdomain ya shule nyingine kwenye custom domain bado
+inakataa akaunti isiyolingana.
+
+Baada ya kuingia kama HEADMASTER, SECOND_MASTER, au ACADEMIC:
+
+1. Fungua **Madarasa na Masomo** kwenye menyu, au nenda
+   `/academic/setup/`.
+2. Madarasa ya msingi hutengenezwa kiotomatiki kulingana na `school_level`:
+   O-Level = Form I–IV, A-Level = Form V–VI, na shule ya viwango vyote =
+   Form I–VI. Ukurasa huu hutengeneza zinazokosekana bila kufuta au kubadili
+   madarasa yaliyopo; tumia fomu kuongeza stream kama Science au Arts.
+3. Ongeza masomo. Masomo ya O-Level hayahitaji combination; A-Level yanahitaji
+   combination inayolingana. Masomo yanafungamanishwa na shule iliyoingia,
+   na darasa/somo lililowekwa shule nyingine haliwezi kuchaguliwa.
+4. Baada ya hapo madarasa yanaonekana kwenye usajili wa wanafunzi na madarasa
+   yanatumika kwenye matokeo. Hakikisha pia walimu wamepangiwa somo/darasa
+   sahihi kabla ya kuingiza alama.
+
+Combination kwa sasa ni katalogi ya pamoja kwenye database, si ya shule moja.
+Ili shule moja isibadilishe chaguo za nyingine, ni admin wa mfumo pekee ndiye
+anayeongeza/kusimamia combination kupitia Django Admin. Mkuu anaweza kuchagua
+combination zilizopo wakati wa kusajili masomo ya A-Level.
+
+Huu ni mpangilio wa mpito wa Render, si kubadilisha tenant kuwa wa pamoja:
+`TenantMiddleware` hutanguliza subdomain inayotambulika kwenye custom domain na
+huzuia mtumiaji wa shule A kufungua subdomain ya shule B. Baadaye, unapokuwa na
+domain yako, ongeza domain na wildcard kwenye Render/DNS, weka `BASE_DOMAIN`,
+`ALLOWED_HOSTS` na `CSRF_TRUSTED_ORIGINS` kama sehemu ya domain hapo chini.
+Base URL ya Render itaendelea kutumia shule ya akaunti iliyoingia; links za
+shule maalum zitakuwa `https://<subdomain>.<domain-yako>/`.
+
 ## Kupokea barua pepe na SMS
 
 Demo ya ukurasa inaweza kuonekana bila SMS/email credentials, lakini login za

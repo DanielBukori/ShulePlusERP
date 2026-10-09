@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from shule_core.models import SchoolClass, Subject, AcademicResult, Student, Combination
+from shule_core.class_setup import SCHOOL_LEVEL_CLASSES, STANDARD_CLASSES
 
 
 # Muhula gani unaruhusu 'matokeo yaliyokamilika' gani (kwa ajili ya
@@ -81,7 +82,6 @@ class ResultFilterForm(forms.Form):
                     f"'{jina_mtihani}' haipo kwenye '{jina_muhula}'. Chagua tena."
                 )
         return cleaned
-
 
 class SubjectScoreFilterForm(forms.Form):
     """
@@ -334,6 +334,8 @@ class StudentRegistrationForm(forms.ModelForm):
                 self.add_error('combination', 'Mwanafunzi wa A-Level lazima awe na Combination.')
             if school_class.level == 'O' and combination:
                 self.add_error('combination', 'Mwanafunzi wa O-Level hapaswi kuwa na Combination.')
+            if combination and combination.level != 'A':
+                self.add_error('combination', 'Combination iliyochaguliwa si ya A-Level.')
 
             # Reg Number ni ya kipekee KWA DARASA (siyo shule nzima) - reg
             # number "0001" inaweza kutumika Form One NA Form Two wakati
@@ -345,4 +347,102 @@ class StudentRegistrationForm(forms.ModelForm):
                     'reg_number',
                     f"Reg Number '{reg_number}' tayari ipo kwenye darasa la {school_class}."
                 )
+        return cleaned
+
+
+class SchoolClassSetupForm(forms.Form):
+    name = forms.ChoiceField(
+        choices=(),
+        label='Darasa',
+        widget=forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
+    )
+    stream = forms.ChoiceField(
+        choices=SchoolClass.STREAM_CHOICES,
+        label='Mkondo',
+        widget=forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
+    )
+
+    def __init__(self, *args, school, **kwargs):
+        super().__init__(*args, **kwargs)
+        levels = SCHOOL_LEVEL_CLASSES.get(school.school_level, {'O', 'A'})
+        self.fields['name'].choices = [
+            (name, name)
+            for name, level in STANDARD_CLASSES
+            if level in levels
+        ]
+        self.school = school
+
+    def clean(self):
+        cleaned = super().clean()
+        name = cleaned.get('name')
+        stream = cleaned.get('stream')
+        if name and stream and SchoolClass.objects.filter(
+            school=self.school,
+            name__iexact=name,
+            stream=stream,
+        ).exists():
+            self.add_error('name', 'Darasa hili na mkondo huu tayari vipo kwenye shule yako.')
+        return cleaned
+
+
+class SchoolSubjectForm(forms.ModelForm):
+    class Meta:
+        model = Subject
+        fields = ('name', 'code', 'level', 'combination')
+        labels = {
+            'name': 'Jina la Somo',
+            'code': 'Code ya Somo',
+            'level': 'Kiwango',
+            'combination': 'Combination (A-Level tu)',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
+            'code': forms.TextInput(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
+            'level': forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
+            'combination': forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
+        }
+
+    def __init__(self, *args, school, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.school = school
+        levels = SCHOOL_LEVEL_CLASSES.get(school.school_level, {'O', 'A'})
+        self.fields['level'].choices = [
+            choice for choice in Subject.LEVEL_CHOICES if choice[0] in levels
+        ]
+        self.fields['combination'].queryset = Combination.objects.all().order_by('name')
+        self.fields['combination'].required = False
+
+    def clean_code(self):
+        return self.cleaned_data['code'].strip().upper()
+
+    def clean_name(self):
+        return self.cleaned_data['name'].strip()
+
+    def clean(self):
+        cleaned = super().clean()
+        level = cleaned.get('level')
+        combination = cleaned.get('combination')
+        code = cleaned.get('code')
+
+        if level == 'A' and not combination:
+            self.add_error('combination', 'Somo la A-Level lazima liwekwe kwenye Combination.')
+        elif level == 'O' and combination:
+            self.add_error('combination', 'Somo la O-Level haliwekwi kwenye Combination.')
+
+        if level and code:
+            duplicate_subjects = Subject.objects.filter(
+                school=self.school,
+                level=level,
+                code__iexact=code,
+                combination=combination,
+            )
+            if not combination:
+                duplicate_subjects = Subject.objects.filter(
+                    school=self.school,
+                    level=level,
+                    code__iexact=code,
+                    combination__isnull=True,
+                )
+            if duplicate_subjects.exists():
+                self.add_error('code', 'Code hii ya somo tayari inatumika kwenye shule yako.')
         return cleaned

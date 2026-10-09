@@ -103,6 +103,25 @@ class EmergencyMarksFilterForm(forms.Form):
         if school:
             self.fields['subject'].queryset = Subject.objects.filter(school=school)
             self.fields['school_class'].queryset = SchoolClass.objects.filter(school=school)
+            self.fields['combination'].queryset = Combination.objects.filter(level='A').order_by('name')
+
+    def clean(self):
+        cleaned = super().clean()
+        subject = cleaned.get('subject')
+        school_class = cleaned.get('school_class')
+        combination = cleaned.get('combination')
+
+        if subject and school_class:
+            if subject.level != school_class.level:
+                self.add_error('school_class', 'Kiwango cha somo na darasa havilingani.')
+            if school_class.level == 'A':
+                if not combination:
+                    self.add_error('combination', 'Chagua Combination kwa darasa la A-Level.')
+                elif subject.combination_id != combination.pk:
+                    self.add_error('combination', 'Combination ya somo na darasa havilingani.')
+            elif combination or subject.combination_id:
+                self.add_error('combination', 'O-Level haitumii Combination.')
+        return cleaned
 
 
 class StatsFilterForm(forms.Form):

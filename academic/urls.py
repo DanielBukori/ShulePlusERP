@@ -6,6 +6,7 @@ app_name = 'academic'
 urlpatterns = [
     # Dashboard kuu ya Academic Master
     path('dashboard/', views.academic_dashboard_view, name='academic_dashboard'),
+    path('setup/', views.school_setup_view, name='school_setup'),
 
     # Matokeo ya darasa moja (broadsheet: subjects, total, average, division, position)
     path('results/class/<int:class_id>/', views.academic_class_results_view, name='class_results'),

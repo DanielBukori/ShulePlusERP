@@ -5,6 +5,7 @@ from django.core.management import call_command
 from django.urls import reverse
 
 from academic.grading import recompute_derived_results
+from shule_core.class_setup import ensure_standard_classes
 from shule_core.models import (
     AcademicResult,
     Combination,
@@ -229,6 +230,135 @@ class HeadmasterDashboardTenantFallbackTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['school'], self.school)
+        self.assertEqual(
+            set(self.school.classes.values_list('name', flat=True)),
+            {'Form I', 'Form II', 'Form III', 'Form IV', 'Form V', 'Form VI'},
+        )
+
+    def test_school_setup_adds_school_scoped_subject_and_extra_class_stream(self):
+        self.client.force_login(self.headmaster)
+        setup_url = reverse('academic:school_setup')
+
+        response = self.client.get(setup_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Form VI')
+
+        response = self.client.post(
+            setup_url,
+            {'action': 'add_class', 'name': 'Form I', 'stream': 'SCIENCE'},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(
+            self.school.classes.filter(name='Form I', stream='SCIENCE', level='O').exists()
+        )
+
+        response = self.client.post(
+            setup_url,
+            {
+                'action': 'add_subject',
+                'name': 'Mathematics',
+                'code': 'mat',
+                'level': 'O',
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        subject = Subject.objects.get(school=self.school, code='MAT')
+        self.assertEqual(subject.level, 'O')
+        self.assertIsNone(subject.combination_id)
+
+    def test_a_level_subject_requires_matching_combination(self):
+        self.client.force_login(self.headmaster)
+        setup_url = reverse('academic:school_setup')
+        combination = Combination.objects.create(name='PCM')
+        invalid_response = self.client.post(
+            setup_url,
+            {
+                'action': 'add_subject',
+                'name': 'Physics',
+                'code': 'PHY',
+                'level': 'A',
+            },
+        )
+        self.assertEqual(invalid_response.status_code, 200)
+        self.assertFalse(Subject.objects.filter(school=self.school, code='PHY').exists())
+
+        valid_response = self.client.post(
+            setup_url,
+            {
+                'action': 'add_subject',
+                'name': 'Physics',
+                'code': 'phy',
+                'level': 'A',
+                'combination': combination.pk,
+            },
+        )
+        self.assertEqual(valid_response.status_code, 302)
+        self.assertTrue(
+            Subject.objects.filter(
+                school=self.school,
+                code='PHY',
+                level='A',
+                combination=combination,
+            ).exists()
+        )
+
+    def test_setup_post_creates_subject_only_for_authenticated_school(self):
+        other_school = School.objects.create(
+            name='Other Setup School',
+            subdomain='othersetupschool',
+            email='other-setup@example.com',
+            phone='255700000062',
+        )
+        self.client.force_login(self.headmaster)
+
+        response = self.client.post(
+            reverse('academic:school_setup'),
+            {
+                'action': 'add_subject',
+                'name': 'Biology',
+                'code': 'BIO',
+                'level': 'O',
+                'school': other_school.pk,
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Subject.objects.filter(school=self.school, code='BIO').exists())
+        self.assertFalse(Subject.objects.filter(school=other_school, code='BIO').exists())
+
+    def test_school_manager_cannot_change_shared_combination_catalog(self):
+        self.client.force_login(self.headmaster)
+        response = self.client.post(
+            reverse('academic:school_setup'),
+            {'action': 'add_combination', 'name': 'XYZ'},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Combination.objects.filter(name='XYZ', level='A').exists())
+
+
+class StandardSchoolClassSetupTests(TestCase):
+    def test_school_level_classes_are_created_idempotently(self):
+        expected = {
+            'O': {'Form I', 'Form II', 'Form III', 'Form IV'},
+            'A': {'Form V', 'Form VI'},
+            'B': {'Form I', 'Form II', 'Form III', 'Form IV', 'Form V', 'Form VI'},
+        }
+        for level, class_names in expected.items():
+            with self.subTest(level=level):
+                school = School.objects.create(
+                    name=f'{level} Level School',
+                    subdomain=f'{level.lower()}levelschool',
+                    email=f'{level.lower()}-level@example.com',
+                    phone=f'25570000007{"OAB".index(level)}',
+                    school_level=level,
+                )
+                ensure_standard_classes(school)
+                ensure_standard_classes(school)
+                self.assertEqual(
+                    set(school.classes.filter(stream='GENERAL').values_list('name', flat=True)),
+                    class_names,
+                )
 
     def test_user_without_school_cannot_open_school_dashboard(self):
         user_without_school = CustomUser.objects.create_user(

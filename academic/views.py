@@ -7,8 +7,17 @@ from django.db import transaction
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import ResultFilterForm, SubjectScoreFilterForm, AcademicStatisticsFilterForm, ReportPublishForm, StudentRegistrationForm
+from .forms import (
+    ResultFilterForm,
+    SubjectScoreFilterForm,
+    AcademicStatisticsFilterForm,
+    ReportPublishForm,
+    StudentRegistrationForm,
+    SchoolClassSetupForm,
+    SchoolSubjectForm,
+)
 from shule_core.models import AcademicResult, CustomUser, SchoolClass, Student, Subject, Combination
+from shule_core.class_setup import STANDARD_CLASSES, ensure_standard_classes
 from shule_core.sms_service import send_sms
 from notifications.utils import notify
 from audit.utils import log_action
@@ -35,9 +44,13 @@ def academic_role_required(view_func):
 def _get_school(request):
     school = getattr(request, 'school', None)
     if school:
+        ensure_standard_classes(school)
         return school
     if request.user.is_authenticated:
-        return request.user.school
+        school = request.user.school
+        if school:
+            ensure_standard_classes(school)
+        return school
     return None
 
 
@@ -203,6 +216,54 @@ def academic_dashboard_view(request):
         ).count()
 
     return render(request, 'academic/academic_dashboard.html', context)
+
+
+@academic_role_required
+def school_setup_view(request):
+    school = _get_school(request)
+    if not school:
+        return HttpResponseForbidden("Hauruhusiwi kufikia ukurasa huu.")
+
+    class_form = SchoolClassSetupForm(school=school)
+    subject_form = SchoolSubjectForm(school=school)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'add_class':
+            class_form = SchoolClassSetupForm(request.POST, school=school)
+            if class_form.is_valid():
+                name = class_form.cleaned_data['name']
+                level = next(level for class_name, level in STANDARD_CLASSES if class_name == name)
+                school.classes.get_or_create(
+                    name=name,
+                    level=level,
+                    stream=class_form.cleaned_data['stream'],
+                )
+                messages.success(request, f'{name} {class_form.cleaned_data["stream"]} imeongezwa.')
+                return redirect('academic:school_setup')
+        elif action == 'add_subject':
+            subject_form = SchoolSubjectForm(request.POST, school=school)
+            if subject_form.is_valid():
+                subject = subject_form.save(commit=False)
+                subject.school = school
+                subject.save()
+                messages.success(request, f'Somo {subject.name} limeongezwa.')
+                return redirect('academic:school_setup')
+        else:
+            messages.error(request, 'Ombi halijatambulika. Jaribu tena.')
+            return redirect('academic:school_setup')
+
+    context = {
+        'school': school,
+        'class_form': class_form,
+        'subject_form': subject_form,
+        'combinations': Combination.objects.filter(level='A').order_by('name'),
+        'classes': SchoolClass.objects.filter(school=school).order_by('level', 'name', 'stream'),
+        'subjects': Subject.objects.filter(school=school).select_related('combination').order_by(
+            'level', 'combination__name', 'name'
+        ),
+    }
+    return render(request, 'academic/school_setup.html', context)
 
 
 def _build_broadsheet(school, school_class, term, exam_type, academic_year):

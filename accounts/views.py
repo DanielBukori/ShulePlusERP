@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import PasswordChangeForm
@@ -146,6 +147,8 @@ def otp_verify_view(request):
 
     if request.method == 'POST':
         code = request.POST.get('otp', '').strip()
+        pending = get_pending_otp(request)
+        backend = pending.get('backend') if pending else None
         user_id, error = verify_otp(request, code)
 
         if error:
@@ -161,7 +164,9 @@ def otp_verify_view(request):
             messages.error(request, "Akaunti haipatikani. Ingia tena.")
             return redirect('accounts:login')
 
-        login(request, user)
+        if backend not in settings.AUTHENTICATION_BACKENDS:
+            backend = settings.AUTHENTICATION_BACKENDS[0]
+        login(request, user, backend=backend)
         return redirect('accounts:post_login_redirect')
 
     # GET (mfano mtu ame-refresh ukurasa) - kama hakuna OTP inayosubiriwa, mrudishe login

@@ -37,20 +37,13 @@
 </header>
 
 <!-- Hero -->
-<!-- HERO CAROUSEL - inazunguka kiotomatiki kama Lake Zone, rangi za brand -->
-<!--
-  JINSI YA KUWEKA PICHA ZAKO HALISI BAADAYE (badala ya emoji + gradient):
-  Kwa kila <div id="hero-slide-N">, ongeza background image hivi:
-    class="hero-slide absolute inset-0 bg-cover bg-center transition-opacity duration-700"
-    style="background-image: linear-gradient(to bottom right, rgba(11,37,69,.75), rgba(15,52,96,.75)), url('/static/marketing/img/wanafunzi-1.jpg');"
-  (weka picha zako kwenye static/marketing/img/, kisha badilisha jina la faili hapo juu.
-  Gradient ya rangi imeachwa juu ya picha ili maandishi meupe yaendelee kusomeka.)
--->
+<!-- Hero texts and gradient placeholders stay in the template; admin uploads only replace slide backgrounds. -->
 <section class="relative overflow-hidden text-white h-[520px] md:h-[560px]">
 
   <div id="hero-slide-0" class="hero-slide absolute inset-0 bg-gradient-to-br from-navy via-navy2 to-navy flex items-center transition-opacity duration-700">
-    <div class="max-w-6xl mx-auto px-4 text-center w-full">
-      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+    {% if hero_images.0 %}<img src="{{ hero_images.0 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/60"></div>{% endif %}
+    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="{% if hero_images.0 %}hidden{% endif %} w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
         <circle cx="60" cy="60" r="56" fill="#D4AF37" fill-opacity="0.15"/>
         <rect x="30" y="60" width="12" height="30" rx="2" fill="#D4AF37"/>
         <rect x="48" y="48" width="12" height="42" rx="2" fill="#FBFAF7" fill-opacity="0.9"/>
@@ -69,8 +62,9 @@
   </div>
 
   <div id="hero-slide-1" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-green via-navy2 to-navy flex items-center transition-opacity duration-700">
-    <div class="max-w-6xl mx-auto px-4 text-center w-full">
-      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+    {% if hero_images.1 %}<img src="{{ hero_images.1 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/60"></div>{% endif %}
+    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="{% if hero_images.1 %}hidden{% endif %} w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
         <circle cx="60" cy="60" r="56" fill="#146B3A" fill-opacity="0.2"/>
         <rect x="42" y="24" width="30" height="52" rx="6" fill="#FBFAF7" fill-opacity="0.95"/>
         <rect x="46" y="30" width="22" height="36" rx="2" fill="#0F3460"/>
@@ -91,8 +85,9 @@
   </div>
 
   <div id="hero-slide-2" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-red-900 via-navy2 to-navy flex items-center transition-opacity duration-700">
-    <div class="max-w-6xl mx-auto px-4 text-center w-full">
-      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+    {% if hero_images.2 %}<img src="{{ hero_images.2 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/60"></div>{% endif %}
+    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="{% if hero_images.2 %}hidden{% endif %} w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
         <circle cx="60" cy="60" r="56" fill="#7f1d1d" fill-opacity="0.2"/>
         <path d="M60 22l28 10v22c0 20-12 34-28 44-16-10-28-24-28-44V32l28-10z" fill="#FBFAF7" fill-opacity="0.95"/>
         <path d="M60 22l28 10v22c0 20-12 34-28 44V22z" fill="#D4AF37" fill-opacity="0.5"/>
@@ -109,8 +104,9 @@
   </div>
 
   <div id="hero-slide-3" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-amber-700 via-navy2 to-navy flex items-center transition-opacity duration-700">
-    <div class="max-w-6xl mx-auto px-4 text-center w-full">
-      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+    {% if hero_images.3 %}<img src="{{ hero_images.3 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/60"></div>{% endif %}
+    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="{% if hero_images.3 %}hidden{% endif %} w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
         <circle cx="60" cy="60" r="56" fill="#b45309" fill-opacity="0.2"/>
         <ellipse cx="46" cy="78" rx="20" ry="7" fill="#D4AF37"/>
         <ellipse cx="46" cy="70" rx="20" ry="7" fill="#FBFAF7" fill-opacity="0.9"/>
@@ -131,8 +127,9 @@
   </div>
 
   <div id="hero-slide-4" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-blue-900 via-navy2 to-navy flex items-center transition-opacity duration-700">
-    <div class="max-w-6xl mx-auto px-4 text-center w-full">
-      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+    {% if hero_images.4 %}<img src="{{ hero_images.4 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/60"></div>{% endif %}
+    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="{% if hero_images.4 %}hidden{% endif %} w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
         <circle cx="60" cy="60" r="56" fill="#3b82f6" fill-opacity="0.18"/>
         <rect x="38" y="26" width="44" height="60" rx="5" fill="#FBFAF7" fill-opacity="0.95"/>
         <rect x="50" y="20" width="20" height="12" rx="3" fill="#D4AF37"/>
@@ -152,8 +149,9 @@
   </div>
 
   <div id="hero-slide-5" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-emerald-900 via-navy2 to-navy flex items-center transition-opacity duration-700">
-    <div class="max-w-6xl mx-auto px-4 text-center w-full">
-      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+    {% if hero_images.5 %}<img src="{{ hero_images.5 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/60"></div>{% endif %}
+    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="{% if hero_images.5 %}hidden{% endif %} w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
         <circle cx="60" cy="60" r="56" fill="#059669" fill-opacity="0.2"/>
         <path d="M30 44l30-14 30 14-30 14z" fill="#D4AF37"/>
         <path d="M30 44v30l30 14V58z" fill="#FBFAF7" fill-opacity="0.9"/>
@@ -171,8 +169,9 @@
   </div>
 
   <div id="hero-slide-6" class="hero-slide absolute inset-0 opacity-0 bg-gradient-to-br from-purple-900 via-navy2 to-navy flex items-center transition-opacity duration-700">
-    <div class="max-w-6xl mx-auto px-4 text-center w-full">
-      <svg class="w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
+    {% if hero_images.6 %}<img src="{{ hero_images.6 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/60"></div>{% endif %}
+    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center w-full">
+      <svg class="{% if hero_images.6 %}hidden{% endif %} w-28 h-28 mx-auto mb-4" viewBox="0 0 120 120" fill="none">
         <circle cx="60" cy="60" r="56" fill="#6b21a8" fill-opacity="0.2"/>
         <rect x="34" y="26" width="52" height="66" rx="4" fill="#FBFAF7" fill-opacity="0.95"/>
         <rect x="42" y="38" width="36" height="5" rx="2" fill="#D4AF37"/>
@@ -238,7 +237,6 @@
     heroTimer = setInterval(nextSlide, 5000);
   }
 </script>
-
 <!-- Problem/Solution -->
 <section class="max-w-6xl mx-auto px-4 py-14">
   <div class="grid md:grid-cols-3 gap-6 text-center">

@@ -138,9 +138,9 @@ staff, mwanafunzi na mzazi kabla ya kutangaza mfumo uko tayari kwa watumiaji.
 ## Muhimu kuhusu mafaili na backups
 
 - Render Free filesystem ni ephemeral. Picha za shule, risiti, ushahidi na
-  vifurushi vya kazi vilivyopakiwa zinaweza kupotea baada ya service kulala,
-  ku-restart au ku-deploy. **Usiweke nyaraka au taarifa halisi za wanafunzi
-  kwenye demo hii.**
+  vifurushi vya kazi pamoja na picha za hero zinazopakiwa kupitia admin zinaweza
+  kupotea baada ya service kulala, ku-restart au ku-deploy. **Usiweke nyaraka
+  au taarifa halisi za wanafunzi kwenye demo hii.**
 - Database URL inapaswa kuwa connection string ya Neon yenye SSL. Settings
   hufunga connection baada ya kila request (`CONN_MAX_AGE=0`) ili kuepuka
   kutumia tena connection ambayo Neon imeifunga baada ya inactivity.
@@ -150,6 +150,12 @@ staff, mwanafunzi na mzazi kabla ya kutangaza mfumo uko tayari kwa watumiaji.
 - Hata ukiwa na media storage, panga backup ya PostgreSQL na ujaribu restore.
 - Tailwind CSS tayari imejengwa ndani ya `static/`; build ya Render haitaji
   Node.js.
+- Hero slides zinadhibitiwa kwenye Django Admin → **Hero slides**. Maandishi na
+  mpangilio wa slides saba vimewekwa tayari; chagua nafasi ya slide na pakia
+  picha tu. Nafasi zisizokuwa na picha zitaendelea kuonyesha gradient na
+  placeholder zake za sasa. Kwenye Render Free picha zilizopakiwa ni za muda
+  tu, hivyo hifadhi ya kudumu ya media inahitajika kabla ya kutumia picha hizo
+  kwenye production.
 - Baada ya deploy, endesha backfill ya A-Level kupitia Render Shell ikiwa
   database ina rekodi za zamani:
 

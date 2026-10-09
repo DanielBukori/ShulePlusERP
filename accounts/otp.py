@@ -36,6 +36,7 @@ def start_otp_session(request, user):
         'code': code,
         'expires': (timezone.now() + timedelta(seconds=OTP_TTL_SECONDS)).isoformat(),
         'attempts': 0,
+        'backend': getattr(user, 'backend', None),
     }
     return code
 

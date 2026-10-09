@@ -50,7 +50,7 @@ service tofauti**.
      badilisha kwa muda kuwa:
 
      ```bash
-     python manage.py migrate --noinput && python manage.py createsuperuser --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
+     python manage.py migrate --noinput && python manage.py createsuperuser --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120
      ```
 
    - Hifadhi mabadiliko na subiri deploy ifanikiwe. `createsuperuser` itasoma
@@ -60,7 +60,7 @@ service tofauti**.
    - Mara moja baada ya deploy kufanikiwa, rudisha **Start Command** kuwa:
 
      ```bash
-     python manage.py migrate --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
+     python manage.py migrate --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --threads 2 --timeout 120
      ```
 
      Ondoa `DJANGO_SUPERUSER_USERNAME`, `DJANGO_SUPERUSER_EMAIL`, na
@@ -178,6 +178,10 @@ staff, mwanafunzi na mzazi kabla ya kutangaza mfumo uko tayari kwa watumiaji.
   vifurushi vya kazi pamoja na picha za hero zinazopakiwa kupitia admin zinaweza
   kupotea baada ya service kulala, ku-restart au ku-deploy. **Usiweke nyaraka
   au taarifa halisi za wanafunzi kwenye demo hii.**
+- Gunicorn imewekwa worker mmoja na threads mbili ili kupunguza matumizi ya RAM
+  kwenye Free instance. Ikiwa bado unaona `WORKER TIMEOUT` au `SIGKILL`, kagua
+  Metrics za memory kwenye Render na log za request ndefu; kuongeza timeout
+  peke yake hakutatui process inayouawa kwa kukosa RAM.
 - Database URL inapaswa kuwa connection string ya Neon yenye SSL. Settings
   hufunga connection baada ya kila request (`CONN_MAX_AGE=0`) ili kuepuka
   kutumia tena connection ambayo Neon imeifunga baada ya inactivity.

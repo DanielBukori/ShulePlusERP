@@ -33,7 +33,12 @@ def academic_role_required(view_func):
 
 
 def _get_school(request):
-    return getattr(request, 'school', None)
+    school = getattr(request, 'school', None)
+    if school:
+        return school
+    if request.user.is_authenticated:
+        return request.user.school
+    return None
 
 
 # ============================================================

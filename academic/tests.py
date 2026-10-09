@@ -206,6 +206,45 @@ class AutoAbsentPublishTests(TestCase):
         self.assertEqual(result.combination, self.combination)
 
 
+class HeadmasterDashboardTenantFallbackTests(TestCase):
+    def setUp(self):
+        self.school = School.objects.create(
+            name='Dashboard School',
+            subdomain='dashboardschool',
+            email='dashboard@example.com',
+            phone='255700000061',
+        )
+        self.headmaster = CustomUser.objects.create_user(
+            username='dashboard-headmaster',
+            password='test-password',
+            role='HEADMASTER',
+            school=self.school,
+            must_change_password=False,
+        )
+
+    def test_headmaster_can_open_dashboard_on_base_domain(self):
+        self.client.force_login(self.headmaster)
+
+        response = self.client.get(reverse('academic:academic_dashboard'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['school'], self.school)
+
+    def test_user_without_school_cannot_open_school_dashboard(self):
+        user_without_school = CustomUser.objects.create_user(
+            username='school-less-headmaster',
+            email='school-less-headmaster@example.com',
+            password='test-password',
+            role='HEADMASTER',
+            must_change_password=False,
+        )
+        self.client.force_login(user_without_school)
+
+        response = self.client.get(reverse('academic:academic_dashboard'))
+
+        self.assertEqual(response.status_code, 403)
+
+
 class StudentRegistrationPinTests(TestCase):
     def setUp(self):
         self.school = School.objects.create(

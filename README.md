@@ -42,7 +42,7 @@ python -m venv venv
 venv\Scripts\activate          # Windows
 pip install -r requirements.txt
 
-# Nakili .env.example kuwa .env, jaza SECRET_KEY/DB/BEEM keys zako
+# Nakili .env.example kuwa .env; local development hutumia SQLite
 copy .env.example .env
 
 python manage.py migrate
@@ -55,13 +55,18 @@ python manage.py runserver
 
 ## Deployment (Uzalishaji)
 
-Mradi una scripts tayari kwenye `deploy/`:
-- `deploy/shuleplus.service` — systemd unit (self-healing, `Restart=always`)
+Mwongozo wa hatua kwa hatua wa Ubuntu VPS/Oracle Cloud uko kwenye
+[`deploy/README.md`](./deploy/README.md). Settings za uzalishaji hutumia
+PostgreSQL, husoma siri kutoka environment, na huzima `DEBUG`.
+
+Faili za deployment kwenye `deploy/`:
+- `deploy/shuleplus.service.txt` — systemd unit (self-healing, `Restart=always`)
 - `deploy/backup.sh` — pg_dump + media backup ya kila siku (cron), cleanup ya siku 7
 - `deploy/restore.sh` — kurudisha backup
 
-Imejaribiwa kwenye **Oracle Cloud Always Free** (Ubuntu 24.04, ARM Ampere A1) +
-Nginx + Let's Encrypt (wildcard SSL kwa subdomains).
+Domain inahitaji DNS records za apex na wildcard subdomains. Wildcard TLS ya
+Let's Encrypt inahitaji DNS-01 challenge. Usitumie taarifa halisi za wanafunzi
+mpaka uhakikishe hifadhi na ruhusa za mafaili ya `media/`.
 
 ## Usalama
 

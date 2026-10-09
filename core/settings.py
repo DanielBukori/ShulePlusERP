@@ -1,6 +1,3 @@
-import pymysql
-pymysql.version_info = (1, 4, 6, "final", 0)
-pymysql.install_as_MySQLdb()
 """
 Django settings for core project.
 
@@ -13,22 +10,39 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-r_y9w=7l@ot5x!o@$5*wco2dmhox6mcxy+v_dooc675fq+yx(5'
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('1', 'true', 'yes', 'on')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    if not DEBUG:
+        raise ImproperlyConfigured('Set DJANGO_SECRET_KEY in the production environment.')
+    SECRET_KEY = 'django-insecure-local-development-only'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.localhost').split(',')
+    if host.strip()
+]
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
+    if origin.strip()
+]
+BASE_DOMAIN = os.environ.get('BASE_DOMAIN', 'shulepluserp.co.tz')
 
 
 # Application definition
@@ -96,16 +110,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-import os
-
-DEBUG = True # Kama ni True = Local
-
 if DEBUG:
     # LOCAL: TUMIA SQLITE - HAKUNA KUINSTALL KITU
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 else:
@@ -117,7 +127,7 @@ else:
             'USER': os.environ.get('DB_USER', 'shule_user'),
             'PASSWORD': os.environ.get('DB_PASSWORD', ''),
             'HOST': os.environ.get('DB_HOST', 'localhost'),
-            'PORT': '5432',
+            'PORT': os.environ.get('DB_PORT', '5432'),
         }
     }
 
@@ -155,11 +165,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-import os
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"] # Tutaweka CSS ya Purple hapa
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR / 'media') # Hapa ndio picha na PDF zitahifadhiwa
+MEDIA_ROOT = BASE_DIR / 'media' # Hapa ndio picha na PDF zitahifadhiwa
 
 # Default primary key fizeld type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -167,19 +177,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR / 'media') # Hapa ndio picha na PDF zitahifad
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-from pathlib import Path
-import os
-
-# Hii BASE_DIR kawaida ipo juu kabisa kwenye settings.py
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Hakikisha hizi zimeandikwa hivi:
-#STATIC_URL = 'static/'
-#STATIC_ROOT = BASE_DIR / 'staticfiles'
-# Hapa ndipo ulikosea, hakikisha ipo hivi:
-#STATICFILES_DIRS = [
-   # BASE_DIR / 'static',
-#]
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'accounts:post_login_redirect'
 LOGOUT_REDIRECT_URL = 'accounts:post_login_redirect'
@@ -189,15 +186,24 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
 
 AUTH_USER_MODEL = 'shule_core.CustomUser'
 
-import os
 BEEM_API_KEY = os.environ.get('BEEM_API_KEY')
 BEEM_SECRET_KEY = os.environ.get('BEEM_SECRET_KEY')
 
-#crontab -e
-# ongeza mstari huu (kila siku saa 8 usiku):
-#0 2 * * * /home/ubuntu/shuleplus_erp/deploy/backup.sh >> /home/ubuntu/backup.log 2>&1
+EMAIL_BACKEND = os.environ.get(
+    'EMAIL_BACKEND',
+    'django.core.mail.backends.console.EmailBackend',
+)
+EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() in ('1', 'true', 'yes', 'on')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'ShulePlusERP <noreply@localhost>')
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # kwa majaribio – link inaonekana kwenye terminal
-
-
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG

@@ -21,11 +21,13 @@ After=network.target postgresql.service
 User=ubuntu
 Group=www-data
 WorkingDirectory=/home/ubuntu/shuleplus_erp
+EnvironmentFile=/etc/shuleplus.env
 ExecStart=/home/ubuntu/shuleplus_erp/venv/bin/gunicorn \
     --workers 3 \
     --timeout 30 \
+    --umask 007 \
     --bind unix:/home/ubuntu/shuleplus_erp/shuleplus.sock \
-    shuleplus_erp.wsgi:application
+    core.wsgi:application
 
 ; --- SELF-HEALING: hii ndiyo sehemu muhimu zaidi ---
 Restart=always

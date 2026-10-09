@@ -35,7 +35,7 @@ service tofauti**.
    connection string ya Neon. Thibitisha kuwa string inaanza na
    `postgresql://` au `postgres://` na ina `sslmode=require`; Neon hutoa SSL
    kwenye connection string yake.
-4. Bonyeza **Apply**. Blueprint itajenga static files, kisha app itaendesha
+4. Bonyeza **Apply**. Blueprint itasafisha na kujenga upya static files, kisha app itaendesha
    migrations na kuanza Gunicorn. Render itatengeneza `DJANGO_SECRET_KEY`
    yenyewe.
 5. Subiri build/deploy ikamilike. Fungua URL iliyoonyeshwa na Render

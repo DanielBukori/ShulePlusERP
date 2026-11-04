@@ -37,8 +37,9 @@ class HeroSlideTests(TestCase):
             reverse('marketing:hero_image', args=[slide.pk]),
         )
         self.assertContains(response, 'const totalHeroSlides = 7;')
-        self.assertContains(response, '<svg class=" w-28 h-28 mx-auto mb-4"')
-        self.assertContains(response, '<svg class="hidden w-28 h-28 mx-auto mb-4"')
+        # Slaidi yenye picha ya admin huficha mchoro wa kipengele; zingine zincuwa.
+        self.assertEqual(response.content.count(b'class="lg:col-span-5 hidden lg:block"'), 6)
+        self.assertEqual(response.content.count(b'class="lg:col-span-5 hidden"'), 1)
 
     def test_hero_image_endpoint_returns_uploaded_image(self):
         slide = HeroSlide.objects.create(position=1, image=self.make_image('hero.jpg'))

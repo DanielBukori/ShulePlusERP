@@ -51,7 +51,7 @@ def send_magic_link_email(user, request):
     )
     send_mail(
         subject, message,
-        getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@shuleplus.co.tz'),
+        getattr(settings, 'DEFAULT_FROM_EMAIL', f"noreply@{settings.BASE_DOMAIN}"),
         [user.email],
         fail_silently=False,
     )

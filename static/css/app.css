@@ -1,0 +1,257 @@
+/* ============================================================
+   ShulePlus ERP - Design System
+   Tabaka la juu ya Tailwind. Halitaji Node/`npm run build:css`,
+   hivyo production server haitaji mabadiliko ya tailwind.config.js.
+   Mfumo wa rangi: Navy #0B2545 / Navy2 #0F3460 / Gold #D4AF37
+   ============================================================ */
+
+:root {
+  --brand: #0B2545;
+  --brand-2: #0F3460;
+  --brand-ink: #ffffff;
+  --accent: #D4AF37;
+  --accent-ink: #1a1a1a;
+
+  --ok: #146B3A;
+  --warn: #B45309;
+  --bad: #DC2626;
+
+  --surface: #FBFAF7;
+  --panel: #ffffff;
+  --panel-2: #F7F8FA;
+  --line: #E5E7EB;
+  --ink: #111827;
+  --ink-2: #4B5563;
+  --ink-3: #6B7280;
+
+  --shadow-sm: 0 1px 2px rgba(11, 37, 69, .06), 0 1px 3px rgba(11, 37, 69, .08);
+  --shadow-md: 0 4px 12px rgba(11, 37, 69, .08), 0 2px 4px rgba(11, 37, 69, .05);
+  --shadow-lg: 0 14px 34px rgba(11, 37, 69, .14), 0 4px 10px rgba(11, 37, 69, .07);
+  --radius: 14px;
+  --ease: cubic-bezier(.4, 0, .2, 1);
+}
+
+/* Kila shule huweka rangi yake (School.primary_color) kwenye <html style> */
+html[data-tenant-themed] {
+  --brand: var(--tenant-brand, #0B2545);
+  --accent: var(--tenant-accent, #D4AF37);
+}
+
+/* ----------------------------- DARK MODE ----------------------------- */
+html.dark {
+  --brand: #071A31;
+  --brand-2: #0C2647;
+  --surface: #061527;
+  --panel: #0E2138;
+  --panel-2: #132B47;
+  --line: #1E3A5C;
+  --ink: #E8EEF6;
+  --ink-2: #B6C6DA;
+  --ink-3: #8FA5BF;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, .45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, .55);
+
+  color-scheme: dark;
+}
+
+/* Tailwind utility remap - inafanya kila ukurasa wa apps 14 kuwa dark
+   bila kubadilisha template moja moja. */
+html.dark body { background-color: var(--surface); color: var(--ink); }
+html.dark .bg-white { background-color: var(--panel); }
+html.dark .bg-gray-50,
+html.dark .bg-gray-100 { background-color: var(--panel-2); }
+html.dark .bg-paper { background-color: var(--surface); }
+html.dark .bg-blue-50,
+html.dark .bg-green-50,
+html.dark .bg-amber-50,
+html.dark .bg-yellow-50,
+html.dark .bg-red-50 { background-color: #14304F; }
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border-gray-300 { border-color: var(--line); }
+html.dark .text-gray-400 { color: var(--ink-3); }
+html.dark .text-gray-500 { color: var(--ink-3); }
+html.dark .text-gray-600 { color: var(--ink-2); }
+html.dark .text-gray-700,
+html.dark .text-gray-800 { color: var(--ink); }
+html.dark .text-navy,
+html.dark .text-navy2 { color: #9FC1E8; }
+html.dark .text-green-700,
+html.dark .text-green-800 { color: #6EE7A8; }
+html.dark .text-red-500,
+html.dark .text-red-600,
+html.dark .text-red-700 { color: #FF9B9B; }
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: var(--panel-2);
+  color: var(--ink);
+  border-color: var(--line);
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder { color: var(--ink-3); }
+
+/* ----------------------------- TYPOGRAFIA ----------------------------- */
+body { font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; }
+.font-serif, h1, h2, h3 { letter-spacing: -.011em; }
+.eyebrow {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-weight: 700;
+  color: var(--ink-3);
+}
+
+/* ----------------------------- CARDS ----------------------------- */
+.sp-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .22s var(--ease), transform .22s var(--ease), border-color .22s var(--ease);
+}
+.sp-card:hover { box-shadow: var(--shadow-md); }
+.sp-card-lift:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+
+/* Kadi ya hero (kama "Rekodi Malipo Mengi") - gold ring laini */
+.sp-card-primary {
+  border: 1.5px solid var(--accent);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, var(--panel)), var(--panel) 60%);
+}
+
+/* ----------------------------- KPI ----------------------------- */
+.sp-kpi { display: flex; align-items: center; gap: 14px; padding: 18px 20px; }
+.sp-kpi-icon {
+  width: 44px; height: 44px; border-radius: 12px; flex: 0 0 44px;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--brand) 10%, transparent);
+  color: var(--brand);
+}
+html.dark .sp-kpi-icon { background: rgba(159, 193, 232, .16); color: #9FC1E8; }
+.sp-kpi-value { font-size: 30px; font-weight: 800; line-height: 1.05; color: var(--ink); font-variant-numeric: tabular-nums; }
+.sp-kpi-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; }
+
+/* ----------------------------- BUTTONS ----------------------------- */
+.sp-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border-radius: 10px; padding: 10px 16px; font-weight: 600; font-size: 14px;
+  border: 1px solid transparent; cursor: pointer; text-decoration: none;
+  transition: transform .12s var(--ease), box-shadow .18s var(--ease), background-color .18s var(--ease), opacity .18s var(--ease);
+}
+.sp-btn:active { transform: scale(.97); }
+.sp-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sp-btn-primary { background: linear-gradient(135deg, var(--brand-2), var(--brand)); color: #fff; box-shadow: var(--shadow-sm); }
+.sp-btn-primary:hover { box-shadow: var(--shadow-md); filter: brightness(1.08); }
+.sp-btn-gold { background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 88%, #fff), var(--accent)); color: #231a00; box-shadow: var(--shadow-sm); }
+.sp-btn-gold:hover { box-shadow: var(--shadow-md); filter: brightness(1.05); }
+.sp-btn-ghost { background: transparent; color: var(--ink-2); border-color: var(--line); }
+.sp-btn-ghost:hover { background: var(--panel-2); color: var(--ink); }
+
+/* ----------------------------- CHIPS ----------------------------- */
+.sp-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 600;
+  background: var(--panel-2); color: var(--ink-2); border: 1px solid var(--line);
+  transition: background-color .16s var(--ease), color .16s var(--ease), border-color .16s var(--ease);
+}
+.sp-chip:hover { border-color: var(--accent); }
+.sp-chip[aria-pressed="true"],
+.sp-chip.is-active {
+  background: color-mix(in srgb, var(--brand) 12%, var(--panel));
+  color: var(--brand);
+  border-color: color-mix(in srgb, var(--brand) 40%, transparent);
+}
+html.dark .sp-chip.is-active { background: rgba(159, 193, 232, .18); color: #BFDAF6; }
+
+/* ----------------------------- SIDEBAR ----------------------------- */
+/* `aside nav a` ijumuishwe hapa ili base template isiyoandikwa upya
+   (apps 14 zote) ipate muonekano mpya mara moja. */
+#sidebar { background: linear-gradient(180deg, var(--brand) 0%, #061A33 100%); }
+.sp-nav-link,
+aside nav a:not([data-popover]) {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 10px;
+  color: rgba(255, 255, 255, .82); font-size: 14px; font-weight: 500;
+  position: relative; overflow: hidden;
+  transition: background-color .16s var(--ease), color .16s var(--ease), transform .1s var(--ease);
+}
+.sp-nav-link:hover,
+aside nav a:not([data-popover]):hover { background: rgba(255, 255, 255, .10); color: #fff; }
+.sp-nav-link:active,
+aside nav a:not([data-popover]):active { transform: scale(.985); }
+.sp-nav-link.is-active,
+aside nav a.is-active { background: rgba(255, 255, 255, .14); color: #fff; font-weight: 600; }
+.sp-nav-link.is-active::before,
+aside nav a.is-active::before {
+  content: ""; position: absolute; left: 0; top: 18%; bottom: 18%;
+  width: 3px; border-radius: 0 3px 3px 0; background: var(--accent);
+}
+
+/* ----------------------------- TOPBAR ----------------------------- */
+.sp-topbar {
+  position: sticky; top: 0; z-index: 25;
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 22px;
+  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  backdrop-filter: saturate(160%) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.sp-icon-btn {
+  width: 38px; height: 38px; border-radius: 10px;
+  display: grid; place-items: center;
+  border: 1px solid var(--line); background: var(--panel); color: var(--ink-2);
+  cursor: pointer;
+  transition: background-color .16s var(--ease), color .16s var(--ease), transform .12s var(--ease);
+}
+.sp-icon-btn:hover { background: var(--panel-2); color: var(--ink); }
+.sp-icon-btn:active { transform: scale(.94); }
+
+/* ----------------------------- JEDWALI ----------------------------- */
+table { border-collapse: separate; border-spacing: 0; }
+thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: var(--panel-2);
+  font-size: 11px; text-transform: uppercase; letter-spacing: .1em; font-weight: 700;
+  color: var(--ink-3);
+}
+tbody tr { transition: background-color .12s var(--ease); }
+tbody tr:hover { background: color-mix(in srgb, var(--accent) 8%, var(--panel)); }
+tbody td, tbody th { border-top: 1px solid var(--line); }
+
+/* ----------------------------- CHART BOXES ----------------------------- */
+.sp-chart { position: relative; width: 100%; height: 280px; }
+.sp-chart-sm { height: 200px; }
+.sp-chart canvas { max-width: 100%; }
+
+/* ----------------------------- ANIMATIONS ----------------------------- */
+@keyframes spFadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes spPop { 0% { transform: scale(.92); opacity: 0; } 60% { transform: scale(1.02); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes spShimmer { 0% { background-position: -420px 0; } 100% { background-position: 420px 0; } }
+
+/* Scroll reveal - hufanya kazi tu kama JS ipo (siyo HTML inakataliwa) */
+html.js .sp-reveal { opacity: 0; transform: translateY(12px); }
+html.js .sp-reveal.sp-shown {
+  animation: spFadeUp .5s var(--ease) forwards;
+  animation-delay: var(--sp-delay, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-reveal, .sp-reveal.sp-shown { opacity: 1; transform: none; animation: none; }
+  * { transition-duration: .01ms !important; }
+}
+
+.sp-skeleton {
+  height: 12px; border-radius: 6px;
+  background: linear-gradient(90deg, var(--panel-2) 25%, var(--line) 50%, var(--panel-2) 75%);
+  background-size: 840px 100%;
+  animation: spShimmer 1.3s linear infinite;
+}
+
+/* ----------------------------- PRINT ----------------------------- */
+@media print {
+  aside, .sp-topbar, #sidebar-overlay, footer, .no-print { display: none !important; }
+  .md\:ml-64 { margin-left: 0 !important; }
+  body { background: #fff; }
+  .sp-card { box-shadow: none; border-color: #ccc; }
+  .sp-reveal { opacity: 1 !important; transform: none !important; animation: none !important; }
+}

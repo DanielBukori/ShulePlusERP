@@ -5,35 +5,39 @@
 {% block content %}
 <div class="max-w-lg mx-auto px-4 py-6 space-y-4">
 
+  <p class="eyebrow mb-1">Watoto</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold" style="color: var(--brand)">Dashboard ya Mzazi</h1>
+
   {% for s in summaries %}
-    <a href="{% url 'family_portal:child_detail' s.student.id %}" class="block bg-white border border-gray-200 rounded p-4 hover:shadow-md transition">
+    <a href="{% url 'family_portal:child_detail' s.student.id %}" class="sp-card sp-card-lift p-4 block sp-reveal">
       <div class="flex items-center gap-3 mb-2">
-        <div class="h-12 w-12 rounded-full bg-navy2/10 flex items-center justify-center text-navy2 font-serif font-bold">
+        <div class="h-12 w-12 rounded-full flex items-center justify-center font-serif font-bold shrink-0"
+             style="background: color-mix(in srgb, var(--brand) 10%, transparent); color: var(--brand)">
           {{ s.student.first_name|slice:":1" }}{{ s.student.last_name|slice:":1" }}
         </div>
-        <div>
-          <div class="font-serif font-bold text-navy">{{ s.student.first_name }} {{ s.student.last_name }}</div>
-          <div class="text-xs text-gray-500">{{ s.student.school_class }} &middot; {{ s.student.reg_number }}</div>
+        <div class="min-w-0">
+          <div class="font-serif font-bold" style="color: var(--brand)">{{ s.student.first_name }} {{ s.student.last_name }}</div>
+          <div class="text-xs" style="color: var(--ink-3)">{{ s.student.school_class }} &middot; {{ s.student.reg_number }}</div>
         </div>
       </div>
 
-      <div class="grid grid-cols-3 gap-2 text-center text-xs mt-3">
-        <div class="bg-gray-50 rounded p-2">
-          <div class="font-bold text-navy">{% if s.results_summary %}{{ s.results_summary.division }}{% else %}-{% endif %}</div>
-          <div class="text-gray-400">Division</div>
+      <div class="grid grid-cols-3 gap-2 text-center mt-3">
+        <div class="rounded-lg p-2" style="background: var(--panel-2)">
+          <div class="text-sm font-bold" style="color: var(--ink)">{% if s.results_summary %}{{ s.results_summary.division }}{% else %}-{% endif %}</div>
+          <div class="sp-kpi-label">Division</div>
         </div>
-        <div class="bg-gray-50 rounded p-2">
-          <div class="font-bold {% if s.debt > 0 %}text-red-600{% else %}text-green-700{% endif %}">TZS {{ s.debt }}</div>
-          <div class="text-gray-400">Deni</div>
+        <div class="rounded-lg p-2" style="background: var(--panel-2)">
+          <div class="text-sm font-bold" style="color: {% if s.debt > 0 %}var(--bad){% else %}var(--ok){% endif %}">TZS {{ s.debt }}</div>
+          <div class="sp-kpi-label">Deni</div>
         </div>
-        <div class="bg-gray-50 rounded p-2">
-          <div class="font-bold {% if s.discipline_alert %}text-red-600{% else %}text-green-700{% endif %}">{{ s.discipline_score }}</div>
-          <div class="text-gray-400">Nidhamu</div>
+        <div class="rounded-lg p-2" style="background: var(--panel-2)">
+          <div class="text-sm font-bold" style="color: {% if s.discipline_alert %}var(--bad){% else %}var(--ok){% endif %}">{{ s.discipline_score }}</div>
+          <div class="sp-kpi-label">Nidhamu</div>
         </div>
       </div>
     </a>
   {% empty %}
-    <div class="bg-white border border-gray-200 rounded p-8 text-center text-gray-400">
+    <div class="sp-card p-8 text-center" style="color: var(--ink-3)">
       Hakuna watoto walioandikishwa kwenye akaunti hii bado.
     </div>
   {% endfor %}

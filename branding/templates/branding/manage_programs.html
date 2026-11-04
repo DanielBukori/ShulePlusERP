@@ -3,46 +3,52 @@
 
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 py-6">
-  <h1 class="font-serif text-xl text-navy mb-5">Programu za Kitaaluma</h1>
+  <p class="eyebrow mb-1">Tovuti ya Shule</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-5" style="color: var(--brand)">Programu za Kitaaluma</h1>
 
   {% if messages %}{% for message in messages %}
-    <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+    <div class="text-sm rounded px-3 py-2 mb-4" style="background: rgba(20,107,58,.12); color: var(--ok); border: 1px solid var(--ok)">{{ message }}</div>
   {% endfor %}{% endif %}
 
-  <details class="bg-white border border-gray-200 rounded p-5 mb-6">
-    <summary class="font-semibold text-navy cursor-pointer">+ Ongeza Programu/Mchepuo</summary>
+  <details class="sp-card p-5 mb-6 sp-reveal">
+    <summary class="font-semibold cursor-pointer" style="color: var(--brand)">+ Ongeza Programu/Mchepuo</summary>
     <form method="POST" class="space-y-4 mt-4">
       {% csrf_token %}
       {% for field in form %}
         <div>
-          <label class="block text-xs uppercase text-gray-500 mb-1">{{ field.label }}</label>
+          <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ field.label }}</label>
           {{ field }}
-          {% for e in field.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+          {% for e in field.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
         </div>
       {% endfor %}
-      <button type="submit" class="bg-gold text-amber-950 font-semibold px-6 py-2.5 rounded">Hifadhi</button>
+      <button type="submit" class="sp-btn sp-btn-gold">Hifadhi</button>
     </form>
   </details>
 
-  <div class="bg-white border border-gray-200 rounded overflow-hidden">
-    <table class="min-w-full text-sm">
-      <thead class="bg-gray-50">
-        <tr><th class="p-3 text-left">Jina</th><th class="p-3 text-left">Ngazi</th><th class="p-3 text-left">Hali</th><th class="p-3 text-right">Vitendo</th></tr>
+  <div class="sp-card overflow-x-auto sp-reveal">
+    <table class="w-full text-sm">
+      <thead>
+        <tr>
+          <th class="p-3 text-left" style="background: var(--brand); color: var(--brand-ink)">Jina</th>
+          <th class="p-3 text-left" style="background: var(--brand); color: var(--brand-ink)">Ngazi</th>
+          <th class="p-3 text-left" style="background: var(--brand); color: var(--brand-ink)">Hali</th>
+          <th class="p-3 text-right" style="background: var(--brand); color: var(--brand-ink)">Vitendo</th>
+        </tr>
       </thead>
-      <tbody class="divide-y divide-gray-100">
+      <tbody>
         {% for p in programs %}
-        <tr class="hover:bg-gray-50">
-          <td class="p-3 font-medium text-gray-800">{{ p.name }}</td>
-          <td class="p-3 text-gray-500">{{ p.get_level_display }}</td>
-          <td class="p-3">{% if p.is_published %}<span class="text-green-700 bg-green-50 text-xs px-2 py-1 rounded-full">Imechapishwa</span>{% else %}<span class="text-gray-500 bg-gray-100 text-xs px-2 py-1 rounded-full">Rasimu</span>{% endif %}</td>
+        <tr class="{% cycle '' 'bg-gray-50' %}">
+          <td class="p-3 font-medium" style="color: var(--ink)">{{ p.name }}</td>
+          <td class="p-3" style="color: var(--ink-2)">{{ p.get_level_display }}</td>
+          <td class="p-3">{% if p.is_published %}<span class="sp-chip is-active">Imechapishwa</span>{% else %}<span class="sp-chip">Rasimu</span>{% endif %}</td>
           <td class="p-3 text-right whitespace-nowrap">
-            <a href="{% url 'branding:edit_program' p.id %}" class="text-navy2 text-xs font-semibold hover:underline mr-3">Hariri</a>
+            <a href="{% url 'branding:edit_program' p.id %}" class="sp-btn sp-btn-ghost mr-2" style="padding: 6px 10px; font-size: 12px; color: var(--brand)">Hariri</a>
             <form method="POST" action="{% url 'branding:delete_program' p.id %}" class="inline" onsubmit="return confirm('Futa?');">
-              {% csrf_token %}<button type="submit" class="text-red-600 text-xs font-semibold hover:underline">Futa</button>
+              {% csrf_token %}<button type="submit" class="sp-btn sp-btn-ghost" style="padding: 6px 10px; font-size: 12px; color: var(--bad)">Futa</button>
             </form>
           </td>
         </tr>
-        {% empty %}<tr><td colspan="4" class="p-6 text-center text-gray-400">Bado hakuna programu.</td></tr>{% endfor %}
+        {% empty %}<tr><td colspan="4" class="p-6 text-center" style="color: var(--ink-3)">Bado hakuna programu.</td></tr>{% endfor %}
       </tbody>
     </table>
   </div>

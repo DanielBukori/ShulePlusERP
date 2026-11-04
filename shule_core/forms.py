@@ -4,6 +4,62 @@ from django.contrib.auth.password_validation import validate_password
 from .models import School, CustomUser
 
 
+TEXT = 'w-full border border-gray-300 rounded px-3 py-2 text-sm'
+
+
+class SchoolSettingsForm(forms.ModelForm):
+    """
+    Mipangilio ya SHULE ILIYOSAJILIWA (rangi, logo, sender ID, anwani).
+    SchoolRegistrationForm hufanya kazi mara moja tu wakati wa usajili,
+    hivyo fomu hii ndiyo inayoruhusu headmaster kuhariri utambulisho wa
+    shule yake baadaye - ndiyo chanzo cha --tenant-brand kwenye CSS.
+    """
+
+    class Meta:
+        model = School
+        fields = ['name', 'subdomain', 'sender_id', 'school_level', 'address',
+                  'phone', 'email', 'logo', 'primary_color', 'discipline_alert_score']
+        labels = {
+            'name': 'Jina la Shule',
+            'subdomain': 'Subdomain (sehemu ya kwanza ya URL)',
+            'sender_id': 'Sender ID ya SMS (herufi/namba 11)',
+            'school_level': 'Kiwango cha Shule',
+            'address': 'Anwani',
+            'phone': 'Simu ya Shule',
+            'email': 'Email ya Shule',
+            'logo': 'Logo ya Shule',
+            'primary_color': 'Rangi Kuu ya Brand',
+            'discipline_alert_score': 'Alama ya Angizo la Nidhamu',
+        }
+        help_texts = {
+            'subdomain': 'Ukibadilisha hii, URL ya shule yako yote hubadilika mara moja.',
+            'primary_color': 'Rangi hii hutumika kwenye menyu, chati na tovuti yako ya umma.',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': TEXT}),
+            'subdomain': forms.TextInput(attrs={'class': TEXT}),
+            'sender_id': forms.TextInput(attrs={'class': TEXT, 'maxlength': 11, 'placeholder': 'mfano: SEHISCO'}),
+            'school_level': forms.Select(attrs={'class': TEXT}),
+            'address': forms.Textarea(attrs={'class': TEXT, 'rows': 3}),
+            'phone': forms.TextInput(attrs={'class': TEXT}),
+            'email': forms.EmailInput(attrs={'class': TEXT}),
+            'primary_color': forms.TextInput(attrs={'class': TEXT, 'type': 'color'}),
+            'discipline_alert_score': forms.NumberInput(attrs={'class': TEXT, 'min': 0, 'max': 100}),
+        }
+
+    def clean_subdomain(self):
+        subdomain = self.cleaned_data.get('subdomain', '').strip().lower()
+        if not subdomain:
+            raise forms.ValidationError('Subdomain haitakiwi kuwa tupu.')
+        if not subdomain.isalnum():
+            raise forms.ValidationError(
+                'Subdomain iwe herufi na namba tu, bila nafasi wala alama.'
+            )
+        if School.objects.filter(subdomain=subdomain).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError('Subdomain hii tayari inatumika na shule nyingine.')
+        return subdomain
+
+
 class SchoolRegistrationForm(forms.ModelForm):
     """
     Fomu ya kusajili SHULE MPYA kabisa kwenye mfumo (siyo mwanafunzi/mwalimu -
@@ -60,7 +116,7 @@ class SchoolRegistrationForm(forms.ModelForm):
 
     def clean_subdomain(self):
         """
-        Subdomain hutumika kwenye URL/DNS (mfano sehisco.shuleplus.co.tz) -
+        Subdomain hutumika kwenye URL/DNS (mfano sehisco.<domaini ya jukwaa>) -
         lazima iwe herufi ndogo na namba TU, bila nafasi wala alama. Ukiacha
         wazi, School.save() itaizalisha kiotomatiki kutoka jina la shule.
         """

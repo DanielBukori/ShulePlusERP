@@ -5,75 +5,77 @@
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 py-6 space-y-5">
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-    <a href="{% url 'accountant:record_payment_spreadsheet' %}" class="bg-white border-2 border-gold rounded p-4 hover:shadow-md">
-      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Wingi (Spreadsheet)</div>
-      <div class="text-navy font-serif text-lg font-bold">Rekodi Malipo Mengi</div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sp-reveal">
+    <a href="{% url 'accountant:record_payment_spreadsheet' %}" class="sp-card sp-card-primary sp-card-lift p-4">
+      <div class="eyebrow mb-1">Wingi (Spreadsheet)</div>
+      <div class="font-serif text-lg font-bold" style="color: var(--brand)">Rekodi Malipo Mengi</div>
     </a>
-    <a href="{% url 'accountant:record_payment' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
-      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Moja kwa Moja</div>
-      <div class="text-navy font-serif text-lg font-bold">+ Malipo</div>
-    </a>
-  </div>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-    <a href="{% url 'accountant:set_fee_structure' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
-      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Ada</div>
-      <div class="text-navy font-serif text-lg font-bold">Fee Structure</div>
-    </a>
-    <a href="{% url 'accountant:add_other_charge' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
-      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Michango</div>
-      <div class="text-navy font-serif text-lg font-bold">+ Charge</div>
+    <a href="{% url 'accountant:record_payment' %}" class="sp-card sp-card-lift p-4">
+      <div class="eyebrow mb-1">Moja kwa Moja</div>
+      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Malipo</div>
     </a>
   </div>
 
-  <a href="{% url 'accountant:generate_assessments' %}" class="block bg-navy text-white rounded p-4 hover:brightness-110">
-    <div class="text-[11px] uppercase text-gray-300 tracking-wide">Hatua ya LAZIMA kabla ya kurekodi malipo</div>
-    <div class="font-serif text-lg font-bold">&#9889; Tengeneza Tathmini (Generate Assessments)</div>
-    <div class="text-xs text-gray-300 mt-1">Bonyeza hii KWANZA kwa kila mwaka mpya - ndipo "Anahitajika" itaonekana sahihi</div>
-  </a>
-
-  <a href="{% url 'accountant:full_report' %}" class="block bg-emerald-700 text-white rounded p-4 hover:brightness-110">
-    <div class="text-[11px] uppercase text-emerald-100 tracking-wide">Kwa Accountant, Headmaster na Second Master</div>
-    <div class="font-serif text-lg font-bold">&#128202; Ripoti Kamili ya Fedha</div>
-    <div class="text-xs text-emerald-100 mt-1">Ada + Michango Mingine + Waliolipa + Wenye Deni - yote mahali pamoja</div>
-  </a>
-
-  <a href="{% url 'accountant:student_debt_search' %}" class="block bg-red-700 text-white rounded p-4 hover:brightness-110 mb-6">
-    <div class="text-[11px] uppercase text-red-100 tracking-wide">Tangu Form One hadi Sasa</div>
-    <div class="font-serif text-lg font-bold">&#128269; Tafuta Deni la Mwanafunzi</div>
-    <div class="text-xs text-red-100 mt-1">Andika jina tu - taarifa za kifedha za miaka yote zinajionyesha</div>
-  </a>
-
-  <div class="bg-white border border-gray-200 rounded p-5 text-center">
-    <div class="text-2xl font-bold text-red-600 font-serif">TZS {{ total_outstanding }}</div>
-    <div class="text-[11px] uppercase text-gray-500 tracking-wide">Jumla ya Madeni ya Shule</div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sp-reveal">
+    <a href="{% url 'accountant:set_fee_structure' %}" class="sp-card sp-card-lift p-4">
+      <div class="eyebrow mb-1">Ada</div>
+      <div class="font-serif text-lg font-bold" style="color: var(--brand)">Fee Structure</div>
+    </a>
+    <a href="{% url 'accountant:add_other_charge' %}" class="sp-card sp-card-lift p-4">
+      <div class="eyebrow mb-1">Michango</div>
+      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Charge</div>
+    </a>
   </div>
 
-  <div class="bg-white border border-gray-200 rounded p-5">
-    <h3 class="font-serif text-navy mb-3">Wanafunzi Wenye Deni</h3>
+  <a href="{% url 'accountant:generate_assessments' %}" class="sp-card sp-card-lift block p-4" style="background: var(--brand); color: var(--brand-ink)">
+    <div class="text-[11px] uppercase tracking-wide mb-1" style="color: var(--brand-ink); opacity: .75">Hatua ya LAZIMA kabla ya kurekodi malipo</div>
+    <div class="font-serif text-lg font-bold">Tengeneza Tathmini (Generate Assessments)</div>
+    <div class="text-xs mt-1" style="color: var(--brand-ink); opacity: .75">Bonyeza hii KWANZA kwa kila mwaka mpya - ndipo "Anahitajika" itaonekana sahihi</div>
+  </a>
+
+  <a href="{% url 'accountant:full_report' %}" class="sp-card sp-card-lift block p-4" style="background: var(--ok); color: var(--brand-ink)">
+    <div class="text-[11px] uppercase tracking-wide mb-1" style="color: var(--brand-ink); opacity: .75">Kwa Accountant, Headmaster na Second Master</div>
+    <div class="font-serif text-lg font-bold">Ripoti Kamili ya Fedha</div>
+    <div class="text-xs mt-1" style="color: var(--brand-ink); opacity: .75">Ada + Michango Mingine + Waliolipa + Wenye Deni - yote mahali pamoja</div>
+  </a>
+
+  <a href="{% url 'accountant:student_debt_search' %}" class="sp-card sp-card-lift block p-4 mb-6" style="background: var(--bad); color: var(--brand-ink)">
+    <div class="text-[11px] uppercase tracking-wide mb-1" style="color: var(--brand-ink); opacity: .75">Tangu Form One hadi Sasa</div>
+    <div class="font-serif text-lg font-bold">Tafuta Deni la Mwanafunzi</div>
+    <div class="text-xs mt-1" style="color: var(--brand-ink); opacity: .75">Andika jina tu - taarifa za kifedha za miaka yote zinajionyesha</div>
+  </a>
+
+  <div class="sp-card sp-kpi sp-reveal">
+    <div class="min-w-0">
+      <div class="sp-kpi-value" style="color: var(--bad)">TZS {{ total_outstanding }}</div>
+      <div class="sp-kpi-label">Jumla ya Madeni ya Shule</div>
+    </div>
+  </div>
+
+  <div class="sp-card p-5 sp-reveal">
+    <h3 class="font-serif mb-3" style="color: var(--brand)">Wanafunzi Wenye Deni</h3>
     <div class="space-y-2">
       {% for d in debtors %}
-        <div class="flex items-center justify-between text-sm border-b border-gray-100 pb-2">
+        <div class="flex items-center justify-between text-sm border-b pb-2" style="border-color: var(--line)">
           <span>{{ d.student.reg_number }} &middot; {{ d.student.first_name }} {{ d.student.last_name }}</span>
-          <span class="font-bold text-red-600">TZS {{ d.debt }}</span>
+          <span class="font-bold" style="color: var(--bad)">TZS {{ d.debt }}</span>
         </div>
       {% empty %}
-        <p class="text-sm text-gray-400">Hakuna deni kwa sasa - kila mtu amelipa!</p>
+        <p class="text-sm" style="color: var(--ink-3)">Hakuna deni kwenye tathmini za sasa. Ikiwa bado hujatengeneza tathmini za mwaka, tumia "Tengeneza Tathmini" hapo juu.</p>
       {% endfor %}
     </div>
   </div>
 
-  <div class="bg-white border border-gray-200 rounded p-5">
-    <h3 class="font-serif text-navy mb-3">Malipo ya Hivi Karibuni</h3>
+  <div class="sp-card p-5 sp-reveal">
+    <h3 class="font-serif mb-3" style="color: var(--brand)">Malipo ya Hivi Karibuni</h3>
     <div class="space-y-2">
       {% for p in recent_payments %}
         <div class="flex items-center justify-between text-sm">
           <span>{{ p.student }} &middot; {{ p.bank_name }}</span>
-          <span class="text-green-700 font-semibold">TZS {{ p.amount }}</span>
+          <span class="font-semibold" style="color: var(--ok)">TZS {{ p.amount }}</span>
         </div>
       {% empty %}
-        <p class="text-sm text-gray-400">Hakuna malipo bado.</p>
+        <p class="text-sm" style="color: var(--ink-3)">Hakuna malipo bado.</p>
       {% endfor %}
     </div>
   </div>

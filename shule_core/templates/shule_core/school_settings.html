@@ -1,0 +1,72 @@
+{% extends 'shule_core/base_tailwind.html' %}
+{% load school_media %}
+{% block title %}Mipangilio ya Shule{% endblock %}
+{% block page_tag %}Utambulisho wa Shule{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <h1 class="font-serif text-xl mb-1" style="color: var(--brand)">Mipangilio ya {{ school.name }}</h1>
+  <p class="text-sm mb-5" style="color: var(--ink-3)">
+    Rangi, logo na anwani unazoweka hapa hutumika kote kwenye mfumo wa shule yako - menyu, chati,
+    na ukurasa wa kuingia. URL yako ni
+    <span class="font-semibold" style="color: var(--ink)">{{ public_host }}</span>.
+  </p>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="text-sm rounded px-3 py-2 mb-4" style="background: rgba(20,107,58,.12); color: var(--ok); border: 1px solid var(--ok)">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="sp-card p-5 md:p-7">
+    <form method="POST" enctype="multipart/form-data" class="space-y-5">
+      {% csrf_token %}
+
+      <div class="flex items-center gap-4 pb-1">
+        {% if school.logo %}
+          <img src="{% school_media_url school 'logo' %}" class="h-14 w-14 rounded-full object-cover border-2" style="border-color: var(--accent)" alt="logo">
+        {% else %}
+          <div class="h-14 w-14 rounded-full grid place-items-center text-lg font-bold border-2"
+               style="background: var(--panel-2); color: var(--brand); border-color: var(--line)">
+            {{ school.name|slice:":1"|upper }}
+          </div>
+        {% endif %}
+        <div class="text-sm" style="color: var(--ink-2)">
+          <div class="font-semibold" style="color: var(--ink)">Logo ya sasa</div>
+          <div class="text-xs" style="color: var(--ink-3)">Ikiacha wazi, logo ya zamani inabaki.</div>
+        </div>
+      </div>
+
+      {% for field in form %}
+        <div>
+          <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <p class="text-[11px] mt-1" style="color: var(--ink-3)">{{ field.help_text }}</p>
+          {% endif %}
+          {% for e in field.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
+        </div>
+      {% endfor %}
+
+      <div class="flex flex-wrap items-center gap-3 pt-1">
+        <button type="submit" class="sp-btn sp-btn-primary">Hifadhi Mipangilio</button>
+        <a href="{% url 'shule_core:onboarding' %}" class="sp-btn sp-btn-ghost">Rudi kwenye Hatua za Kuanza</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Rangi hupiga mara moja ukurasa unavyohifadhiwa - hakuna kuhariri CSS.
+  var picker = document.getElementById('id_primary_color');
+  if (picker) {
+    picker.addEventListener('input', function () {
+      document.documentElement.style.setProperty('--tenant-brand', picker.value);
+    });
+  }
+</script>
+{% endblock %}

@@ -98,7 +98,7 @@ def send_otp(user, code, school=None):
                 f"Namba yako ya kuingia (OTP) ni: {code}\n"
                 f"Inaisha muda baada ya dakika 5.\n\n"
                 f"Kama hukuomba hii, puuza ujumbe huu.\n\nShulePlusERP",
-                getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@shuleplus.co.tz'),
+                getattr(settings, 'DEFAULT_FROM_EMAIL', f"noreply@{settings.BASE_DOMAIN}"),
                 [user.email],
                 fail_silently=True,
             )

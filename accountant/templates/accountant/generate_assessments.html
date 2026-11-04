@@ -4,17 +4,19 @@
 {% block content %}
 <div class="max-w-xl mx-auto px-4 py-6">
 
+  <p class="eyebrow mb-1">Ada</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-4" style="color: var(--brand)">Tengeneza Tathmini za Ada (Invoice)</h1>
+
   {% if messages %}
     {% for message in messages %}
-      <div class="text-sm {% if message.tags == 'warning' %}bg-amber-50 border-amber-500 text-amber-800{% else %}bg-green-50 border-green-600 text-green-800{% endif %} border rounded px-3 py-2 mb-4">
+      <div class="text-sm rounded px-3 py-2 mb-4" style="{% if message.tags == 'warning' %}background: rgba(180,83,9,.14); color: var(--warn); border: 1px solid var(--warn){% else %}background: rgba(20,107,58,.12); color: var(--ok); border: 1px solid var(--ok){% endif %}">
         {{ message }}
       </div>
     {% endfor %}
   {% endif %}
 
-  <div class="bg-white border border-gray-200 rounded p-5">
-    <h3 class="font-serif text-navy mb-2">Tengeneza Tathmini za Ada (Invoice)</h3>
-    <p class="text-sm text-gray-500 mb-4">
+  <div class="sp-card p-5 sp-reveal">
+    <p class="text-sm mb-4" style="color: var(--ink-3)">
       Hii itaandaa deni la ada kwa kila mwanafunzi wa mwaka huu, kutumia Fee
       Structure na Michango iliyowekwa tayari. Haitaguza wale ambao tayari
       wana tathmini ya mwaka huu.
@@ -23,7 +25,7 @@
       {% csrf_token %}
       <input type="number" name="academic_year" value="2026"
              class="border border-gray-300 rounded px-3 py-2 text-sm flex-1" required>
-      <button type="submit" class="bg-gold text-amber-950 font-semibold px-5 py-2 rounded">Tengeneza</button>
+      <button type="submit" class="sp-btn sp-btn-gold">Tengeneza</button>
     </form>
   </div>
 </div>

@@ -38,6 +38,17 @@ class SchoolProfileForm(forms.ModelForm):
             'accent_color': forms.TextInput(attrs={'class': TW, 'type': 'color'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Kibura huchagua #000000 ikiwa input ya rangi haijawekwa kitu, hivyo
+        # "Hifadhi" bila kugusa rangi hubadilisha brand ya shule kuwa nyeusi.
+        school = getattr(self.instance, 'school', None)
+        brand = (getattr(school, 'primary_color', None) or '').strip() or '#0B2545'
+        if not (self.instance.primary_color or '').strip():
+            self.fields['primary_color'].widget.attrs['value'] = brand
+        if not (self.instance.accent_color or '').strip():
+            self.fields['accent_color'].widget.attrs['value'] = '#D4AF37'
+
 
 class BrandingPostForm(forms.ModelForm):
     class Meta:

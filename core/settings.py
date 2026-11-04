@@ -54,6 +54,7 @@ BASE_DOMAIN = os.environ.get(
     'BASE_DOMAIN',
     render_hostname or 'shulepluserp.co.tz',
 )
+SUPPORT_EMAIL = os.environ.get('SUPPORT_EMAIL', f'info@{BASE_DOMAIN}')
 
 
 # Application definition
@@ -114,6 +115,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'notifications.context_processors.notifications_context',
+                'shule_core.context_processors.platform',
             ],
         },
     },

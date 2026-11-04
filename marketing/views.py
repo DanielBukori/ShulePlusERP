@@ -42,9 +42,18 @@ def landing_page_view(request):
         slide.position: reverse('marketing:hero_image', args=[slide.pk])
         for slide in HeroSlide.objects.exclude(image='')
     }
+    # Takwimu halisi za jukwaa - hakuna nambari za kuubeba.
+    from shule_core.models import School, Student, Staff, AcademicResult
+    stats = {
+        'schools': School.objects.filter(is_approved=True).count(),
+        'students': Student.objects.count(),
+        'teachers': Staff.objects.filter(is_teaching_staff=True).count(),
+        'results': AcademicResult.objects.count(),
+    }
     context = {
         'form': form,
         'hero_images': [slides_with_images.get(position, '') for position in range(1, 8)],
+        'stats': stats,
     }
     return render(request, 'marketing/landing_page.html', context)
 

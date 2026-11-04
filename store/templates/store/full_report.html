@@ -4,64 +4,69 @@
 {% block content %}
 <div class="max-w-5xl mx-auto px-4 py-6">
 
-  <div class="flex items-center justify-between mb-5">
-    <h1 class="font-serif text-xl text-navy">Ripoti Kamili ya Michango - {{ academic_year }}</h1>
+  <div class="flex items-center justify-between mb-5 flex-wrap gap-3 sp-reveal">
+    <div>
+      <p class="eyebrow mb-1">Ripoti</p>
+      <h1 class="font-serif text-xl md:text-2xl font-bold" style="color: var(--brand)">Ripoti Kamili ya Michango - {{ academic_year }}</h1>
+    </div>
     <form method="GET" class="flex gap-2">
       <input type="number" name="academic_year" value="{{ academic_year }}"
              class="border border-gray-300 rounded px-3 py-1.5 text-sm w-24">
-      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded px-4 py-1.5">Chagua Mwaka</button>
+      <button type="submit" class="sp-btn sp-btn-primary">Chagua Mwaka</button>
     </form>
   </div>
 
   {% if report_groups %}
     {% for group in report_groups %}
-      <div class="bg-white border border-gray-200 rounded p-5 mb-5 overflow-x-auto">
-        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-          <div>
-            <h3 class="font-serif text-navy font-bold">{{ group.requirement.item_name }}</h3>
-            <p class="text-xs text-gray-500">
-              {{ group.requirement.school_class|default:"Shule Nzima" }} &middot;
-              {{ group.requirement.get_term_display }} &middot;
-              Kila mmoja anahitajika: {{ group.requirement.quantity_required }}
-            </p>
+      <div class="sp-card overflow-x-auto mb-5">
+        <div class="p-5">
+          <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+            <div>
+              <h3 class="font-serif font-bold" style="color: var(--brand)">{{ group.requirement.item_name }}</h3>
+              <p class="text-xs" style="color: var(--ink-3)">
+                {{ group.requirement.school_class|default:"Shule Nzima" }} &middot;
+                {{ group.requirement.get_term_display }} &middot;
+                Kila mmoja anahitajika: {{ group.requirement.quantity_required }}
+              </p>
+            </div>
+            <div class="flex gap-2">
+              <span class="sp-chip" style="color: var(--ok); border-color: var(--ok)">
+                Wamekamilisha: {{ group.complete_count }}
+              </span>
+              <span class="sp-chip" style="color: var(--bad); border-color: var(--bad)">
+                Bado Wanadaiwa: {{ group.incomplete_count }}
+              </span>
+            </div>
           </div>
-          <div class="flex gap-2">
-            <span class="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full font-semibold">
-              Wamekamilisha: {{ group.complete_count }}
-            </span>
-            <span class="text-xs bg-red-100 text-red-700 px-3 py-1.5 rounded-full font-semibold">
-              Bado Wanadaiwa: {{ group.incomplete_count }}
-            </span>
-          </div>
-        </div>
 
-        <table class="w-full text-sm min-w-[420px]">
-          <thead>
-            <tr class="bg-navy text-white text-xs uppercase">
-              <th class="p-2 text-left">Mwanafunzi</th>
-              <th class="p-2">Ameleta</th>
-              <th class="p-2">Bado Anadaiwa</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for row in group.rows %}
-              <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
-                <td class="p-2 font-medium">
-                  {{ row.student.first_name }} {{ row.student.last_name }}
-                  <span class="text-gray-400 text-[10px] block">{{ row.student.reg_number }}</span>
-                </td>
-                <td class="p-2 text-center text-green-700">{{ row.brought }}</td>
-                <td class="p-2 text-center font-bold {% if row.owed > 0 %}text-red-600{% else %}text-green-700{% endif %}">
-                  {% if row.owed > 0 %}{{ row.owed }}{% else %}&#10003;{% endif %}
-                </td>
+          <table class="w-full text-sm min-w-[420px]">
+            <thead>
+              <tr class="text-xs uppercase" style="background: var(--brand); color: var(--brand-ink)">
+                <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Mwanafunzi</th>
+                <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Ameleta</th>
+                <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Bado Anadaiwa</th>
               </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {% for row in group.rows %}
+                <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
+                  <td class="p-2 font-medium">
+                    {{ row.student.first_name }} {{ row.student.last_name }}
+                    <span class="text-[10px] block" style="color: var(--ink-3)">{{ row.student.reg_number }}</span>
+                  </td>
+                  <td class="p-2 text-center" style="color: var(--ok)">{{ row.brought }}</td>
+                  <td class="p-2 text-center font-bold" style="color: {% if row.owed > 0 %}var(--bad){% else %}var(--ok){% endif %}">
+                    {% if row.owed > 0 %}{{ row.owed }}{% else %}&#10003;{% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     {% endfor %}
   {% else %}
-    <div class="bg-white border border-gray-200 rounded p-8 text-center text-gray-400">
+    <div class="sp-card p-8 text-center sp-reveal" style="color: var(--ink-3)">
       Hakuna masharti ya michango yaliyowekwa kwa mwaka huu.
     </div>
   {% endif %}

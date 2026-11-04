@@ -1,31 +1,56 @@
 {% extends 'branding/public_base.html' %}
+{% load static %}
 {% block title %}Admissions - {{ school.name }}{% endblock %}
 
 {% block content %}
-<section class="bg-gradient-to-br from-navy to-navy2 text-white">
-  <div class="max-w-4xl mx-auto px-4 py-16 text-center">
-    <span class="text-gold text-xs uppercase font-bold tracking-widest">Jiunge Nasi</span>
-    <h1 class="font-serif text-3xl md:text-4xl font-bold mt-2">Admissions - {{ school.name }}</h1>
+<style>
+  /* Fomu ya maombi - maudhui ya widget hubaki yale yale, muonekano tu ndio unabadilishwa */
+  .sp-adm-form input,
+  .sp-adm-form select,
+  .sp-adm-form textarea {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    background: var(--panel-2);
+    color: var(--ink);
+    transition: border-color .16s var(--ease, ease), box-shadow .16s var(--ease, ease), background-color .16s var(--ease, ease);
+  }
+  .sp-adm-form input:focus,
+  .sp-adm-form select:focus,
+  .sp-adm-form textarea:focus {
+    outline: none;
+    background: var(--panel);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+</style>
+<section class="text-white border-b-4" style="background: linear-gradient(135deg, var(--brand), color-mix(in srgb, var(--brand) 55%, #0F3460)); border-color: var(--accent)">
+  <div class="max-w-4xl mx-auto px-4 py-20 text-center sp-reveal">
+    <p class="eyebrow mb-2" style="color: var(--accent)">Jiunge Nasi</p>
+    <h1 class="font-serif text-3xl md:text-4xl font-bold text-white">Admissions - {{ school.name }}</h1>
   </div>
 </section>
 
-<section class="max-w-5xl mx-auto px-4 py-14 grid grid-cols-1 md:grid-cols-2 gap-10">
+<section class="max-w-5xl mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 gap-10">
 
-  <div>
+  <div class="sp-reveal">
     {% for p in admission_posts %}
       <div class="prose text-gray-700 leading-relaxed mb-6 whitespace-pre-line">{{ p.body }}</div>
     {% endfor %}
 
     {% if programs %}
-      <h2 class="font-serif font-bold text-navy text-xl mb-4">Programu Zinazopatikana</h2>
+      <p class="eyebrow mb-2">Ofa ya Masomo</p>
+      <h2 class="font-serif font-bold text-2xl mb-6" style="color: var(--brand)">Programu Zinazopatikana</h2>
       <div class="space-y-4">
         {% for p in programs %}
-          <div class="border border-gray-200 rounded-xl p-4">
-            <span class="inline-block bg-navy/10 text-navy text-xs font-bold px-3 py-1 rounded-full mb-2">{{ p.get_level_display }}</span>
-            <h3 class="font-serif font-bold text-navy">{{ p.name }}</h3>
-            {% if p.description %}<p class="text-gray-600 text-sm mt-1">{{ p.description }}</p>{% endif %}
+          <div class="sp-card sp-card-lift p-5">
+            <span class="sp-chip mb-2">{{ p.get_level_display }}</span>
+            <h3 class="font-serif font-bold text-lg" style="color: var(--brand)">{{ p.name }}</h3>
+            {% if p.description %}<p class="text-sm mt-1.5 leading-relaxed" style="color: var(--ink-2)">{{ p.description }}</p>{% endif %}
             {% if p.requirements %}
-              <p class="text-gray-500 text-xs mt-2"><b>Masharti:</b> {{ p.requirements }}</p>
+              <p class="text-xs mt-2.5" style="color: var(--ink-3)"><b>Masharti:</b> {{ p.requirements }}</p>
             {% endif %}
           </div>
         {% endfor %}
@@ -33,28 +58,32 @@
     {% endif %}
   </div>
 
-  <div class="bg-white border border-gray-200 rounded-xl p-6 h-fit shadow-sm">
-    <h2 class="font-serif font-bold text-navy text-xl mb-1">Fomu ya Maombi</h2>
-    <p class="text-gray-500 text-sm mb-5">Jaza fomu hii, tutakupigia haraka iwezekanavyo.</p>
+  <div class="sp-card p-7 h-fit sp-reveal">
+    <p class="eyebrow mb-2">Maombi</p>
+    <h2 class="font-serif font-bold text-2xl mb-1" style="color: var(--brand)">Fomu ya Maombi</h2>
+    <p class="text-sm mb-6" style="color: var(--ink-3)">Jaza fomu hii, tutakupigia haraka iwezekanavyo.</p>
 
     {% if messages %}
       {% for message in messages %}
-        <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+        <div class="text-sm rounded-lg px-4 py-3 mb-4 border"
+             style="background: color-mix(in srgb, var(--ok) 10%, var(--panel)); color: var(--ok); border-color: color-mix(in srgb, var(--ok) 40%, transparent)">{{ message }}</div>
       {% endfor %}
     {% endif %}
 
-    <form method="POST" class="space-y-4">
+    <form method="POST" class="space-y-4 sp-adm-form">
       {% csrf_token %}
       {% for field in form %}
         <div>
-          <label class="block text-xs uppercase text-gray-500 mb-1">{{ field.label }}</label>
+          <label class="block text-xs uppercase tracking-wide mb-1.5 font-semibold" style="color: var(--ink-3)">{{ field.label }}</label>
           {{ field }}
-          {% for e in field.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+          {% for e in field.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
         </div>
       {% endfor %}
-      <button type="submit" class="w-full bg-gold text-amber-950 font-semibold py-3 rounded">Tuma Ombi</button>
+      <button type="submit" class="sp-btn sp-btn-gold w-full !py-3 mt-2">Tuma Ombi</button>
     </form>
   </div>
 
 </section>
+
+<script src="{% static 'js/app.js' %}" defer></script>
 {% endblock %}

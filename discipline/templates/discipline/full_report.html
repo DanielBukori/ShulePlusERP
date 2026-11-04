@@ -4,44 +4,51 @@
 {% block content %}
 <div class="max-w-5xl mx-auto px-4 py-6">
 
-  <div class="flex items-center justify-between mb-5">
-    <h1 class="font-serif text-xl text-navy">Ripoti Kamili ya Nidhamu - {{ academic_year }}</h1>
+  <div class="flex flex-wrap items-end justify-between gap-3 mb-5 sp-reveal">
+    <div>
+      <p class="eyebrow mb-1">Nidhamu</p>
+      <h1 class="font-serif text-xl md:text-2xl font-bold" style="color: var(--brand)">Ripoti Kamili ya Nidhamu - {{ academic_year }}</h1>
+    </div>
     <form method="GET" class="flex gap-2">
       <input type="number" name="academic_year" value="{{ academic_year }}"
              class="border border-gray-300 rounded px-3 py-1.5 text-sm w-24">
-      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded px-4 py-1.5">Chagua Mwaka</button>
+      <button type="submit" class="sp-btn sp-btn-primary">Chagua Mwaka</button>
     </form>
   </div>
 
-  <div class="grid grid-cols-2 gap-3 mb-6">
-    <div class="bg-white border border-gray-200 rounded p-4 text-center">
-      <div class="text-2xl font-bold text-navy font-serif">{{ total_students_involved }}</div>
-      <div class="text-[10px] uppercase text-gray-500">Wanafunzi Wenye Makosa</div>
+  <div class="grid grid-cols-2 gap-3 mb-6 sp-reveal">
+    <div class="sp-card sp-kpi">
+      <div class="min-w-0">
+        <div class="sp-kpi-value" data-count="{{ total_students_involved }}">0</div>
+        <div class="sp-kpi-label">Wanafunzi Wenye Makosa</div>
+      </div>
     </div>
-    <div class="bg-white border border-gray-200 rounded p-4 text-center">
-      <div class="text-2xl font-bold text-navy font-serif">{{ total_incidents }}</div>
-      <div class="text-[10px] uppercase text-gray-500">Jumla ya Makosa Yote</div>
+    <div class="sp-card sp-kpi">
+      <div class="min-w-0">
+        <div class="sp-kpi-value" data-count="{{ total_incidents }}">0</div>
+        <div class="sp-kpi-label">Jumla ya Makosa Yote</div>
+      </div>
     </div>
   </div>
 
   {% if student_rows %}
     {% for row in student_rows %}
-      <div class="bg-white border border-gray-200 rounded p-5 mb-4">
+      <div class="sp-card p-5 mb-4">
         <div class="flex items-center justify-between mb-3">
           <div>
             <div class="font-serif font-bold text-navy">{{ row.student.first_name }} {{ row.student.last_name }}</div>
-            <div class="text-xs text-gray-500">{{ row.school_class }} &middot; {{ row.student.reg_number }}</div>
+            <div class="text-xs" style="color: var(--ink-3)">{{ row.school_class }} &middot; {{ row.student.reg_number }}</div>
           </div>
           <div class="text-right">
-            <div class="text-xl font-bold {% if row.score < 50 %}text-red-600{% else %}text-amber-600{% endif %} font-serif">
+            <div class="text-xl font-bold font-serif" {% if row.score < 50 %}style="color: var(--bad)"{% else %}style="color: var(--warn)"{% endif %}>
               {{ row.score }}
             </div>
-            <div class="text-[10px] uppercase text-gray-500">Alama za Sasa</div>
+            <div class="text-[10px] uppercase" style="color: var(--ink-3)">Alama za Sasa</div>
           </div>
         </div>
         <table class="w-full text-sm">
           <thead>
-            <tr class="bg-gray-50 text-gray-500 text-xs uppercase">
+            <tr class="text-xs uppercase">
               <th class="p-2 text-left">Kosa</th>
               <th class="p-2">Alama Zilizokatwa</th>
               <th class="p-2">Tarehe</th>
@@ -51,8 +58,8 @@
             {% for inc in row.incidents %}
               <tr class="border-b border-gray-100">
                 <td class="p-2">{{ inc.offense_type.name }}</td>
-                <td class="p-2 text-center text-red-600 font-semibold">-{{ inc.offense_type.points_deducted }}</td>
-                <td class="p-2 text-center text-gray-500">{{ inc.date_occurred|date:"d/m/Y" }}</td>
+                <td class="p-2 text-center font-semibold" style="color: var(--bad)">-{{ inc.offense_type.points_deducted }}</td>
+                <td class="p-2 text-center" style="color: var(--ink-3)">{{ inc.date_occurred|date:"d/m/Y" }}</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -60,8 +67,11 @@
       </div>
     {% endfor %}
   {% else %}
-    <div class="bg-white border border-green-200 rounded p-8 text-center text-green-700 font-semibold">
-      &#10003; Hakuna makosa yaliyorekodiwa kwa mwaka huu - nidhamu njema kwa wote!
+    <div class="text-sm rounded p-8 text-center font-semibold sp-reveal" style="background: rgba(20,107,58,.12); color: var(--ok); border: 1px solid var(--ok)">
+      <span class="inline-flex items-center justify-center gap-2">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        Hakuna makosa yaliyorekodiwa kwa mwaka huu - nidhamu njema kwa wote!
+      </span>
     </div>
   {% endif %}
 </div>

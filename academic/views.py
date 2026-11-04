@@ -181,6 +181,39 @@ def academic_dashboard_view(request):
 
     class_averages.sort(key=lambda x: x['average'], reverse=True)
 
+    # ---- Data za chati (SPCharts) ----
+    # json_script huwekwa kwenye template, hivyo tunapitisha dict (siyo string).
+    exam_order = [e[0] for e in AcademicResult.EXAM_TYPE_CHOICES]
+    trend_rows = list(
+        AcademicResult.objects.filter(school=school, is_published=True)
+        .values('academic_year', 'term', 'exam_type')
+        .annotate(avg=Avg('score'), n=Count('id'))
+    )
+    trend_rows.sort(key=lambda r: (
+        r['academic_year'], r['term'],
+        exam_order.index(r['exam_type']) if r['exam_type'] in exam_order else 99,
+    ))
+    trend_rows = trend_rows[-12:]
+
+    dashboard_charts = {
+        'subjects': {
+            'labels': [s['subject__name'] for s in subject_stats],
+            'values': [round(float(s['avg_score']), 1) for s in subject_stats],
+        },
+        'division': {
+            'labels': [d for d in sorted(division_counts)],
+            'values': [division_counts[d] for d in sorted(division_counts)],
+        },
+        'classes': {
+            'labels': [c['label'] for c in class_averages],
+            'values': [round(float(c['average']), 1) for c in class_averages],
+        },
+        'trend': {
+            'labels': [f"{r['exam_type']} · {r['term']} {str(r['academic_year'])[-2:]}" for r in trend_rows],
+            'values': [round(float(r['avg']), 1) for r in trend_rows],
+        },
+    }
+
     context = {
         'school': school,
         'classes': classes,
@@ -192,6 +225,8 @@ def academic_dashboard_view(request):
         'class_averages': class_averages,
         'latest_result': latest_result,
         'available_combos': available_combos,
+        'dashboard_charts': dashboard_charts,
+        'results_published_total': sum(r['n'] for r in trend_rows),
     }
 
     # Takwimu za ziada kwa Headmaster/Second Master - muhtasari wa shule

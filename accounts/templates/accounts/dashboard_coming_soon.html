@@ -1,19 +1,20 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="sw">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Inakuja</title>
-<style>
-  body{font-family:"Inter",sans-serif; background:#FBFAF7; color:#1B2430;
-       display:flex; align-items:center; justify-content:center; height:100vh; margin:0;}
-  .box{text-align:center; padding:40px;}
-  h1{color:#0F3460;}
-</style>
+<link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
+<link href="{% static 'css/app.css' %}" rel="stylesheet">
 </head>
-<body>
-  <div class="box">
-    <h1>Karibu!</h1>
-    <p>Dashboard ya <strong>{{ role }}</strong> bado inajengwa — itakuwa tayari hivi karibuni.</p>
+<body style="background: var(--surface); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px;">
+
+  <div class="sp-card p-8 text-center" style="max-width: 420px">
+    <p class="eyebrow mb-1">ShulePlus ERP</p>
+    <h1 class="font-serif text-2xl font-bold mb-2" style="color: var(--brand)">Karibu!</h1>
+    <p class="text-sm" style="color: var(--ink-2)">Dashboard ya <strong style="color: var(--ink)">{{ role }}</strong> bado inajengwa — itakuwa tayari hivi karibuni.</p>
   </div>
+
 </body>
 </html>

@@ -3,59 +3,68 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 py-6">
-  <div class="bg-blue border border-gray-200 rounded p-5 md:p-8">
+  <p class="eyebrow mb-1">Walimu</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-1" style="color: var(--brand)">Sajili Mwalimu</h1>
+
+  <div class="sp-card p-5 md:p-8 sp-reveal">
 
     {% if messages %}
       {% for message in messages %}
-        <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+        <div class="text-sm rounded px-3 py-2 mb-4" style="background: rgba(20,107,58,.12); color: var(--ok); border: 1px solid var(--ok)">{{ message }}</div>
       {% endfor %}
     {% endif %}
 
-    <h3 class="font-serif text-navy text-lg mb-4">Taarifa za Msingi za Mwalimu</h3>
+    <h3 class="font-serif font-bold mb-4" style="color: var(--brand)">Taarifa za Msingi za Mwalimu</h3>
 
     <form method="POST">
       {% csrf_token %}
       <div class="grid grid-cols-1 gap-3 mb-5">
         <div>
-          <label class="block text-sm text-gray-600 mb-1">{{ form.role.label }} <span class="text-red-500">*</span></label>
+          <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.role.label }} <span style="color: var(--bad)">*</span></label>
           {{ form.role }}
-          {% for e in form.role.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+          {% for e in form.role.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
         </div>
         <div>
+          <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.first_name.label }}</label>
           {{ form.first_name }}
-          {% for e in form.first_name.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+          {% for e in form.first_name.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
         </div>
         <div>
+          <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.last_name.label }}</label>
           {{ form.last_name }}
-          {% for e in form.last_name.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+          {% for e in form.last_name.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
         </div>
         <div>
+          <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.phone.label }}</label>
           {{ form.phone }}
-          {% for e in form.phone.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+          {% for e in form.phone.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
         </div>
         <div>
+          <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.tsc_number.label }}</label>
           {{ form.tsc_number }}
-          {% for e in form.tsc_number.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+          {% for e in form.tsc_number.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
         </div>
         <div>
+          <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.qualification.label }}</label>
           {{ form.qualification }}
-          {% for e in form.qualification.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+          {% for e in form.qualification.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
         </div>
-                    
+
         <div>
-          <label class="block text-sm text-gray-600 mb-1">Email <span class="text-red-500">*</span></label>
+          <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">Email <span style="color: var(--bad)">*</span></label>
           <input type="email" name="email" required
                 placeholder="mfano: juma@shule.co.tz"
                 class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-navy focus:outline-none">
-          <p class="text-xs text-gray-400 mt-1">Link ya kuingia (2FA) itatumwa kwenye email hii.</p>
+          <p class="text-[11px] mt-1" style="color: var(--ink-3)">Link ya kuingia (2FA) itatumwa kwenye email hii.</p>
         </div>
 
-        <label class="flex items-center gap-2 text-sm bg-blue-50 border border-gray-200 rounded px-3 py-3">
+        <label class="flex items-center gap-2 text-sm rounded px-3 py-3 border"
+               style="background: var(--panel-2); border-color: var(--line); color: var(--ink-2)">
           {{ form.is_store_keeper }}
           <span>Mteue kuwa <b>Store Keeper</b> (atasimamia vifaa/michango ya wanafunzi)</span>
         </label>
       </div>
-      <button type="submit" class="w-full bg-gold hover:brightness-95 text-amber-950 font-semibold py-3 rounded">
+      <button type="submit" class="sp-btn sp-btn-gold w-full">
         Sajili Mwalimu
       </button>
     </form>

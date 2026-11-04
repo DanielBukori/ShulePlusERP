@@ -3,49 +3,64 @@
 
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 py-6">
-  <h1 class="font-serif text-xl text-navy mb-1">Simamia Tovuti ya Shule</h1>
-  <p class="text-sm text-gray-500 mb-5">
-    Ukurasa wa umma: <a href="{% url 'branding:school_home_local' subdomain=school.subdomain %}" target="_blank" class="text-navy2 hover:underline">{{ school.subdomain }}.shuleplus.co.tz &#8599;</a>
+  <p class="eyebrow mb-1">Tovuti ya Shule</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-1" style="color: var(--brand)">Simamia Tovuti ya Shule</h1>
+  <p class="text-sm mb-5" style="color: var(--ink-3)">
+    Ukurasa wa umma: <a href="{% url 'branding:school_home_local' subdomain=school.subdomain %}" target="_blank" class="font-semibold hover:underline" style="color: var(--brand-2)">{{ school.subdomain }}.{{ platform_domain }} &#8599;</a>
   </p>
 
   {% if not profile_complete %}
-    <div class="mb-6 bg-amber-50 border border-amber-400 text-amber-800 rounded p-4 text-sm">
+    <div class="mb-6 text-sm rounded px-3 py-2" style="background: rgba(180,83,9,.14); color: var(--warn); border: 1px solid var(--warn)">
       <b>Kamilisha Wasifu wa Tovuti Yako.</b> Bado hujaweka baadhi ya taarifa muhimu (About, Vision, Mission, au Picha Kuu).
       <a href="{% url 'branding:edit_profile' %}" class="underline font-semibold ml-1">Kamilisha Sasa &rarr;</a>
     </div>
   {% endif %}
 
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-    <a href="{% url 'branding:manage_posts' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
-      <div class="text-2xl font-serif font-bold text-navy">{{ total_posts }}</div>
-      <div class="text-xs text-gray-500 mt-1">Machapisho</div>
+    <a href="{% url 'branding:manage_posts' %}" class="sp-card sp-card-lift sp-kpi sp-reveal">
+      <div class="min-w-0">
+        <div class="sp-kpi-value" data-count="{{ total_posts }}">0</div>
+        <div class="sp-kpi-label">Machapisho</div>
+      </div>
     </a>
-    <a href="{% url 'branding:manage_leadership' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
-      <div class="text-2xl font-serif font-bold text-navy">{{ total_leadership }}</div>
-      <div class="text-xs text-gray-500 mt-1">Uongozi</div>
+    <a href="{% url 'branding:manage_leadership' %}" class="sp-card sp-card-lift sp-kpi sp-reveal">
+      <div class="min-w-0">
+        <div class="sp-kpi-value" data-count="{{ total_leadership }}">0</div>
+        <div class="sp-kpi-label">Uongozi</div>
+      </div>
     </a>
-    <a href="{% url 'branding:manage_programs' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
-      <div class="text-2xl font-serif font-bold text-navy">{{ total_programs }}</div>
-      <div class="text-xs text-gray-500 mt-1">Programu</div>
+    <a href="{% url 'branding:manage_programs' %}" class="sp-card sp-card-lift sp-kpi sp-reveal">
+      <div class="min-w-0">
+        <div class="sp-kpi-value" data-count="{{ total_programs }}">0</div>
+        <div class="sp-kpi-label">Programu</div>
+      </div>
     </a>
-    <a href="{% url 'branding:manage_facilities' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
-      <div class="text-2xl font-serif font-bold text-navy">{{ total_facilities }}</div>
-      <div class="text-xs text-gray-500 mt-1">Miundombinu</div>
+    <a href="{% url 'branding:manage_facilities' %}" class="sp-card sp-card-lift sp-kpi sp-reveal">
+      <div class="min-w-0">
+        <div class="sp-kpi-value" data-count="{{ total_facilities }}">0</div>
+        <div class="sp-kpi-label">Miundombinu</div>
+      </div>
     </a>
-    <a href="{% url 'branding:manage_testimonials' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
-      <div class="text-2xl font-serif font-bold text-navy">{{ total_testimonials }}</div>
-      <div class="text-xs text-gray-500 mt-1">Maoni</div>
+    <a href="{% url 'branding:manage_testimonials' %}" class="sp-card sp-card-lift sp-kpi sp-reveal">
+      <div class="min-w-0">
+        <div class="sp-kpi-value" data-count="{{ total_testimonials }}">0</div>
+        <div class="sp-kpi-label">Maoni</div>
+      </div>
     </a>
-    <a href="{% url 'branding:manage_inquiries' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md relative">
+    <a href="{% url 'branding:manage_inquiries' %}" class="sp-card sp-card-lift sp-kpi sp-reveal relative">
       {% if new_inquiries %}
-        <span class="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{{ new_inquiries }}</span>
+        <span class="absolute top-2 right-2 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" style="background: var(--bad)">{{ new_inquiries }}</span>
       {% endif %}
-      <div class="text-2xl font-serif font-bold text-navy">{{ new_inquiries }}</div>
-      <div class="text-xs text-gray-500 mt-1">Maombi Mapya</div>
+      <div class="min-w-0">
+        <div class="sp-kpi-value" data-count="{{ new_inquiries }}">0</div>
+        <div class="sp-kpi-label">Maombi Mapya</div>
+      </div>
     </a>
-    <a href="{% url 'branding:edit_profile' %}" class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md">
-      <div class="text-2xl font-serif font-bold text-navy">&#9881;</div>
-      <div class="text-xs text-gray-500 mt-1">Wasifu wa Shule</div>
+    <a href="{% url 'branding:edit_profile' %}" class="sp-card sp-card-lift sp-kpi sp-reveal">
+      <div class="min-w-0">
+        <div class="sp-kpi-value" style="font-size: 20px">{{ profile_complete|yesno:"Kamili,Hakamiliki" }}</div>
+        <div class="sp-kpi-label">Wasifu wa Shule</div>
+      </div>
     </a>
   </div>
 </div>

@@ -4,59 +4,66 @@
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 py-6">
 
-  <h1 class="font-serif text-xl text-navy mb-1">Ripoti ya F za Kiotomatiki</h1>
-  <p class="text-sm text-gray-500 mb-5">
+  <p class="eyebrow mb-1">Ripoti ya F za Kiotomatiki</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-1" style="color: var(--brand)">Ripoti ya F za Kiotomatiki</h1>
+  <p class="text-sm mb-5" style="color: var(--ink-3)">
     Wanafunzi waliopewa alama 0 (F) kiotomatiki wakati wa "Chapisha Matokeo" - kwa sababu mtihani wa somo
     lao ULIFANYIKA lakini hawakuwa na alama iliyorekodiwa. Fuatilia kuhakiki sababu (mgonjwa, hayupo, au
     kosa la kuandika alama).
   </p>
 
-  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
+  <div class="sp-card p-5 mb-5 sp-reveal">
     <form method="GET" class="grid grid-cols-2 gap-3 items-end">
       <div>
-        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.term.label }}</label>
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.term.label }}</label>
         {{ form.term }}
       </div>
       <div>
-        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.exam_type.label }}</label>
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.exam_type.label }}</label>
         {{ form.exam_type }}
       </div>
       <div class="col-span-2">
-        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.school_class.label }}</label>
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.school_class.label }}</label>
         {{ form.school_class }}
       </div>
       <div class="col-span-2">
-        <label class="block text-xs uppercase text-gray-500 mb-1">{{ form.academic_year.label }}</label>
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.academic_year.label }}</label>
         {{ form.academic_year }}
       </div>
       {% if form.non_field_errors %}
-        <div class="col-span-2 text-red-600 text-xs">{{ form.non_field_errors|join:", " }}</div>
+        <div class="col-span-2 text-xs rounded px-3 py-2" style="background: rgba(220,38,38,.12); color: var(--bad); border: 1px solid var(--bad)">
+          {{ form.non_field_errors|join:", " }}
+        </div>
       {% endif %}
-      <button type="submit" class="col-span-2 bg-navy2 text-white text-sm font-semibold rounded py-2.5">Angalia Ripoti</button>
+      <button type="submit" class="col-span-2 sp-btn sp-btn-primary">Angalia Ripoti</button>
     </form>
   </div>
 
   {% if auto_absent_results %}
     <div class="grid grid-cols-2 gap-3 mb-5">
-      <div class="bg-white border border-amber-300 rounded p-4 text-center">
-        <div class="text-2xl font-bold text-amber-700 font-serif">{{ auto_absent_students_count }}</div>
-        <div class="text-[10px] uppercase text-gray-500">Wanafunzi Wenye F za Kiotomatiki</div>
+      <div class="sp-card sp-kpi sp-reveal">
+        <div class="min-w-0">
+          <div class="sp-kpi-value" style="color: var(--warn)" data-count="{{ auto_absent_students_count }}">0</div>
+          <div class="sp-kpi-label">Wanafunzi Wenye F za Kiotomatiki</div>
+        </div>
       </div>
-      <div class="bg-white border border-amber-300 rounded p-4 text-center">
-        <div class="text-2xl font-bold text-amber-700 font-serif">{{ auto_absent_count }}</div>
-        <div class="text-[10px] uppercase text-gray-500">Jumla ya F za Kiotomatiki</div>
+      <div class="sp-card sp-kpi sp-reveal">
+        <div class="min-w-0">
+          <div class="sp-kpi-value" style="color: var(--warn)" data-count="{{ auto_absent_count }}">0</div>
+          <div class="sp-kpi-label">Jumla ya F za Kiotomatiki</div>
+        </div>
       </div>
     </div>
 
-    <div class="bg-white border border-gray-200 rounded p-5 overflow-x-auto">
+    <div class="sp-card overflow-x-auto sp-reveal">
       <table class="w-full text-sm min-w-[560px]">
         <thead>
-          <tr class="bg-navy text-white text-xs uppercase">
-            <th class="p-2 text-left">Darasa</th>
-            <th class="p-2 text-left">Reg Number</th>
-            <th class="p-2 text-left">Mwanafunzi</th>
-            <th class="p-2 text-left">Somo</th>
-            <th class="p-2">Tarehe ya Publish</th>
+          <tr class="text-xs uppercase" style="background: var(--brand); color: var(--brand-ink)">
+            <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Darasa</th>
+            <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Reg Number</th>
+            <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Mwanafunzi</th>
+            <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Somo</th>
+            <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Tarehe ya Publish</th>
           </tr>
         </thead>
         <tbody>
@@ -65,23 +72,23 @@
               <td class="p-2">{{ r.student.school_class }}</td>
               <td class="p-2">{{ r.student.reg_number }}</td>
               <td class="p-2 font-medium">{{ r.student.first_name }} {{ r.student.last_name }}</td>
-              <td class="p-2 text-amber-700 font-semibold">{{ r.subject.name }}</td>
-              <td class="p-2 text-center text-gray-500">{{ r.created_at|date:"d/m/Y" }}</td>
+              <td class="p-2 font-semibold" style="color: var(--warn)">{{ r.subject.name }}</td>
+              <td class="p-2 text-center" style="color: var(--ink-3)">{{ r.created_at|date:"d/m/Y" }}</td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
-      <p class="text-xs text-gray-400 mt-3">
+      <p class="text-xs mt-3" style="color: var(--ink-3)">
         Kama alama halisi imejulikana, ibadilishe kupitia Marks Entry ya kawaida - itaacha kuwa "F ya
         kiotomatiki" mara tu ikihaririwa upya na mwalimu husika.
       </p>
     </div>
   {% elif form.is_valid %}
-    <div class="bg-white border border-green-200 rounded p-8 text-center text-green-700 font-semibold">
+    <div class="rounded p-6 text-center text-sm font-semibold" style="background: rgba(20,107,58,.12); color: var(--ok); border: 1px solid var(--ok)">
       &#10003; Hakuna F za kiotomatiki kwa mtihani huu - kila mtu alikuwa na alama wakati wa Publish.
     </div>
   {% else %}
-    <div class="bg-white border border-gray-200 rounded p-8 text-center text-gray-400">
+    <div class="sp-card p-8 text-center" style="color: var(--ink-3)">
       Chagua Muhula, Aina ya Mtihani, na Mwaka hapo juu kuona ripoti.
     </div>
   {% endif %}

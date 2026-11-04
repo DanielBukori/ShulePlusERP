@@ -3,58 +3,68 @@
 
 {% block content %}
 <div class="max-w-xl mx-auto px-4 py-6">
-  <h1 class="font-serif text-xl text-navy mb-5">Weka Kinachotakiwa Kuletwa</h1>
 
-  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
+  <p class="eyebrow mb-1">Michango</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-5" style="color: var(--brand)">Weka Kinachotakiwa Kuletwa</h1>
+
+  <div class="sp-card p-5 mb-5 sp-reveal">
     <form method="POST" class="grid grid-cols-1 gap-3">
       {% csrf_token %}
-      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.school_class.label }}</label>{{ form.school_class }}</div>
-      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.term.label }}</label>{{ form.term }}</div>
-      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.academic_year.label }}</label>{{ form.academic_year }}</div>
-      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.item_name.label }}</label>{{ form.item_name }}{% for e in form.item_name.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}</div>
-      <div><label class="block text-xs uppercase text-gray-500 mb-1">{{ form.quantity_required.label }}</label>{{ form.quantity_required }}</div>
-      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded py-2.5 mt-2">Weka Sharti</button>
+      <div><label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.school_class.label }}</label>{{ form.school_class }}</div>
+      <div><label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.term.label }}</label>{{ form.term }}</div>
+      <div><label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.academic_year.label }}</label>{{ form.academic_year }}</div>
+      <div><label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.item_name.label }}</label>{{ form.item_name }}{% for e in form.item_name.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}</div>
+      <div><label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.quantity_required.label }}</label>{{ form.quantity_required }}</div>
+      <button type="submit" class="sp-btn sp-btn-primary w-full mt-2">Weka Sharti</button>
     </form>
   </div>
 
-  <div class="bg-white border border-gray-200 rounded p-5 overflow-x-auto">
-    <h3 class="font-serif text-navy mb-3">Masharti Yaliyopo</h3>
-    <table class="w-full text-sm min-w-[560px]">
-      <thead><tr class="bg-navy text-white text-xs uppercase">
-        <th class="p-2">Muhula</th><th class="p-2">Mwaka</th><th class="p-2">Darasa</th><th class="p-2 text-left">Kifaa</th><th class="p-2">Kiasi</th><th class="p-2">Hali</th><th class="p-2">Kitendo</th>
-      </tr></thead>
-      <tbody>
-        {% for r in requirements %}
-          <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100 text-center">
-            <td class="p-2">{{ r.get_term_display }}</td>
-            <td class="p-2">{{ r.academic_year }}</td>
-            <td class="p-2">{{ r.school_class|default:"Shule Nzima" }}</td>
-            <td class="p-2 text-left font-medium">{{ r.item_name }}</td>
-            <td class="p-2">{{ r.quantity_required }}</td>
-            <td class="p-2">
-              {% if r.is_published %}
-                <span class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-semibold">IMECHAPISHWA</span>
-              {% else %}
-                <span class="text-[10px] bg-gray-100 text-gray-500 px-2 py-1 rounded-full font-semibold">RASIMU</span>
-              {% endif %}
-            </td>
-            <td class="p-2">
-              {% if r.is_published %}
-                <span class="text-xs text-gray-400">&#10003; {{ r.published_at|date:"d/m/Y" }}</span>
-              {% else %}
-                <form method="POST" action="{% url 'store:publish_requirement' r.id %}"
-                      onsubmit="return confirm('Deni la {{ r.item_name }} litawekwa kwa wanafunzi wote wa {{ r.school_class|default:"shule nzima" }}. Endelea?');">
-                  {% csrf_token %}
-                  <button type="submit" class="bg-gold text-amber-950 text-xs font-semibold px-3 py-1.5 rounded-full hover:brightness-95">Chapisha</button>
-                </form>
-              {% endif %}
-            </td>
-          </tr>
-        {% empty %}
-          <tr><td colspan="7" class="text-center text-gray-400 py-6">Hakuna masharti bado.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="sp-card overflow-x-auto sp-reveal">
+    <div class="p-5">
+      <h3 class="font-serif mb-3" style="color: var(--brand)">Masharti Yaliyopo</h3>
+      <table class="w-full text-sm min-w-[560px]">
+        <thead><tr class="text-xs uppercase" style="background: var(--brand); color: var(--brand-ink)">
+          <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Muhula</th>
+          <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Mwaka</th>
+          <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Darasa</th>
+          <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Kifaa</th>
+          <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Kiasi</th>
+          <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Hali</th>
+          <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Kitendo</th>
+        </tr></thead>
+        <tbody>
+          {% for r in requirements %}
+            <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100 text-center">
+              <td class="p-2">{{ r.get_term_display }}</td>
+              <td class="p-2">{{ r.academic_year }}</td>
+              <td class="p-2">{{ r.school_class|default:"Shule Nzima" }}</td>
+              <td class="p-2 text-left font-medium">{{ r.item_name }}</td>
+              <td class="p-2">{{ r.quantity_required }}</td>
+              <td class="p-2">
+                {% if r.is_published %}
+                  <span class="sp-chip is-active">IMECHAPISHWA</span>
+                {% else %}
+                  <span class="sp-chip">RASIMU</span>
+                {% endif %}
+              </td>
+              <td class="p-2">
+                {% if r.is_published %}
+                  <span class="text-xs" style="color: var(--ink-3)">&#10003; {{ r.published_at|date:"d/m/Y" }}</span>
+                {% else %}
+                  <form method="POST" action="{% url 'store:publish_requirement' r.id %}"
+                        onsubmit="return confirm('Deni la {{ r.item_name }} litawekwa kwa wanafunzi wote wa {{ r.school_class|default:"shule nzima" }}. Endelea?');">
+                    {% csrf_token %}
+                    <button type="submit" class="sp-btn sp-btn-gold" style="padding: 6px 12px; font-size: 12px">Chapisha</button>
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="7" class="text-center py-6" style="color: var(--ink-3)">Hakuna masharti bado.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 {% endblock %}

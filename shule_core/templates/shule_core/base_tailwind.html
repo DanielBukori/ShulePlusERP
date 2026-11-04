@@ -1,11 +1,14 @@
 {% load static school_media %}
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="sw"{% if school.primary_color %} data-tenant-themed style="--tenant-brand: {{ school.primary_color }}"{% endif %}>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="{{ school.primary_color|default:'#0B2545' }}">
 <title>{% block title %}ShulePlus ERP{% endblock %} &middot; {{ school.name|default:"ShulePlus ERP" }}</title>
+<script src="{% static 'js/theme.js' %}"></script>
 <link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
+<link href="{% static 'css/app.css' %}" rel="stylesheet">
 {% block extra_head %}{% endblock %}
 <style>
   /* ============================================================
@@ -62,6 +65,7 @@
 </head>
 <body class="bg-paper min-h-screen">
 
+{% if request.user.is_authenticated %}
 <!-- SIDEBAR -->
 <aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-navy text-white transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-40 flex flex-col">
 
@@ -75,37 +79,14 @@
     {% endif %}
     <div class="min-w-0">
       <div class="text-white font-serif font-bold text-sm truncate">{{ school.name|default:"ShulePlus ERP" }}</div>
-      <div class="text-gold/80 text-[10px] uppercase tracking-widest truncate">{% block page_tag %}Mfumo Rasmi wa Shule{% endblock %}</div>
+      <div class="text-gold/80 text-[10px] uppercase tracking-widest truncate">{{ request.user.get_role_display }}</div>
     </div>
-    <button onclick="document.getElementById('sidebar').classList.add('-translate-x-full')" class="md:hidden ml-auto text-white">
+    <button data-drawer="close" class="md:hidden ml-auto text-white" aria-label="Funga menyu">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
   </div>
 
   <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-0.5 text-sm">
-
-    <!-- Notifications bell -->
-    <div class="relative mb-2 px-1">
-      <button onclick="document.getElementById('notif-dropdown').classList.toggle('hidden')"
-              class="w-full flex items-center gap-3 px-2 py-2 rounded hover:bg-white/10 relative">
-        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-        <span>Taarifa</span>
-        {% if unread_notifications_count %}
-          <span class="ml-auto bg-red-600 text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center notif-pulse">{{ unread_notifications_count }}</span>
-        {% endif %}
-      </button>
-      <div id="notif-dropdown" class="hidden absolute left-0 top-full mt-1 w-72 bg-white text-gray-800 rounded-lg shadow-xl z-50 max-h-80 overflow-y-auto">
-        {% for n in recent_notifications %}
-          <a href="{% url 'notifications:mark_read_and_go' n.id %}" class="block px-3 py-2 text-xs border-b border-gray-100 {% if not n.is_read %}bg-blue-50{% endif %} hover:bg-gray-50">
-            {{ n.message }}
-            <span class="block text-[10px] text-gray-400 mt-0.5">{{ n.created_at|date:"d/m/Y H:i" }}</span>
-          </a>
-        {% empty %}
-          <p class="text-xs text-gray-400 text-center py-4">Hakuna taarifa bado.</p>
-        {% endfor %}
-        <a href="{% url 'notifications:notifications_list' %}" class="block text-center text-xs text-navy2 font-semibold py-2 hover:bg-gray-50">Ona Zote &rarr;</a>
-      </div>
-    </div>
 
     {% if request.user.role == 'HEADMASTER' or request.user.role == 'SECOND_MASTER' or request.user.role == 'ACADEMIC' %}
       <form method="GET" action="{% url 'academic:global_search' %}" class="mb-3 px-1">
@@ -115,6 +96,10 @@
     {% endif %}
 
     {% if request.user.role == 'HEADMASTER' or request.user.role == 'SECOND_MASTER' %}
+      <a href="{% url 'shule_core:onboarding' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10">
+        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 7l2 2 4-4"/></svg>
+        Hatua za Kuanza
+      </a>
       <a href="{% url 'academic:academic_dashboard' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10">
         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
         Academic
@@ -171,6 +156,10 @@
       <a href="{% url 'branding:branding_dashboard' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10">
         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0zM3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 010 18M12 3a15 15 0 000 18"/></svg>
         Tovuti ya Shule
+      </a>
+      <a href="{% url 'shule_core:school_settings' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10">
+        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Mipangilio ya Shule
       </a>
       {% if request.user.role == 'HEADMASTER' %}
         <div class="border-t border-white/10 my-2"></div>
@@ -275,30 +264,95 @@
       <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
       Badilisha Password
     </a>
-    <form method="POST" action="{% url 'accounts:logout' %}">
-      {% csrf_token %}
-      <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 text-sm text-gray-300">
-        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-        Toka
-      </button>
-    </form>
   </div>
 </aside>
 
 <!-- Overlay ya simu - inafunga sidebar ukibonyeza nje yake -->
-<div id="sidebar-overlay" onclick="document.getElementById('sidebar').classList.add('-translate-x-full'); this.classList.add('hidden')"
-     class="hidden fixed inset-0 bg-black/40 z-30 md:hidden"></div>
+<div id="sidebar-overlay" class="hidden fixed inset-0 bg-black/40 z-30 md:hidden"></div>
+{% endif %}
 
 <!-- MAIN CONTENT -->
-<div class="md:ml-64">
-  <!-- Mobile top bar -->
-  <div class="md:hidden bg-gradient-to-r from-navy to-navy2 border-b-4 border-gold px-4 py-3 flex items-center justify-between sticky top-0 z-20">
-    <span class="text-white font-serif font-bold text-sm">{{ school.name|default:"ShulePlus ERP" }}</span>
-    <button onclick="document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebar-overlay').classList.remove('hidden')"
-            class="text-white">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
-  </div>
+<div class="{% if request.user.is_authenticated %}md:ml-64{% endif %}">
+
+  <!-- TOPBAR - moja kwa simu na kompyuta -->
+  <header class="sp-topbar">
+    {% if request.user.is_authenticated %}
+      <button data-drawer="open" class="sp-icon-btn md:hidden" aria-label="Fungua menyu">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    {% else %}
+      <a href="{% if school %}{% url 'branding:school_home' %}{% else %}/{% endif %}" class="flex items-center gap-2 min-w-0">
+        <span class="font-serif font-bold text-[15px] truncate" style="color: var(--brand)">{{ school.name|default:"ShulePlus ERP" }}</span>
+      </a>
+    {% endif %}
+
+    <div class="min-w-0 hidden sm:block">
+      <div class="text-[15px] font-bold truncate" style="color: var(--ink)">{% block page_title %}{{ school.name|default:"ShulePlus ERP" }}{% endblock %}</div>
+      <div class="eyebrow truncate">{% block page_tag %}Mfumo Rasmi wa Shule{% endblock %}</div>
+    </div>
+
+    <div class="ml-auto flex items-center gap-2 shrink-0">
+      {% if request.user.is_authenticated %}
+        <!-- Bell -->
+        <div class="relative">
+          <button data-popover="notif-dropdown" class="sp-icon-btn" aria-label="Taarifa" aria-expanded="false">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            {% if unread_notifications_count %}
+              <span class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] px-1 flex items-center justify-center notif-pulse">{{ unread_notifications_count }}</span>
+            {% endif %}
+          </button>
+          <div id="notif-dropdown" data-popover-panel class="hidden absolute right-0 top-full mt-2 w-80 sp-card overflow-hidden z-50 max-h-96 overflow-y-auto">
+            <div class="px-4 py-2.5 border-b flex items-center justify-between" style="border-color: var(--line)">
+              <span class="eyebrow">Taarifa</span>
+              <a href="{% url 'notifications:notifications_list' %}" class="text-xs font-semibold" style="color: var(--brand)">Ona Zote &rarr;</a>
+            </div>
+            {% for n in recent_notifications %}
+              <a href="{% url 'notifications:mark_read_and_go' n.id %}" class="block px-4 py-2.5 text-xs border-b {% if not n.is_read %}font-semibold{% endif %}" style="border-color: var(--line); color: var(--ink)">
+                {{ n.message }}
+                <span class="block text-[10px] mt-0.5 font-normal" style="color: var(--ink-3)">{{ n.created_at|date:"d/m/Y H:i" }}</span>
+              </a>
+            {% empty %}
+              <p class="text-xs text-center py-6" style="color: var(--ink-3)">Hakuna taarifa bado.</p>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Dark mode -->
+      <button data-theme-toggle class="sp-icon-btn" aria-pressed="false" title="Washa mwonekano wa usiku">
+        <svg data-icon="moon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg data-icon="sun" class="w-5 h-5" style="display:none" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m14.95-6.95l-1.414 1.414M7.464 16.536L6.05 17.95m11.9 0l-1.414-1.414M7.464 7.464L6.05 6.05M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+
+      {% if request.user.is_authenticated %}
+        <div class="relative">
+          <button data-popover="user-menu" class="flex items-center gap-2 sp-btn sp-btn-ghost !px-2.5">
+            <span class="h-7 w-7 rounded-full grid place-items-center text-[11px] font-bold text-white shrink-0" style="background: linear-gradient(135deg, var(--brand-2), var(--brand))">
+              {{ request.user.get_full_name|default:request.user.username|slice:":1"|upper }}
+            </span>
+            <span class="hidden lg:block text-[13px] font-semibold max-w-[130px] truncate" style="color: var(--ink)">{{ request.user.get_full_name|default:request.user.username }}</span>
+          </button>
+          <div id="user-menu" data-popover-panel class="hidden absolute right-0 top-full mt-2 w-56 sp-card overflow-hidden z-50">
+            <div class="px-4 py-3 border-b" style="border-color: var(--line)">
+              <div class="text-sm font-bold truncate" style="color: var(--ink)">{{ request.user.get_full_name|default:request.user.username }}</div>
+              <div class="text-[11px] uppercase tracking-wider font-semibold mt-0.5" style="color: var(--accent)">{{ request.user.get_role_display }}</div>
+            </div>
+            <a href="{% url 'accounts:password_change' %}" class="flex items-center gap-2.5 px-4 py-2.5 text-sm hover:opacity-80" style="color: var(--ink-2)">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+              Badilisha Password
+            </a>
+            <form method="POST" action="{% url 'accounts:logout' %}" class="border-t" style="border-color: var(--line)">
+              {% csrf_token %}
+              <button type="submit" class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-left hover:opacity-80" style="color: var(--bad)">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                Toka
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </header>
 
   <div class="min-h-[80vh] page-fade-in">
     {% block content %}{% endblock %}
@@ -307,6 +361,8 @@
   <footer class="text-center text-xs text-gray-400 py-4">&copy; {% now "Y" %} ShulePlusERP</footer>
 </div>
 
+<script src="{% static 'js/app.js' %}" defer></script>
+<script src="{% static 'js/charts.js' %}" defer></script>
 {% block extra_scripts %}{% endblock %}
 <script src="{% static 'js/password_visibility.js' %}" defer></script>
 </body>

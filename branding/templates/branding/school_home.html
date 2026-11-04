@@ -1,70 +1,83 @@
 {% extends 'branding/public_base.html' %}
-{% load school_media %}
+{% load static school_media %}
 {% block title %}{{ school.name }}{% endblock %}
 
 {% block content %}
 
 <!-- HERO -->
 <section class="relative text-white overflow-hidden"
-  style="background: linear-gradient(to bottom right, rgba(11,37,69,.92), rgba(15,52,96,.88)){% if profile.cover_image %}, url('{% school_media_url profile 'cover_image' %}') center/cover{% endif %};">
-  <div class="max-w-5xl mx-auto px-4 py-20 text-center">
+  style="background: linear-gradient(to bottom right, color-mix(in srgb, var(--brand) 92%, transparent), color-mix(in srgb, var(--brand-2) 88%, transparent)){% if profile.cover_image %}, url('{% school_media_url profile 'cover_image' %}') center/cover{% endif %};">
+  <div class="max-w-5xl mx-auto px-4 py-24 text-center sp-reveal">
     {% if school.logo %}
-      <img src="{% school_media_url school 'logo' %}" class="h-20 w-20 rounded-full border-4 border-gold object-cover mx-auto mb-5">
+      <img src="{% school_media_url school 'logo' %}" loading="lazy"
+           class="h-20 w-20 rounded-full border-4 object-cover mx-auto mb-6 shadow-lg" style="border-color: var(--accent)" alt="{{ school.name }}">
     {% endif %}
-    <h1 class="font-serif text-3xl md:text-5xl font-bold mb-3">{{ school.name }}</h1>
+    <h1 class="font-serif text-3xl md:text-5xl font-bold mb-3 leading-tight">{{ school.name }}</h1>
     {% if profile.motto %}
-      <p class="text-gold italic text-lg mb-6">"{{ profile.motto }}"</p>
+      <p class="text-gold italic text-lg mb-2">"{{ profile.motto }}"</p>
     {% endif %}
-    <div class="flex flex-col sm:flex-row gap-3 justify-center mt-6">
+    <div class="flex flex-col sm:flex-row gap-3 justify-center mt-8">
       <a href="{% if subdomain %}{% url 'branding:admissions_local' subdomain=subdomain %}{% else %}{% url 'branding:admissions' %}{% endif %}"
-         class="bg-gold text-amber-950 font-semibold px-8 py-3 rounded-full">Jiunge na Shule Yetu</a>
-      <a href="/accounts/login/" class="border border-white/40 text-white font-semibold px-8 py-3 rounded-full hover:bg-white/10">Ingia</a>
+         class="sp-btn sp-btn-gold !px-8 !py-3">Jiunge na Shule Yetu</a>
+      <a href="/accounts/login/" class="sp-btn text-white font-semibold !px-8 !py-3 hover:bg-white/10"
+         style="border-color: rgba(255,255,255,.45)">Ingia</a>
     </div>
   </div>
 </section>
 
 <!-- STATS BAR -->
-<section class="bg-navy2 text-white">
-  <div class="max-w-5xl mx-auto px-4 py-6 grid grid-cols-3 gap-4 text-center">
+<section class="text-white border-b" style="background: color-mix(in srgb, var(--brand) 82%, #0F3460); border-color: color-mix(in srgb, var(--accent) 45%, transparent)">
+  <div class="max-w-5xl mx-auto px-4 py-10 grid grid-cols-3 gap-4 text-center sp-reveal">
     <div>
-      <div class="text-3xl font-serif font-bold text-gold">{{ stats.students }}+</div>
-      <div class="text-xs uppercase tracking-wide text-gray-300 mt-1">Wanafunzi</div>
+      <div class="sp-kpi-value font-serif" style="color: var(--accent)" data-count="{{ stats.students }}" data-count-suffix="+">0</div>
+      <div class="sp-kpi-label mt-1" style="color: rgba(255,255,255,.72)">Wanafunzi</div>
     </div>
     <div>
-      <div class="text-3xl font-serif font-bold text-gold">{{ stats.teachers }}+</div>
-      <div class="text-xs uppercase tracking-wide text-gray-300 mt-1">Walimu</div>
+      <div class="sp-kpi-value font-serif" style="color: var(--accent)" data-count="{{ stats.teachers }}" data-count-suffix="+">0</div>
+      <div class="sp-kpi-label mt-1" style="color: rgba(255,255,255,.72)">Walimu</div>
     </div>
     <div>
-      <div class="text-3xl font-serif font-bold text-gold">{{ stats.programs }}</div>
-      <div class="text-xs uppercase tracking-wide text-gray-300 mt-1">Programu/Michepuo</div>
+      <div class="sp-kpi-value font-serif" style="color: var(--accent)" data-count="{{ stats.programs }}">0</div>
+      <div class="sp-kpi-label mt-1" style="color: rgba(255,255,255,.72)">Programu/Michepuo</div>
     </div>
   </div>
 </section>
 
 <!-- ABOUT / MISSION / VISION -->
 {% if profile.about_text or profile.mission or profile.vision %}
-<section id="about" class="max-w-5xl mx-auto px-4 py-16">
+<section id="about" class="max-w-5xl mx-auto px-4 py-20 sp-reveal">
   {% if profile.about_text %}
-    <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="text-gold text-xs uppercase font-bold tracking-widest">Kuhusu Sisi</span>
-      <p class="text-gray-700 leading-relaxed mt-3">{{ profile.about_text }}</p>
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <p class="eyebrow mb-2">Kuhusu Sisi</p>
+      <p class="text-gray-700 leading-relaxed">{{ profile.about_text }}</p>
     </div>
   {% endif %}
 
   {% if profile.mission or profile.vision %}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       {% if profile.vision %}
-        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-          <div class="text-gold text-2xl mb-2">&#127919;</div>
-          <h3 class="font-serif font-bold text-navy text-lg mb-2">Dira Yetu (Vision)</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">{{ profile.vision }}</p>
+        <div class="sp-card sp-card-lift p-8">
+          <div class="h-11 w-11 rounded-xl grid place-items-center mb-4"
+               style="background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent)">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <h3 class="font-serif font-bold text-lg mb-2" style="color: var(--brand)">Dira Yetu (Vision)</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--ink-2)">{{ profile.vision }}</p>
         </div>
       {% endif %}
       {% if profile.mission %}
-        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-          <div class="text-gold text-2xl mb-2">&#128737;</div>
-          <h3 class="font-serif font-bold text-navy text-lg mb-2">Dhamira Yetu (Mission)</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">{{ profile.mission }}</p>
+        <div class="sp-card sp-card-lift p-8">
+          <div class="h-11 w-11 rounded-xl grid place-items-center mb-4"
+               style="background: color-mix(in srgb, var(--brand) 12%, transparent); color: var(--brand)">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5c0 4.6-2.9 8.2-7 10-4.1-1.8-7-5.4-7-10V6l7-3z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <h3 class="font-serif font-bold text-lg mb-2" style="color: var(--brand)">Dhamira Yetu (Mission)</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--ink-2)">{{ profile.mission }}</p>
         </div>
       {% endif %}
     </div>
@@ -74,28 +87,30 @@
 
 <!-- LEADERSHIP PREVIEW -->
 {% if leadership %}
-<section class="bg-white border-y border-gray-100">
-  <div class="max-w-5xl mx-auto px-4 py-16">
-    <div class="text-center mb-10">
-      <span class="text-gold text-xs uppercase font-bold tracking-widest">Uongozi</span>
-      <h2 class="font-serif text-2xl md:text-3xl font-bold text-navy mt-2">Wanaoongoza Shule Yetu</h2>
+<section class="border-y" style="background: var(--panel); border-color: var(--line)">
+  <div class="max-w-5xl mx-auto px-4 py-20 sp-reveal">
+    <div class="text-center mb-12">
+      <p class="eyebrow mb-2">Uongozi</p>
+      <h2 class="font-serif text-2xl md:text-3xl font-bold" style="color: var(--brand)">Wanaoongoza Shule Yetu</h2>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
       {% for m in leadership %}
         <div class="text-center">
           {% if m.photo %}
-            <img src="{% school_media_url m 'photo' %}" class="w-24 h-24 rounded-full object-cover mx-auto mb-3 border-2 border-gold">
+            <img src="{% school_media_url m 'photo' %}" loading="lazy"
+                 class="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-2" style="border-color: var(--accent)" alt="{{ m.full_name }}">
           {% else %}
-            <div class="w-24 h-24 rounded-full bg-navy/10 mx-auto mb-3 flex items-center justify-center text-navy font-serif font-bold text-2xl">{{ m.full_name|slice:":1" }}</div>
+            <div class="w-24 h-24 rounded-full mx-auto mb-4 grid place-items-center font-serif font-bold text-2xl"
+                 style="background: color-mix(in srgb, var(--brand) 8%, transparent); color: var(--brand)">{{ m.full_name|slice:":1" }}</div>
           {% endif %}
-          <div class="font-semibold text-navy text-sm">{{ m.full_name }}</div>
-          <div class="text-gray-500 text-xs">{{ m.role_title }}</div>
+          <div class="font-semibold text-sm" style="color: var(--ink)">{{ m.full_name }}</div>
+          <div class="text-xs mt-1" style="color: var(--ink-3)">{{ m.role_title }}</div>
         </div>
       {% endfor %}
     </div>
-    <div class="text-center mt-8">
+    <div class="text-center mt-12">
       <a href="{% if subdomain %}{% url 'branding:leadership_list_local' subdomain=subdomain %}{% else %}{% url 'branding:leadership_list' %}{% endif %}"
-         class="text-navy2 font-semibold text-sm hover:underline">Ona Uongozi Wote &rarr;</a>
+         class="sp-btn sp-btn-ghost">Ona Uongozi Wote &rarr;</a>
     </div>
   </div>
 </section>
@@ -103,17 +118,17 @@
 
 <!-- PROGRAMS -->
 {% if programs %}
-<section class="max-w-5xl mx-auto px-4 py-16">
-  <div class="text-center mb-10">
-    <span class="text-gold text-xs uppercase font-bold tracking-widest">Taaluma</span>
-    <h2 class="font-serif text-2xl md:text-3xl font-bold text-navy mt-2">Programu Zetu za Kitaaluma</h2>
+<section class="max-w-5xl mx-auto px-4 py-20 sp-reveal">
+  <div class="text-center mb-12">
+    <p class="eyebrow mb-2">Taaluma</p>
+    <h2 class="font-serif text-2xl md:text-3xl font-bold" style="color: var(--brand)">Programu Zetu za Kitaaluma</h2>
   </div>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     {% for p in programs %}
-      <div class="border border-gray-200 rounded-xl p-6 hover:shadow-md">
-        <span class="inline-block bg-navy/10 text-navy text-xs font-bold px-3 py-1 rounded-full mb-3">{{ p.get_level_display }}</span>
-        <h3 class="font-serif font-bold text-navy text-lg mb-2">{{ p.name }}</h3>
-        {% if p.description %}<p class="text-gray-600 text-sm leading-relaxed">{{ p.description }}</p>{% endif %}
+      <div class="sp-card sp-card-lift p-7">
+        <span class="sp-chip mb-4">{{ p.get_level_display }}</span>
+        <h3 class="font-serif font-bold text-lg mb-2" style="color: var(--brand)">{{ p.name }}</h3>
+        {% if p.description %}<p class="text-sm leading-relaxed" style="color: var(--ink-2)">{{ p.description }}</p>{% endif %}
       </div>
     {% endfor %}
   </div>
@@ -122,22 +137,30 @@
 
 <!-- FACILITIES -->
 {% if facilities %}
-<section class="bg-white border-y border-gray-100">
-  <div class="max-w-5xl mx-auto px-4 py-16">
-    <div class="text-center mb-10">
-      <span class="text-gold text-xs uppercase font-bold tracking-widest">Miundombinu</span>
-      <h2 class="font-serif text-2xl md:text-3xl font-bold text-navy mt-2">Vifaa Tulivyonavyo</h2>
+<section class="border-y" style="background: var(--panel); border-color: var(--line)">
+  <div class="max-w-5xl mx-auto px-4 py-20 sp-reveal">
+    <div class="text-center mb-12">
+      <p class="eyebrow mb-2">Miundombinu</p>
+      <h2 class="font-serif text-2xl md:text-3xl font-bold" style="color: var(--brand)">Vifaa Tulivyonavyo</h2>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
       {% for f in facilities %}
-        <div class="text-center border border-gray-100 rounded-xl overflow-hidden hover:shadow-md">
+        <div class="sp-card sp-card-lift text-center overflow-hidden">
           {% if f.image %}
-            <img src="{% school_media_url f 'image' %}" class="w-full h-32 object-cover">
+            <img src="{% school_media_url f 'image' %}" loading="lazy" class="w-full h-32 object-cover" alt="{{ f.name }}">
           {% else %}
-            <div class="w-full h-32 bg-navy/5 flex items-center justify-center text-4xl">{{ f.icon|default:"&#127963;" }}</div>
+            <div class="w-full h-32 grid place-items-center" style="background: color-mix(in srgb, var(--brand) 6%, transparent)">
+              {% if f.icon %}
+                <span class="text-3xl leading-none">{{ f.icon }}</span>
+              {% else %}
+                <svg class="w-9 h-9" style="color: color-mix(in srgb, var(--brand) 45%, transparent)" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-5h6v5"/>
+                </svg>
+              {% endif %}
+            </div>
           {% endif %}
-          <div class="p-3">
-            <div class="font-semibold text-navy text-sm">{{ f.name }}</div>
+          <div class="p-4">
+            <div class="font-semibold text-sm" style="color: var(--ink)">{{ f.name }}</div>
           </div>
         </div>
       {% endfor %}
@@ -148,25 +171,26 @@
 
 <!-- TESTIMONIALS -->
 {% if testimonials %}
-<section class="max-w-5xl mx-auto px-4 py-16">
-  <div class="text-center mb-10">
-    <span class="text-gold text-xs uppercase font-bold tracking-widest">Maoni</span>
-    <h2 class="font-serif text-2xl md:text-3xl font-bold text-navy mt-2">Wanachosema Wazazi na Wahitimu</h2>
+<section class="max-w-5xl mx-auto px-4 py-20 sp-reveal">
+  <div class="text-center mb-12">
+    <p class="eyebrow mb-2">Maoni</p>
+    <h2 class="font-serif text-2xl md:text-3xl font-bold" style="color: var(--brand)">Wanachosema Wazazi na Wahitimu</h2>
   </div>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     {% for t in testimonials %}
-      <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-        <div class="text-gold text-3xl mb-2">&#8220;</div>
-        <p class="text-gray-600 text-sm italic leading-relaxed mb-4">{{ t.quote }}</p>
+      <div class="sp-card sp-card-lift p-7">
+        <div class="font-serif text-4xl leading-none mb-2" style="color: var(--accent)">&#8220;</div>
+        <p class="text-sm italic leading-relaxed mb-5" style="color: var(--ink-2)">{{ t.quote }}</p>
         <div class="flex items-center gap-3">
           {% if t.photo %}
-            <img src="{% school_media_url t 'photo' %}" class="w-10 h-10 rounded-full object-cover">
+            <img src="{% school_media_url t 'photo' %}" loading="lazy" class="w-10 h-10 rounded-full object-cover" alt="{{ t.author_name }}">
           {% else %}
-            <div class="w-10 h-10 rounded-full bg-navy/10 flex items-center justify-center text-navy font-bold text-sm">{{ t.author_name|slice:":1" }}</div>
+            <div class="w-10 h-10 rounded-full grid place-items-center font-bold text-sm"
+                 style="background: color-mix(in srgb, var(--brand) 10%, transparent); color: var(--brand)">{{ t.author_name|slice:":1" }}</div>
           {% endif %}
           <div>
-            <div class="font-semibold text-navy text-sm">{{ t.author_name }}</div>
-            <div class="text-gray-400 text-xs">{{ t.get_author_role_display }}</div>
+            <div class="font-semibold text-sm" style="color: var(--ink)">{{ t.author_name }}</div>
+            <div class="text-xs" style="color: var(--ink-3)">{{ t.get_author_role_display }}</div>
           </div>
         </div>
       </div>
@@ -177,54 +201,71 @@
 
 <!-- LATEST NEWS -->
 {% if posts %}
-<section class="bg-white border-y border-gray-100">
-  <div class="max-w-5xl mx-auto px-4 py-16">
-    <div class="text-center mb-10">
-      <span class="text-gold text-xs uppercase font-bold tracking-widest">Habari</span>
-      <h2 class="font-serif text-2xl md:text-3xl font-bold text-navy mt-2">Habari na Matukio ya Hivi Karibuni</h2>
+<section class="border-y" style="background: var(--panel); border-color: var(--line)">
+  <div class="max-w-5xl mx-auto px-4 py-20 sp-reveal">
+    <div class="text-center mb-12">
+      <p class="eyebrow mb-2">Habari</p>
+      <h2 class="font-serif text-2xl md:text-3xl font-bold" style="color: var(--brand)">Habari na Matukio ya Hivi Karibuni</h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       {% for post in posts %}
         <a href="{% if subdomain %}{% url 'branding:post_detail_local' subdomain=subdomain post_id=post.id %}{% else %}{% url 'branding:post_detail' post_id=post.id %}{% endif %}"
-           class="block border border-gray-200 rounded-xl overflow-hidden hover:shadow-md">
+           class="block sp-card sp-card-lift overflow-hidden">
           {% if post.image %}
-            <img src="{% school_media_url post 'image' %}" class="w-full h-40 object-cover">
+            <img src="{% school_media_url post 'image' %}" loading="lazy" class="w-full h-40 object-cover" alt="{{ post.title }}">
           {% endif %}
-          <div class="p-4">
-            <span class="text-xs uppercase text-gold font-semibold">{{ post.get_category_display }}</span>
-            <h3 class="font-serif font-bold text-navy mt-1">{{ post.title }}</h3>
-            <p class="text-gray-400 text-xs mt-2">{{ post.created_at|date:"d/m/Y" }}</p>
+          <div class="p-5">
+            <span class="text-xs uppercase font-semibold" style="color: var(--accent)">{{ post.get_category_display }}</span>
+            <h3 class="font-serif font-bold mt-1" style="color: var(--brand)">{{ post.title }}</h3>
+            <p class="text-xs mt-2" style="color: var(--ink-3)">{{ post.created_at|date:"d/m/Y" }}</p>
           </div>
         </a>
       {% endfor %}
     </div>
-    <div class="text-center mt-8">
+    <div class="text-center mt-12">
       <a href="{% if subdomain %}{% url 'branding:post_list_local' subdomain=subdomain %}{% else %}{% url 'branding:post_list' %}{% endif %}"
-         class="text-navy2 font-semibold text-sm hover:underline">Ona Habari Zote &rarr;</a>
+         class="sp-btn sp-btn-ghost">Ona Habari Zote &rarr;</a>
     </div>
   </div>
 </section>
 {% endif %}
 
 <!-- ADMISSIONS CTA -->
-<section class="bg-gradient-to-br from-navy to-navy2 text-white">
-  <div class="max-w-3xl mx-auto px-4 py-16 text-center">
-    <h2 class="font-serif text-2xl md:text-3xl font-bold mb-3">Uko Tayari Kujiunga Nasi?</h2>
-    <p class="text-gray-300 mb-8">Jaza fomu fupi ya maombi, na uongozi wa shule utawasiliana nawe.</p>
+<section class="text-white" style="background: linear-gradient(135deg, var(--brand), color-mix(in srgb, var(--brand) 55%, #0F3460))">
+  <div class="max-w-3xl mx-auto px-4 py-20 text-center sp-reveal">
+    <p class="eyebrow mb-2" style="color: var(--accent)">Usajili</p>
+    <h2 class="font-serif text-2xl md:text-3xl font-bold text-white mb-3">Uko Tayari Kujiunga Nasi?</h2>
+    <p class="text-gray-300 mb-9">Jaza fomu fupi ya maombi, na uongozi wa shule utawasiliana nawe.</p>
     <a href="{% if subdomain %}{% url 'branding:admissions_local' subdomain=subdomain %}{% else %}{% url 'branding:admissions' %}{% endif %}"
-       class="bg-gold text-amber-950 font-semibold px-8 py-3 rounded-full inline-block">Omba Kujiunga Sasa</a>
+       class="sp-btn sp-btn-gold !px-8 !py-3">Omba Kujiunga Sasa</a>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact" class="max-w-5xl mx-auto px-4 py-16 text-center">
-  <span class="text-gold text-xs uppercase font-bold tracking-widest">Mawasiliano</span>
-  <h2 class="font-serif text-2xl font-bold text-navy mt-2 mb-6">Tupigie au Tutembelee</h2>
-  <div class="flex flex-col sm:flex-row justify-center gap-6 text-gray-600 text-sm">
-    {% if profile.contact_phone %}<div>&#128222; {{ profile.contact_phone }}</div>{% endif %}
-    {% if profile.contact_email %}<div>&#9993; {{ profile.contact_email }}</div>{% endif %}
-    {% if school.address %}<div>&#128205; {{ school.address }}</div>{% endif %}
+<section id="contact" class="max-w-5xl mx-auto px-4 py-20 text-center sp-reveal">
+  <p class="eyebrow mb-2">Mawasiliano</p>
+  <h2 class="font-serif text-2xl font-bold mb-8" style="color: var(--brand)">Tupigie au Tutembelee</h2>
+  <div class="flex flex-col sm:flex-row justify-center gap-4 text-sm">
+    {% if profile.contact_phone %}
+      <span class="sp-card px-4 py-2.5 flex items-center justify-center gap-2" style="color: var(--ink-2)">
+        <svg class="w-4 h-4 shrink-0" style="color: var(--accent)" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.3a1 1 0 01.95.68l1.2 3.2a1 1 0 01-.28 1.06L9.9 12a15.4 15.4 0 006.1 6.1l1.86-1.86a1 1 0 011.06-.28l3.2 1.2a1 1 0 01.68.95V21a2 2 0 01-2 2h-1C10.3 23 3 15.7 3 7V5z"/></svg>
+        {{ profile.contact_phone }}
+      </span>
+    {% endif %}
+    {% if profile.contact_email %}
+      <span class="sp-card px-4 py-2.5 flex items-center justify-center gap-2" style="color: var(--ink-2)">
+        <svg class="w-4 h-4 shrink-0" style="color: var(--accent)" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        {{ profile.contact_email }}
+      </span>
+    {% endif %}
+    {% if school.address %}
+      <span class="sp-card px-4 py-2.5 flex items-center justify-center gap-2" style="color: var(--ink-2)">
+        <svg class="w-4 h-4 shrink-0" style="color: var(--accent)" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        {{ school.address }}
+      </span>
+    {% endif %}
   </div>
 </section>
 
+<script src="{% static 'js/app.js' %}" defer></script>
 {% endblock %}

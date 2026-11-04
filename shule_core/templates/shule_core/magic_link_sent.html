@@ -6,21 +6,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Angalia Email Yako</title>
 <link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
+<link href="{% static 'css/app.css' %}" rel="stylesheet">
 </head>
-<body class="bg-navy min-h-screen flex items-center justify-center px-4">
+<body class="min-h-screen flex items-center justify-center px-4 py-10" style="background: var(--surface)">
 
-  <div class="w-full max-w-sm bg-white rounded-xl p-8 text-center relative">
-    <div class="absolute inset-2 border border-gold/40 rounded pointer-events-none"></div>
+  <div class="sp-card w-full max-w-sm p-8 text-center relative">
+    <div class="absolute inset-2 rounded-xl pointer-events-none" style="border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent)"></div>
 
-    <div class="relative z-10">
-      <div class="h-14 w-14 rounded-full bg-green/10 text-green flex items-center justify-center mx-auto mb-4">
+    <div class="relative">
+      <div class="h-14 w-14 rounded-full flex items-center justify-center mx-auto mb-4"
+           style="background: rgba(20,107,58,.12); color: var(--ok)">
         <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
       </div>
-      <h2 class="font-serif text-xl text-navy mb-2">Angalia Email Yako</h2>
-      <p class="text-sm text-gray-500 mb-1">Tumetuma link ya kuingia kwenye:</p>
-      <p class="text-sm font-semibold text-navy mb-4">{{ email }}</p>
-      <p class="text-xs text-gray-400">Bofya link hiyo kuingia. Inaisha muda baada ya dakika 10.</p>
-      <a href="{% url 'accounts:login' %}" class="block mt-6 text-navy2 text-sm font-semibold">&larr; Rudi kwenye Login</a>
+      <p class="eyebrow mb-2">Barua Pepe</p>
+      <h2 class="font-serif text-xl font-bold mb-2" style="color: var(--brand)">Angalia Email Yako</h2>
+      <p class="text-sm mb-1" style="color: var(--ink-2)">Tumetuma link ya kuingia kwenye:</p>
+      <p class="text-sm font-semibold mb-4" style="color: var(--brand)">{{ email }}</p>
+      <p class="text-xs" style="color: var(--ink-3)">Bofya link hiyo kuingia. Inaisha muda baada ya dakika 10.</p>
+      <a href="{% url 'accounts:login' %}" class="sp-btn sp-btn-ghost w-full mt-6">&larr; Rudi kwenye Login</a>
     </div>
   </div>
 

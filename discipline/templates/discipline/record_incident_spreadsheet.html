@@ -3,20 +3,22 @@
 
 {% block content %}
 <div class="max-w-6xl mx-auto px-4 py-6">
+  <p class="eyebrow mb-1">Nidhamu</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-5" style="color: var(--brand)">Rekodi Makosa (Wingi)</h1>
 
   {% if messages %}
     {% for message in messages %}
-      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+      <div class="text-sm rounded px-3 py-2 mb-4" style="background: rgba(20,107,58,.12); color: var(--ok); border: 1px solid var(--ok)">{{ message }}</div>
     {% endfor %}
   {% endif %}
 
-  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
+  <div class="sp-card p-5 mb-5 sp-reveal">
     <h3 class="font-serif text-navy mb-3">Chagua Darasa, Tarehe na Mwaka</h3>
     <form method="GET" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
       <div>{{ filter_form.school_class }}</div>
       <div>{{ filter_form.date_occurred }}</div>
       <div>{{ filter_form.academic_year }}</div>
-      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded py-2.5">Onyesha Wanafunzi</button>
+      <button type="submit" class="sp-btn sp-btn-primary">Onyesha Wanafunzi</button>
     </form>
   </div>
 
@@ -24,9 +26,9 @@
     {% if offense_types %}
       <form method="POST">
         {% csrf_token %}
-        <div class="bg-white border border-gray-200 rounded p-4 overflow-x-auto">
+        <div class="sp-card p-4 overflow-x-auto sp-reveal">
           <h3 class="font-serif text-navy mb-1">{{ school_class }} - {{ date_occurred|date:"d/m/Y" }}</h3>
-          <p class="text-xs text-gray-500 mb-4">
+          <p class="text-xs mb-4" style="color: var(--ink-3)">
             Tiki tu boksi la kosa alilofanya mwanafunzi siku hii - wengine waachwe bila kutiki. Kwa makosa
             yanayohitaji ushahidi (picha/PDF) au maelezo marefu, tumia
             <a href="{% url 'discipline:record_incident' %}" class="text-navy2 underline font-semibold">Rekodi Kosa (Moja kwa Moja)</a>.
@@ -34,10 +36,10 @@
 
           <table class="w-full text-sm min-w-[720px]">
             <thead>
-              <tr class="bg-navy text-white text-xs uppercase">
-                <th class="p-2 text-left sticky left-0 bg-navy">Mwanafunzi</th>
+              <tr class="text-xs uppercase">
+                <th class="p-2 text-left sticky left-0" style="background: var(--brand); color: var(--brand-ink)">Mwanafunzi</th>
                 {% for ot in offense_types %}
-                  <th class="p-2 bg-gold text-amber-950 whitespace-nowrap">{{ ot.name }}<br><span class="font-normal text-[10px]">(-{{ ot.points_deducted }})</span></th>
+                  <th class="p-2 whitespace-nowrap" style="background: var(--accent); color: var(--accent-ink)">{{ ot.name }}<br><span class="font-normal text-[10px]">(-{{ ot.points_deducted }})</span></th>
                 {% endfor %}
               </tr>
             </thead>
@@ -56,18 +58,18 @@
                   {% endfor %}
                 </tr>
               {% empty %}
-                <tr><td colspan="{{ offense_types|length|add:1 }}" class="text-center text-gray-400 py-6">Hakuna wanafunzi kwenye darasa hili.</td></tr>
+                <tr><td colspan="{{ offense_types|length|add:1 }}" class="text-center py-6" style="color: var(--ink-3)">Hakuna wanafunzi kwenye darasa hili.</td></tr>
               {% endfor %}
             </tbody>
           </table>
 
           {% if students %}
-            <button type="submit" class="w-full mt-4 bg-gold text-amber-950 font-semibold py-2.5 rounded">Hifadhi Makosa Yote</button>
+            <button type="submit" class="sp-btn sp-btn-gold w-full mt-4">Hifadhi Makosa Yote</button>
           {% endif %}
         </div>
       </form>
     {% else %}
-      <div class="bg-white border border-amber-200 rounded p-5 text-center text-gray-500">
+      <div class="text-sm rounded px-3 py-2 sp-reveal" style="background: rgba(180,83,9,.14); color: var(--warn); border: 1px solid var(--warn)">
         Hakuna aina za makosa zilizowekwa bado.
         <a href="{% url 'discipline:add_offense_type' %}" class="text-navy2 underline font-semibold">Weka Aina ya Kosa kwanza</a>.
       </div>

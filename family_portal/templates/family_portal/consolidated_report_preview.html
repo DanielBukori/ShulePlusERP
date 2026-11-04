@@ -5,16 +5,18 @@
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 py-6">
 
-  <div class="flex items-center justify-between mb-4 no-print">
-    <a href="javascript:history.back()" class="text-navy2 text-sm font-semibold">&larr; Rudi Nyuma</a>
+  <div class="flex items-center justify-between mb-4 no-print sp-reveal">
+    <a href="javascript:history.back()" class="sp-btn sp-btn-ghost">&larr; Rudi Nyuma</a>
     <a href="{% url 'family_portal:download_consolidated_report' student.id %}{% if results_summary %}?term={{ results_summary.term }}&exam_type={{ results_summary.exam_type }}&academic_year={{ results_summary.academic_year }}{% endif %}"
-       class="bg-red-600 text-white text-sm font-semibold px-4 py-2 rounded">&#128196; Pakua PDF</a>
+       class="sp-btn sp-btn-primary">Pakua PDF</a>
   </div>
 
   {% if available_combos|length > 1 %}
-    <form method="GET" class="flex items-center gap-2 mb-4 no-print flex-wrap">
-      <label class="text-xs uppercase text-gray-500">Ripoti Ya:</label>
-      <select name="combo" onchange="window.location = this.value" class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm">
+    <form method="GET" class="flex items-center gap-2 mb-4 no-print flex-wrap sp-reveal">
+      <label class="block text-xs uppercase font-semibold" style="color: var(--ink-3)">Ripoti Ya:</label>
+      <select name="combo" onchange="window.location = this.value"
+              class="border rounded-lg px-3 py-1.5 text-sm"
+              style="border-color: var(--line); background: var(--panel); color: var(--ink)">
         {% for c in available_combos %}
           <option value="?term={{ c.term }}&exam_type={{ c.exam_type }}&academic_year={{ c.academic_year }}"
             {% if results_summary and c.term == results_summary.term and c.exam_type == results_summary.exam_type and c.academic_year == results_summary.academic_year %}selected{% endif %}>
@@ -25,161 +27,179 @@
     </form>
   {% endif %}
 
-  <div class="bg-white border border-gray-200 rounded-xl p-6 md:p-8 relative overflow-hidden">
-    <div class="absolute inset-3 border border-gold/30 rounded pointer-events-none"></div>
+  <div class="sp-card p-6 md:p-8 relative overflow-hidden sp-reveal">
+    <div class="absolute inset-3 rounded-xl pointer-events-none" style="border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent)"></div>
 
-    <div class="text-center border-b-2 border-navy pb-4 mb-5 relative z-10">
-      <h1 class="font-serif text-xl uppercase tracking-wide text-navy">{{ school.name|default:"ShulePlus ERP" }}</h1>
-      <div class="text-xs text-gray-500 uppercase tracking-widest mt-1">Ripoti ya Maendeleo ya Mwanafunzi</div>
+    <div class="text-center pb-4 mb-5 relative" style="border-bottom: 2px solid var(--brand)">
+      <h1 class="font-serif text-xl uppercase tracking-wide font-bold" style="color: var(--brand)">{{ school.name|default:"ShulePlus ERP" }}</h1>
+      <div class="eyebrow mt-1">Ripoti ya Maendeleo ya Mwanafunzi</div>
     </div>
 
-    <div class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 mb-6 text-sm relative z-10">
-      <div><b>{{ student.first_name }} {{ student.last_name }}</b> &middot; Reg: {{ student.reg_number }}</div>
-      <div class="text-gray-500">{{ student.school_class }} &middot; {{ academic_year }}</div>
+    <div class="flex flex-wrap items-center justify-between gap-2 rounded-lg px-4 py-3 mb-6 text-sm relative"
+         style="background: var(--panel-2); border: 1px solid var(--line)">
+      <div style="color: var(--ink)"><b>{{ student.first_name }} {{ student.last_name }}</b> &middot; Reg: {{ student.reg_number }}</div>
+      <div style="color: var(--ink-3)">{{ student.school_class }} &middot; {{ academic_year }}</div>
     </div>
 
-    <h3 class="font-serif text-navy text-sm uppercase tracking-wide border-l-4 border-gold pl-2 mb-3">Muhtasari</h3>
+    <h3 class="font-serif text-sm uppercase tracking-wide font-bold pl-2 mb-3" style="color: var(--brand); border-left: 4px solid var(--accent)">Muhtasari</h3>
     <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-6">
-      <div class="border border-gray-200 rounded-lg p-3 text-center">
-        <div class="text-lg font-bold text-navy font-serif">{% if results_summary %}{{ results_summary.average }}{% else %}-{% endif %}</div>
-        <div class="text-[9px] uppercase text-gray-400">Wastani</div>
+      <div class="rounded-lg p-3 text-center" style="border: 1px solid var(--line)">
+        <div class="sp-kpi-value" style="font-size: 18px">{% if results_summary %}{{ results_summary.average }}{% else %}-{% endif %}</div>
+        <div class="sp-kpi-label">Wastani</div>
       </div>
-      <div class="border border-gray-200 rounded-lg p-3 text-center">
-        <div class="text-lg font-bold text-navy font-serif">{% if results_summary %}{{ results_summary.position }}/{{ results_summary.total_students }}{% else %}-{% endif %}</div>
-        <div class="text-[9px] uppercase text-gray-400">Nafasi</div>
+      <div class="rounded-lg p-3 text-center" style="border: 1px solid var(--line)">
+        <div class="sp-kpi-value" style="font-size: 18px">{% if results_summary %}{{ results_summary.position }}/{{ results_summary.total_students }}{% else %}-{% endif %}</div>
+        <div class="sp-kpi-label">Nafasi</div>
       </div>
-      <div class="border border-gray-200 rounded-lg p-3 text-center">
-        <div class="text-lg font-bold text-green font-serif">{% if results_summary %}{{ results_summary.division }}{% else %}-{% endif %}</div>
-        <div class="text-[9px] uppercase text-gray-400">Division</div>
+      <div class="rounded-lg p-3 text-center" style="border: 1px solid var(--line)">
+        <div class="mb-1">
+          <span class="sp-chip">{% if results_summary %}{{ results_summary.division }}{% else %}-{% endif %}</span>
+        </div>
+        <div class="sp-kpi-label">Division</div>
       </div>
-      <div class="border border-gray-200 rounded-lg p-3 text-center">
-        <div class="text-lg font-bold {% if discipline_score < 50 %}text-red-600{% else %}text-navy{% endif %} font-serif">{{ discipline_score }}</div>
-        <div class="text-[9px] uppercase text-gray-400">Nidhamu</div>
+      <div class="rounded-lg p-3 text-center" style="border: 1px solid var(--line)">
+        <div class="sp-kpi-value" style="font-size: 18px; {% if discipline_score < 50 %}color: var(--bad){% endif %}">{{ discipline_score }}</div>
+        <div class="sp-kpi-label">Nidhamu</div>
       </div>
-      <div class="border border-gray-200 rounded-lg p-3 text-center col-span-2 sm:col-span-1">
-        <div class="text-sm font-bold {% if debt > 0 %}text-red-600{% else %}text-green{% endif %} font-serif">TZS {{ debt }}</div>
-        <div class="text-[9px] uppercase text-gray-400">Deni la Ada</div>
+      <div class="rounded-lg p-3 text-center col-span-2 sm:col-span-1" style="border: 1px solid var(--line)">
+        <div class="text-sm font-bold" style="color: {% if debt > 0 %}var(--bad){% else %}var(--ok){% endif %}">TZS {{ debt }}</div>
+        <div class="sp-kpi-label">Deni la Ada</div>
       </div>
     </div>
 
-    <h3 class="font-serif text-navy text-sm uppercase tracking-wide border-l-4 border-gold pl-2 mb-3">
+    <h3 class="font-serif text-sm uppercase tracking-wide font-bold pl-2 mb-3" style="color: var(--brand); border-left: 4px solid var(--accent)">
       Matokeo kwa Somo{% if results_summary %} &middot; {{ results_summary.exam_type }}, {{ results_summary.term }}{% endif %}
     </h3>
-    <table class="w-full text-sm mb-6">
-      <thead>
-        <tr class="bg-navy text-white text-xs uppercase">
-          <th class="p-2 text-left rounded-tl-lg">Somo</th><th class="p-2">Alama</th><th class="p-2 rounded-tr-lg">Daraja</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for res in subject_results %}
-          <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
-            <td class="p-2 font-medium">{{ res.subject.name }}</td>
-            <td class="p-2 text-center font-bold text-navy">{{ res.score }}</td>
-            <td class="p-2 text-center">{{ res.grade }}</td>
-          </tr>
-        {% empty %}
-          <tr><td colspan="3" class="text-center text-gray-400 py-6">Hakuna matokeo yaliyochapishwa bado.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    {% if series_results %}
-      <h3 class="font-serif text-navy text-sm uppercase tracking-wide border-l-4 border-gold pl-2 mb-3">Mitihani ya Maandalizi (Series) - Hiari, si Rasmi</h3>
-      <table class="w-full text-sm mb-6">
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm">
         <thead>
-          <tr class="bg-navy2 text-white text-xs uppercase">
-            <th class="p-2 text-left rounded-tl-lg">Somo</th><th class="p-2">Series</th><th class="p-2 rounded-tr-lg">Alama</th>
+          <tr class="text-xs uppercase">
+            <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Somo</th>
+            <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Alama</th>
+            <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Daraja</th>
           </tr>
         </thead>
         <tbody>
-          {% for r in series_results %}
-            <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
-              <td class="p-2 font-medium">{{ r.subject.name }}</td>
-              <td class="p-2 text-center text-gray-500">{{ r.get_exam_type_display }}</td>
-              <td class="p-2 text-center font-bold text-navy2">{{ r.score }}</td>
+          {% for res in subject_results %}
+            <tr class="{% cycle '' 'bg-gray-50' %}">
+              <td class="p-2 font-medium" style="color: var(--ink)">{{ res.subject.name }}</td>
+              <td class="p-2 text-center font-bold" style="color: var(--brand)">{{ res.score }}</td>
+              <td class="p-2 text-center"><span class="sp-chip">{{ res.grade }}</span></td>
             </tr>
+          {% empty %}
+            <tr><td colspan="3" class="text-center py-6" style="color: var(--ink-3)">Hakuna matokeo yaliyochapishwa bado.</td></tr>
           {% endfor %}
         </tbody>
       </table>
+    </div>
+
+    {% if series_results %}
+      <h3 class="font-serif text-sm uppercase tracking-wide font-bold pl-2 mb-3" style="color: var(--brand); border-left: 4px solid var(--accent)">Mitihani ya Maandalizi (Series) - Hiari, si Rasmi</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-xs uppercase">
+              <th class="p-2 text-left" style="background: var(--brand-2); color: var(--brand-ink)">Somo</th>
+              <th class="p-2" style="background: var(--brand-2); color: var(--brand-ink)">Series</th>
+              <th class="p-2" style="background: var(--brand-2); color: var(--brand-ink)">Alama</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in series_results %}
+              <tr class="{% cycle '' 'bg-gray-50' %}">
+                <td class="p-2 font-medium" style="color: var(--ink)">{{ r.subject.name }}</td>
+                <td class="p-2 text-center" style="color: var(--ink-3)">{{ r.get_exam_type_display }}</td>
+                <td class="p-2 text-center font-bold" style="color: var(--brand-2)">{{ r.score }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     {% endif %}
 
     {% if conduct %}
-      <h3 class="font-serif text-navy text-sm uppercase tracking-wide border-l-4 border-gold pl-2 mb-3">Tabia/Mwenendo</h3>
+      <h3 class="font-serif text-sm uppercase tracking-wide font-bold pl-2 mb-3" style="color: var(--brand); border-left: 4px solid var(--accent)">Tabia/Mwenendo</h3>
       {% if conduct.conduct_items %}
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 text-sm mb-3">
           {% for label, grade in conduct.conduct_items %}
-            <div class="flex justify-between border-b border-gray-50 py-0.5">
-              <span class="text-gray-500 text-xs">{{ label }}</span><span class="font-bold text-navy2">{{ grade }}</span>
+            <div class="flex justify-between py-0.5" style="border-bottom: 1px solid var(--line)">
+              <span class="text-xs" style="color: var(--ink-3)">{{ label }}</span><span class="font-bold" style="color: var(--brand-2)">{{ grade }}</span>
             </div>
           {% endfor %}
         </div>
       {% endif %}
       {% if conduct.general_behavior %}
-        <p class="text-xs mb-2"><span class="text-gray-500">Mwenendo kwa Ujumla:</span> <b>{{ conduct.general_behavior }}</b></p>
+        <p class="text-xs mb-2"><span style="color: var(--ink-3)">Mwenendo kwa Ujumla:</span> <b style="color: var(--ink)">{{ conduct.general_behavior }}</b></p>
       {% endif %}
       {% if conduct.class_teacher_remarks %}
-        <div class="text-xs mb-2 border-t border-gray-100 pt-2">
-          <span class="text-gray-500 uppercase text-[10px]">Maoni ya Mwalimu wa Darasa</span>
-          <p class="italic mt-0.5">{{ conduct.class_teacher_remarks }}</p>
+        <div class="text-xs mb-2 pt-2" style="border-top: 1px solid var(--line)">
+          <span class="eyebrow">Maoni ya Mwalimu wa Darasa</span>
+          <p class="italic mt-0.5" style="color: var(--ink)">{{ conduct.class_teacher_remarks }}</p>
         </div>
       {% endif %}
       {% if conduct.headteacher_remarks %}
         <div class="text-xs mb-4">
-          <span class="text-gray-500 uppercase text-[10px]">Maoni ya Mkuu wa Shule</span>
-          <p class="italic mt-0.5">{{ conduct.headteacher_remarks }}</p>
+          <span class="eyebrow">Maoni ya Mkuu wa Shule</span>
+          <p class="italic mt-0.5" style="color: var(--ink)">{{ conduct.headteacher_remarks }}</p>
         </div>
       {% endif %}
     {% endif %}
 
-    <h3 class="font-serif text-navy text-sm uppercase tracking-wide border-l-4 border-gold pl-2 mb-3">Nidhamu - Makosa ya Hivi Karibuni</h3>
-    <table class="w-full text-sm mb-6">
-      <thead>
-        <tr class="bg-navy text-white text-xs uppercase">
-          <th class="p-2 text-left rounded-tl-lg">Kosa</th><th class="p-2">Alama</th><th class="p-2 rounded-tr-lg">Tarehe</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for i in recent_incidents %}
-          <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
-            <td class="p-2 font-medium">{{ i.offense_type.name }}</td>
-            <td class="p-2 text-center text-red-600">-{{ i.offense_type.points_deducted }}</td>
-            <td class="p-2 text-center">{{ i.date_occurred }}</td>
+    <h3 class="font-serif text-sm uppercase tracking-wide font-bold pl-2 mb-3" style="color: var(--brand); border-left: 4px solid var(--accent)">Nidhamu - Makosa ya Hivi Karibuni</h3>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-xs uppercase">
+            <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Kosa</th>
+            <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Alama</th>
+            <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Tarehe</th>
           </tr>
-        {% empty %}
-          <tr><td colspan="3" class="text-center text-gray-400 py-6">Hakuna makosa yaliyorekodiwa.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for i in recent_incidents %}
+            <tr class="{% cycle '' 'bg-gray-50' %}">
+              <td class="p-2 font-medium" style="color: var(--ink)">{{ i.offense_type.name }}</td>
+              <td class="p-2 text-center" style="color: var(--bad)">-{{ i.offense_type.points_deducted }}</td>
+              <td class="p-2 text-center" style="color: var(--ink-2)">{{ i.date_occurred }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="3" class="text-center py-6" style="color: var(--ink-3)">Hakuna makosa yaliyorekodiwa.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
-    <h3 class="font-serif text-navy text-sm uppercase tracking-wide border-l-4 border-gold pl-2 mb-3">Michango ya Vifaa (Store)</h3>
-    <table class="w-full text-sm">
-      <thead>
-        <tr class="bg-navy text-white text-xs uppercase">
-          <th class="p-2 text-left rounded-tl-lg">Kifaa</th><th class="p-2 rounded-tr-lg">Anadaiwa</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for c in pending_contributions %}
-          <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
-            <td class="p-2 font-medium">{{ c.requirement.item_name }}</td>
-            <td class="p-2 text-center text-amber-700 font-semibold">{{ c.quantity_owed }}</td>
+    <h3 class="font-serif text-sm uppercase tracking-wide font-bold pl-2 mb-3" style="color: var(--brand); border-left: 4px solid var(--accent)">Michango ya Vifaa (Store)</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-xs uppercase">
+            <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Kifaa</th>
+            <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Anadaiwa</th>
           </tr>
-        {% empty %}
-          <tr><td colspan="2" class="text-center text-green-700 py-4">Michango yote imekamilika.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for c in pending_contributions %}
+            <tr class="{% cycle '' 'bg-gray-50' %}">
+              <td class="p-2 font-medium" style="color: var(--ink)">{{ c.requirement.item_name }}</td>
+              <td class="p-2 text-center"><span class="sp-chip">{{ c.quantity_owed }}</span></td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="2" class="text-center py-4" style="color: var(--ok)">Michango yote imekamilika.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
-    <div class="flex justify-between mt-10 text-xs text-gray-500 relative z-10">
-      <div class="border-t border-gray-800 pt-2 w-2/5">Sahihi ya Mwalimu wa Darasa</div>
-      <div class="border-t border-gray-800 pt-2 w-2/5 text-right">Muhuri na Sahihi ya Mkuu wa Shule</div>
+    <div class="flex justify-between mt-10 text-xs relative" style="color: var(--ink-3)">
+      <div class="pt-2 w-2/5" style="border-top: 1px solid var(--ink-3)">Sahihi ya Mwalimu wa Darasa</div>
+      <div class="pt-2 w-2/5 text-right" style="border-top: 1px solid var(--ink-3)">Muhuri na Sahihi ya Mkuu wa Shule</div>
     </div>
   </div>
 
   <a href="{% url 'family_portal:download_consolidated_report' student.id %}"
-     class="block text-center bg-gold text-amber-950 font-semibold py-3 rounded-xl mt-4 no-print">
-    &#128196; Pakua PDF Kamili
+     class="sp-btn sp-btn-gold w-full mt-4 no-print">
+    Pakua PDF Kamili
   </a>
 </div>
 {% endblock %}

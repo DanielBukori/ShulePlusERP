@@ -1,19 +1,38 @@
-{% load static school_media %}
+{% load static school_media school_theme %}
 <!DOCTYPE html>
 <html lang="sw">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}{{ school.name }}{% endblock %}</title>
+<meta name="theme-color" content="{{ school|theme_brand }}">
 <link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
+<link href="{% static 'css/app.css' %}" rel="stylesheet">
 </head>
 <style>
+  /* Rangi za shule hii (SchoolProfile > School.primary_color) hutumika kote
+     kwenye tovuti ya umma bila kubadilisha kila template. */
+  :root {
+    --brand: {{ school|theme_brand }};
+    --accent: {{ school|theme_accent }};
+  }
+  .bg-navy { background-color: var(--brand); }
+  .text-navy { color: var(--brand); }
+  .border-navy { border-color: var(--brand); }
+  .bg-gold, .bg-gold\/20 { background-color: var(--accent); }
+  .text-gold { color: var(--accent); }
+  .border-gold { border-color: var(--accent); }
+  header.bg-gradient-to-r {
+    background-image: linear-gradient(90deg, var(--brand), color-mix(in srgb, var(--brand) 55%, #0F3460));
+    backdrop-filter: saturate(160%) blur(8px);
+  }
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   section { animation: fadeInUp 0.5s ease-out; }
   a, button { transition: transform 0.15s ease, background-color 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease; }
   a:active, button:active { transform: scale(0.97); }
   .hover\:shadow-md, .hover\:shadow-xl { transition: transform 0.2s ease, box-shadow 0.2s ease !important; }
-  a.block.border:hover, a.block.overflow-hidden:hover { transform: translateY(-3px); }
+  a.block.border:hover, a.block.overflow-hidden:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .sp-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
 </style>
 <body class="bg-paper text-gray-800">
 

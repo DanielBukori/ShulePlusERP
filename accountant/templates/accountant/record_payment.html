@@ -4,29 +4,44 @@
 {% block content %}
 <div class="max-w-xl mx-auto px-4 py-6">
 
+  <p class="eyebrow mb-1">Malipo</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-4" style="color: var(--brand)">Rekodi Malipo ya Mwanafunzi</h1>
+
   {% if messages %}
     {% for message in messages %}
-      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+      <div class="text-sm rounded px-3 py-2 mb-4" style="background: rgba(20,107,58,.12); color: var(--ok); border: 1px solid var(--ok)">{{ message }}</div>
     {% endfor %}
   {% endif %}
 
-  <div class="bg-white border border-gray-200 rounded p-5 md:p-8">
-    <h3 class="font-serif text-navy mb-4">Rekodi Malipo ya Mwanafunzi</h3>
+  <div class="sp-card p-5 md:p-8 sp-reveal">
     <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 gap-3">
       {% csrf_token %}
       <div>
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.student.label }}</label>
         {{ form.student }}
-        {% for e in form.student.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        {% for e in form.student.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
       </div>
-      {{ form.amount }}
-      {{ form.date_paid }}
-      {{ form.bank_name }}
       <div>
-        {{ form.receipt_number }}
-        {% for e in form.receipt_number.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.amount.label }}</label>
+        {{ form.amount }}
       </div>
-      {{ form.receipt_file }}
-      <button type="submit" class="bg-gold text-amber-950 font-semibold py-3 rounded mt-2">Hifadhi Malipo</button>
+      <div>
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.date_paid.label }}</label>
+        {{ form.date_paid }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.bank_name.label }}</label>
+        {{ form.bank_name }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ form.receipt_number.label }}</label>
+        {{ form.receipt_number }}
+        {% for e in form.receipt_number.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
+      </div>
+      <div>
+        {{ form.receipt_file }}
+      </div>
+      <button type="submit" class="sp-btn sp-btn-gold w-full mt-2">Hifadhi Malipo</button>
     </form>
   </div>
 </div>

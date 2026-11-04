@@ -6,38 +6,43 @@
 
   {% if messages %}
     {% for message in messages %}
-      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+      <div class="text-sm rounded px-3 py-2 mb-4" style="background: rgba(20,107,58,.12); color: var(--ok); border: 1px solid var(--ok)">{{ message }}</div>
     {% endfor %}
   {% endif %}
 
-  <div class="bg-white border border-gray-200 rounded-xl p-5 md:p-8">
+  <p class="eyebrow mb-1">Walimu</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-3" style="color: var(--brand)">Badilisha Cheo</h1>
+
+  <div class="sp-card p-5 md:p-8 sp-reveal">
     <div class="flex items-center gap-3 mb-5">
-      <div class="h-12 w-12 rounded-full bg-navy2/10 flex items-center justify-center text-navy2 font-serif font-bold">
+      <div class="h-12 w-12 rounded-full flex items-center justify-center font-serif font-bold shrink-0"
+           style="background: linear-gradient(135deg, var(--brand-2), var(--brand)); color: #fff">
         {{ staff.user.first_name|slice:":1" }}{{ staff.user.last_name|slice:":1" }}
       </div>
-      <div>
-        <div class="font-serif font-bold text-navy">{{ staff.user.get_full_name }}</div>
-        <div class="text-xs text-gray-500">Cheo cha sasa: <b>{{ staff.user.get_role_display }}</b></div>
+      <div class="min-w-0">
+        <div class="font-serif font-bold" style="color: var(--ink)">{{ staff.user.get_full_name }}</div>
+        <div class="text-xs" style="color: var(--ink-3)">Cheo cha sasa: <b>{{ staff.user.get_role_display }}</b></div>
       </div>
     </div>
 
     <form method="POST" class="space-y-4">
       {% csrf_token %}
       <div>
-        <label class="block text-xs uppercase text-gray-500 mb-1">Chagua Cheo Kipya</label>
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">Chagua Cheo Kipya</label>
         {{ form.role }}
-        <p class="text-xs text-gray-400 mt-1">Chagua "Mwalimu" ili kumvua cheo maalum na kumrudisha kuwa mwalimu wa kawaida.</p>
-        {% for e in form.role.errors %}<p class="text-red-600 text-xs mt-1">{{ e }}</p>{% endfor %}
+        <p class="text-[11px] mt-1" style="color: var(--ink-3)">Chagua "Mwalimu" ili kumvua cheo maalum na kumrudisha kuwa mwalimu wa kawaida.</p>
+        {% for e in form.role.errors %}<p class="text-xs mt-1" style="color: var(--bad)">{{ e }}</p>{% endfor %}
       </div>
 
-      <label class="flex items-center gap-2 text-sm bg-amber-50 border border-amber-200 rounded px-3 py-3">
+      <label class="flex items-center gap-2 text-sm rounded px-3 py-3 border"
+             style="background: var(--panel-2); border-color: var(--line); color: var(--ink-2)">
         {{ form.is_store_keeper }}
         <span>Store Keeper (anasimamia vifaa/michango ya wanafunzi) - inaweza kuwa pamoja na cheo chochote hapo juu</span>
       </label>
-      <button type="submit" class="w-full bg-gold text-amber-950 font-semibold py-3 rounded-xl">Hifadhi Cheo</button>
+      <button type="submit" class="sp-btn sp-btn-gold w-full">Hifadhi Cheo</button>
     </form>
 
-    <a href="{% url 'staff:teacher_list' %}" class="block text-center text-sm text-navy2 font-semibold mt-4">&larr; Rudi Orodha ya Walimu</a>
+    <a href="{% url 'staff:teacher_list' %}" class="sp-btn sp-btn-ghost w-full mt-4">&larr; Rudi Orodha ya Walimu</a>
   </div>
 </div>
 {% endblock %}

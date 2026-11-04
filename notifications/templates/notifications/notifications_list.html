@@ -3,26 +3,29 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 py-6">
-  <div class="flex items-center justify-between mb-4">
-    <h1 class="font-serif text-xl text-navy">Taarifa Zangu</h1>
+  <div class="flex flex-wrap items-end justify-between gap-3 mb-4 sp-reveal">
+    <div>
+      <p class="eyebrow mb-1">Taarifa</p>
+      <h1 class="font-serif text-xl md:text-2xl font-bold" style="color: var(--brand)">Taarifa Zangu</h1>
+    </div>
     {% if unread_notifications_count %}
-      <a href="{% url 'notifications:mark_all_read' %}?next={{ request.path }}" class="text-sm text-navy2 font-semibold">Weka Zote 'Zimesomwa'</a>
+      <a href="{% url 'notifications:mark_all_read' %}?next={{ request.path }}" class="sp-btn sp-btn-ghost">Weka Zote 'Zimesomwa'</a>
     {% endif %}
   </div>
 
-  <div class="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
+  <div class="sp-card divide-y divide-gray-100 sp-reveal">
     {% for n in notifications %}
       <a href="{% url 'notifications:mark_read_and_go' n.id %}" class="block px-4 py-3 {% if not n.is_read %}bg-blue-50{% endif %} hover:bg-gray-50">
         <div class="flex items-start gap-2">
-          {% if not n.is_read %}<span class="h-2 w-2 bg-navy2 rounded-full mt-1.5 shrink-0"></span>{% endif %}
+          {% if not n.is_read %}<span class="h-2 w-2 rounded-full mt-1.5 shrink-0" style="background: var(--accent)"></span>{% endif %}
           <div>
-            <p class="text-sm text-gray-700">{{ n.message }}</p>
-            <p class="text-xs text-gray-400 mt-0.5">{{ n.created_at|date:"d/m/Y H:i" }}</p>
+            <p class="text-sm {% if not n.is_read %}font-semibold{% endif %}" style="color: var(--ink)">{{ n.message }}</p>
+            <p class="text-xs mt-0.5" style="color: var(--ink-3)">{{ n.created_at|date:"d/m/Y H:i" }}</p>
           </div>
         </div>
       </a>
     {% empty %}
-      <p class="text-sm text-gray-400 text-center py-10">Hakuna taarifa bado.</p>
+      <p class="text-sm text-center py-10" style="color: var(--ink-3)">Hakuna taarifa bado.</p>
     {% endfor %}
   </div>
 </div>

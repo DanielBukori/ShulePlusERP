@@ -4,21 +4,29 @@
 
 {% block content %}
 <div class="max-w-3xl mx-auto px-4 py-6">
-  <p class="text-sm text-gray-500 mb-5">Kiwango cha Alert: chini ya {{ school.discipline_alert_score }}</p>
+  <p class="eyebrow mb-1">Nidhamu</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-1" style="color: var(--brand)">Dashibodi ya Nidhamu</h1>
+  <p class="text-sm mb-5" style="color: var(--ink-3)">Kiwango cha Alert: chini ya {{ school.discipline_alert_score }}</p>
 
   {% if open_alerts %}
-    <div class="bg-white border border-red-200 border-l-4 border-l-red-600 rounded p-5 mb-6 overflow-x-auto">
-      <h3 class="text-red-700 font-semibold mb-3">&#9888; Alerts Zinazohitaji Hatua</h3>
+    <div class="sp-card p-5 mb-6 overflow-x-auto sp-reveal" style="border-left: 4px solid var(--bad)">
+      <h3 class="mb-3 font-semibold flex items-center gap-2" style="color: var(--bad)">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        Alerts Zinazohitaji Hatua
+      </h3>
       <table class="w-full text-sm min-w-[420px]">
-        <thead><tr class="bg-navy text-white text-xs uppercase">
-          <th class="p-2 text-left">Mwanafunzi</th><th class="p-2">Mwaka</th><th class="p-2">Alama</th><th class="p-2">Tarehe</th>
+        <thead><tr class="text-xs uppercase">
+          <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Mwanafunzi</th>
+          <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Mwaka</th>
+          <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Alama</th>
+          <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Tarehe</th>
         </tr></thead>
         <tbody>
           {% for a in open_alerts %}
             <tr class="border-b border-gray-100 text-center">
               <td class="p-2 text-left font-medium">{{ a.student }}</td>
               <td class="p-2">{{ a.academic_year }}</td>
-              <td class="p-2 font-bold text-red-600">{{ a.score_at_alert }}</td>
+              <td class="p-2 font-bold" style="color: var(--bad)">{{ a.score_at_alert }}</td>
               <td class="p-2">{{ a.created_at|date:"d/m/Y" }}</td>
             </tr>
           {% endfor %}
@@ -27,46 +35,52 @@
     </div>
   {% endif %}
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-    <a href="{% url 'discipline:record_incident_spreadsheet' %}" class="bg-white border-2 border-gold rounded p-4 hover:shadow-md">
-      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Wingi (Spreadsheet)</div>
-      <div class="text-navy font-serif text-lg font-bold">Rekodi Makosa Mengi</div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3 sp-reveal">
+    <a href="{% url 'discipline:record_incident_spreadsheet' %}" class="sp-card sp-card-primary sp-card-lift p-4">
+      <div class="text-[11px] uppercase tracking-wide" style="color: var(--warn)">Wingi (Spreadsheet)</div>
+      <div class="font-serif text-lg font-bold" style="color: var(--brand)">Rekodi Makosa Mengi</div>
     </a>
-    <a href="{% url 'discipline:record_incident' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
-      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Moja kwa Moja</div>
-      <div class="text-navy font-serif text-lg font-bold">+ Kosa</div>
-    </a>
-  </div>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-    <a href="{% url 'discipline:add_offense_type' %}" class="bg-white border border-gray-200 rounded p-4 hover:shadow-md">
-      <div class="text-[11px] uppercase text-gray-500 tracking-wide">Weka Aina ya Kosa</div>
-      <div class="text-navy font-serif text-lg font-bold">+ Offense Type</div>
+    <a href="{% url 'discipline:record_incident' %}" class="sp-card sp-card-lift p-4">
+      <div class="text-[11px] uppercase tracking-wide" style="color: var(--ink-3)">Moja kwa Moja</div>
+      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Kosa</div>
     </a>
   </div>
 
-  <a href="{% url 'discipline:full_report' %}" class="block bg-emerald-700 text-white rounded p-4 hover:brightness-110 mb-6">
-    <div class="text-[11px] uppercase text-emerald-100 tracking-wide">Kwa Discipline, Headmaster na Second Master</div>
-    <div class="font-serif text-lg font-bold">&#128202; Ripoti Kamili ya Nidhamu</div>
-    <div class="text-xs text-emerald-100 mt-1">Kila mwanafunzi, makosa yake yote, na alama zake za sasa - mahali pamoja</div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 sp-reveal">
+    <a href="{% url 'discipline:add_offense_type' %}" class="sp-card sp-card-lift p-4">
+      <div class="text-[11px] uppercase tracking-wide" style="color: var(--ink-3)">Weka Aina ya Kosa</div>
+      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Offense Type</div>
+    </a>
+  </div>
+
+  <a href="{% url 'discipline:full_report' %}" class="block sp-card sp-card-primary sp-card-lift p-4 mb-6 sp-reveal">
+    <div class="text-[11px] uppercase tracking-wide" style="color: var(--warn)">Kwa Discipline, Headmaster na Second Master</div>
+    <div class="font-serif text-lg font-bold flex items-center gap-2" style="color: var(--brand)">
+      <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+      Ripoti Kamili ya Nidhamu
+    </div>
+    <div class="text-xs mt-1" style="color: var(--ink-2)">Kila mwanafunzi, makosa yake yote, na alama zake za sasa - mahali pamoja</div>
   </a>
 
-  <div class="bg-white border border-gray-200 rounded p-5 overflow-x-auto">
+  <div class="sp-card p-5 overflow-x-auto sp-reveal">
     <h3 class="font-serif text-navy mb-3">Makosa ya Karibuni</h3>
     <table class="w-full text-sm min-w-[420px]">
-      <thead><tr class="bg-navy text-white text-xs uppercase">
-        <th class="p-2 text-left">Mwanafunzi</th><th class="p-2 text-left">Kosa</th><th class="p-2">Alama</th><th class="p-2">Tarehe</th>
+      <thead><tr class="text-xs uppercase">
+        <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Mwanafunzi</th>
+        <th class="p-2 text-left" style="background: var(--brand); color: var(--brand-ink)">Kosa</th>
+        <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Alama</th>
+        <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Tarehe</th>
       </tr></thead>
       <tbody>
         {% for i in recent_incidents %}
           <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
             <td class="p-2 font-medium">{{ i.student }}</td>
             <td class="p-2">{{ i.offense_type.name }}</td>
-            <td class="p-2 text-center text-red-600">-{{ i.offense_type.points_deducted }}</td>
+            <td class="p-2 text-center" style="color: var(--bad)">-{{ i.offense_type.points_deducted }}</td>
             <td class="p-2 text-center">{{ i.date_occurred|date:"d/m/Y" }}</td>
           </tr>
         {% empty %}
-          <tr><td colspan="4" class="text-center text-gray-400 py-6">Hakuna makosa yaliyorekodiwa bado.</td></tr>
+          <tr><td colspan="4" class="text-center py-6" style="color: var(--ink-3)">Hakuna makosa yaliyorekodiwa bado.</td></tr>
         {% endfor %}
       </tbody>
     </table>

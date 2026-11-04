@@ -1,29 +1,34 @@
 {% extends 'branding/public_base.html' %}
-{% load school_media %}
+{% load static school_media %}
 {% block title %}{{ post.title }} - {{ school.name }}{% endblock %}
 
 {% block content %}
-<article class="max-w-3xl mx-auto px-4 py-10">
-  <span class="text-xs uppercase text-gold font-semibold">{{ post.get_category_display }}</span>
-  <h1 class="font-serif text-3xl text-navy font-bold mt-2 mb-2">{{ post.title }}</h1>
-  <p class="text-xs text-gray-400 mb-6">{{ post.created_at|date:"d/m/Y" }}</p>
-  {% if post.image %}
-    <img src="{% school_media_url post 'image' %}" class="w-full rounded mb-6">
-  {% endif %}
-  <div class="text-gray-700 leading-relaxed whitespace-pre-line">{{ post.body }}</div>
+<article class="max-w-3xl mx-auto px-4 py-14">
+  <div class="sp-card p-7 md:p-10 sp-reveal">
+    <span class="sp-chip">{{ post.get_category_display }}</span>
+    <h1 class="font-serif text-3xl font-bold mt-4 mb-2" style="color: var(--brand)">{{ post.title }}</h1>
+    <p class="text-xs mb-7" style="color: var(--ink-3)">{{ post.created_at|date:"d/m/Y" }}</p>
+    {% if post.image %}
+      <img src="{% school_media_url post 'image' %}" loading="lazy" class="w-full rounded-xl object-cover mb-7" alt="{{ post.title }}">
+    {% endif %}
+    <div class="leading-relaxed whitespace-pre-line" style="color: var(--ink-2)">{{ post.body }}</div>
+  </div>
 
   {% if extra_images %}
-    <div class="mt-8">
-      <h3 class="font-serif font-bold text-navy text-sm uppercase tracking-wide mb-3">Picha Zaidi</h3>
+    <div class="mt-10 sp-reveal">
+      <p class="eyebrow mb-2">Picha za Chapisho</p>
+      <h3 class="font-serif font-bold text-lg mb-4" style="color: var(--brand)">Picha Zaidi</h3>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
         {% for img in extra_images %}
-          <a href="{% school_media_url img 'image' %}" target="_blank" class="block rounded overflow-hidden border border-gray-200">
-            <img src="{% school_media_url img 'image' %}" class="w-full h-32 object-cover hover:scale-105 transition">
-            {% if img.caption %}<div class="text-xs text-gray-500 p-1.5">{{ img.caption }}</div>{% endif %}
+          <a href="{% school_media_url img 'image' %}" target="_blank" class="block sp-card sp-card-lift overflow-hidden">
+            <img src="{% school_media_url img 'image' %}" loading="lazy" class="w-full h-32 object-cover transition hover:scale-105" alt="{{ img.caption|default:post.title }}">
+            {% if img.caption %}<div class="text-xs p-2" style="color: var(--ink-3)">{{ img.caption }}</div>{% endif %}
           </a>
         {% endfor %}
       </div>
     </div>
   {% endif %}
 </article>
+
+<script src="{% static 'js/app.js' %}" defer></script>
 {% endblock %}

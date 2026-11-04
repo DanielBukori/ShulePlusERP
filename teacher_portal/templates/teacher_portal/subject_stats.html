@@ -4,50 +4,65 @@
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 py-6">
 
-  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
-    <h3 class="font-serif text-navy mb-3">Chagua Somo/Darasa na Mtihani</h3>
+  <p class="eyebrow mb-1">Masomo</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-3" style="color: var(--brand)">Takwimu za Somo</h1>
+
+  <div class="sp-card p-5 mb-5 sp-reveal">
+    <h3 class="font-serif font-bold mb-3" style="color: var(--brand)">Chagua Somo/Darasa na Mtihani</h3>
     <form method="GET" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <div class="sm:col-span-2">{{ filter_form.assignment }}</div>
       <div>{{ filter_form.exam_type }}</div>
       <div>{{ filter_form.term }}</div>
       <div class="sm:col-span-2">{{ filter_form.academic_year }}</div>
-      <button type="submit" class="sm:col-span-2 bg-navy2 text-white text-sm font-semibold rounded py-2.5">Onyesha Takwimu</button>
+      <button type="submit" class="sp-btn sp-btn-primary w-full sm:col-span-2">Onyesha Takwimu</button>
     </form>
   </div>
 
   {% if stats %}
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
-      <div class="bg-white border border-gray-200 rounded p-4 text-center">
-        <div class="text-xl font-bold text-navy font-serif">{{ stats.average }}</div>
-        <div class="text-[10px] uppercase text-gray-500">Wastani</div>
+      <div class="sp-card sp-kpi sp-reveal">
+        <div class="min-w-0">
+          <div class="sp-kpi-value">{{ stats.average }}</div>
+          <div class="sp-kpi-label">Wastani</div>
+        </div>
       </div>
-      <div class="bg-white border border-gray-200 rounded p-4 text-center">
-        <div class="text-xl font-bold text-navy font-serif">{{ stats.highest }}</div>
-        <div class="text-[10px] uppercase text-gray-500">Juu Kabisa</div>
+      <div class="sp-card sp-kpi sp-reveal">
+        <div class="min-w-0">
+          <div class="sp-kpi-value">{{ stats.highest }}</div>
+          <div class="sp-kpi-label">Juu Kabisa</div>
+        </div>
       </div>
-      <div class="bg-white border border-gray-200 rounded p-4 text-center">
-        <div class="text-xl font-bold text-navy font-serif">{{ stats.lowest }}</div>
-        <div class="text-[10px] uppercase text-gray-500">Chini Kabisa</div>
+      <div class="sp-card sp-kpi sp-reveal">
+        <div class="min-w-0">
+          <div class="sp-kpi-value">{{ stats.lowest }}</div>
+          <div class="sp-kpi-label">Chini Kabisa</div>
+        </div>
       </div>
-      <div class="bg-white border border-gray-200 rounded p-4 text-center">
-        <div class="text-xl font-bold text-green-700 font-serif">{{ stats.passed }}</div>
-        <div class="text-[10px] uppercase text-gray-500">Waliofaulu</div>
+      <div class="sp-card sp-kpi sp-reveal">
+        <div class="min-w-0">
+          <div class="sp-kpi-value" data-count="{{ stats.passed }}" style="color: var(--ok)">0</div>
+          <div class="sp-kpi-label">Waliofaulu</div>
+        </div>
       </div>
-      <div class="bg-white border border-gray-200 rounded p-4 text-center">
-        <div class="text-xl font-bold text-red-600 font-serif">{{ stats.failed }}</div>
-        <div class="text-[10px] uppercase text-gray-500">Waliofeli</div>
+      <div class="sp-card sp-kpi sp-reveal">
+        <div class="min-w-0">
+          <div class="sp-kpi-value" data-count="{{ stats.failed }}" style="color: var(--bad)">0</div>
+          <div class="sp-kpi-label">Waliofeli</div>
+        </div>
       </div>
-      <div class="bg-white border border-gray-200 rounded p-4 text-center">
-        <div class="text-xl font-bold text-navy font-serif">{{ stats.total_students }}</div>
-        <div class="text-[10px] uppercase text-gray-500">Jumla</div>
+      <div class="sp-card sp-kpi sp-reveal">
+        <div class="min-w-0">
+          <div class="sp-kpi-value" data-count="{{ stats.total_students }}">0</div>
+          <div class="sp-kpi-label">Jumla</div>
+        </div>
       </div>
     </div>
 
-    <div class="bg-white border border-gray-200 rounded p-5">
-      <h3 class="font-serif text-navy mb-3">Idadi ya Wanafunzi kwa Grade</h3>
+    <div class="sp-card p-5 sp-reveal">
+      <h3 class="font-serif font-bold mb-3" style="color: var(--brand)">Idadi ya Wanafunzi kwa Grade</h3>
       <div class="flex flex-wrap gap-2">
         {% for grade, count in stats.grade_counts.items %}
-          <span class="bg-navy2/10 text-navy2 text-sm font-semibold px-3 py-1.5 rounded-full">{{ grade }}: {{ count }}</span>
+          <span class="sp-chip">{{ grade }}: {{ count }}</span>
         {% endfor %}
       </div>
     </div>

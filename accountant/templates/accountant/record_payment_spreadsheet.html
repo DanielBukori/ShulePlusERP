@@ -4,55 +4,64 @@
 {% block content %}
 <div class="max-w-6xl mx-auto px-4 py-6">
 
+  <p class="eyebrow mb-1">Malipo</p>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-4" style="color: var(--brand)">Rekodi Malipo (Wingi)</h1>
+
   {% if messages %}
     {% for message in messages %}
-      <div class="text-sm bg-green-50 border border-green-600 text-green-800 rounded px-3 py-2 mb-4">{{ message }}</div>
+      <div class="text-sm rounded px-3 py-2 mb-4" style="{% if message.tags == 'warning' %}background: rgba(180,83,9,.14); color: var(--warn); border: 1px solid var(--warn){% else %}background: rgba(20,107,58,.12); color: var(--ok); border: 1px solid var(--ok){% endif %}">{{ message }}</div>
     {% endfor %}
   {% endif %}
 
-  <div class="bg-white border border-gray-200 rounded p-5 mb-5">
-    <h3 class="font-serif text-navy mb-3">Chagua Darasa na Mwaka</h3>
+  <div class="sp-card p-5 mb-5 sp-reveal">
+    <h3 class="font-serif mb-3" style="color: var(--brand)">Chagua Darasa na Mwaka</h3>
     <form method="GET" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-      <div>{{ filter_form.school_class }}</div>
-      <div>{{ filter_form.academic_year }}</div>
-      <button type="submit" class="bg-navy2 text-white text-sm font-semibold rounded py-2.5">Onyesha Wanafunzi</button>
+      <div>
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ filter_form.school_class.label }}</label>
+        {{ filter_form.school_class }}
+      </div>
+      <div>
+        <label class="block text-xs uppercase mb-1 font-semibold" style="color: var(--ink-3)">{{ filter_form.academic_year.label }}</label>
+        {{ filter_form.academic_year }}
+      </div>
+      <button type="submit" class="sp-btn sp-btn-primary">Onyesha Wanafunzi</button>
     </form>
   </div>
 
   {% if school_class %}
     <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="bg-white border border-gray-200 rounded p-4 overflow-x-auto">
-        <h3 class="font-serif text-navy mb-1">{{ school_class }} - {{ academic_year }}</h3>
-        <p class="text-xs text-gray-500 mb-4">
+      <div class="sp-card p-4 overflow-x-auto sp-reveal">
+        <h3 class="font-serif mb-1" style="color: var(--brand)">{{ school_class }} - {{ academic_year }}</h3>
+        <p class="text-xs mb-4" style="color: var(--ink-3)">
           Jaza tu safu za wanafunzi walioleta malipo leo - wengine waachwe wazi. <b>Namba ya Risiti ni LAZIMA</b>
           kwa kila mlipaji (ya kipekee, isirudie). Kwa malipo ya mwanafunzi mmoja tu (mfano ukitaka udhibiti zaidi
-          wa tarehe), tumia <a href="{% url 'accountant:record_payment' %}" class="text-navy2 underline font-semibold">Rekodi Malipo (Moja kwa Moja)</a>.
+          wa tarehe), tumia <a href="{% url 'accountant:record_payment' %}" class="underline font-semibold" style="color: var(--brand-2)">Rekodi Malipo (Moja kwa Moja)</a>.
         </p>
 
         <table class="w-full text-sm min-w-[880px]">
           <thead>
-            <tr class="bg-navy text-white text-xs uppercase">
-              <th class="p-2 text-left sticky left-0 bg-navy">Mwanafunzi</th>
-              <th class="p-2">Anahitajika</th>
-              <th class="p-2">Amelipa Jumla</th>
-              <th class="p-2">Deni Lililobaki</th>
-              <th class="p-2 bg-gold text-amber-950">Kiasi Kipya</th>
-              <th class="p-2 bg-gold text-amber-950">Namba ya Risiti</th>
-              <th class="p-2 bg-gold text-amber-950">Benki</th>
-              <th class="p-2 bg-gold text-amber-950">Picha ya Risiti</th>
+            <tr class="text-xs uppercase" style="background: var(--brand); color: var(--brand-ink)">
+              <th class="p-2 text-left sticky left-0" style="background: var(--brand); color: var(--brand-ink)">Mwanafunzi</th>
+              <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Anahitajika</th>
+              <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Amelipa Jumla</th>
+              <th class="p-2" style="background: var(--brand); color: var(--brand-ink)">Deni Lililobaki</th>
+              <th class="p-2" style="background: var(--accent); color: var(--accent-ink)">Kiasi Kipya</th>
+              <th class="p-2" style="background: var(--accent); color: var(--accent-ink)">Namba ya Risiti</th>
+              <th class="p-2" style="background: var(--accent); color: var(--accent-ink)">Benki</th>
+              <th class="p-2" style="background: var(--accent); color: var(--accent-ink)">Picha ya Risiti</th>
             </tr>
           </thead>
           <tbody>
             {% for row in students %}
               <tr class="{% cycle '' 'bg-gray-50' %} border-b border-gray-100">
                 <td class="p-2 sticky left-0 {% cycle 'bg-white' 'bg-gray-50' %} font-medium">
-                  <span class="text-gray-400 text-[10px] block">{{ row.student.reg_number }}</span>
+                  <span class="text-[10px] block" style="color: var(--ink-3)">{{ row.student.reg_number }}</span>
                   {{ row.student.first_name }} {{ row.student.last_name }}
                 </td>
-                <td class="p-2 text-center text-gray-500">{{ row.required }}</td>
-                <td class="p-2 text-center text-green-700">{{ row.paid_total }}</td>
-                <td class="p-2 text-center font-bold {% if row.remaining > 0 %}text-red-600{% else %}text-green-700{% endif %}">
+                <td class="p-2 text-center" style="color: var(--ink-3)">{{ row.required }}</td>
+                <td class="p-2 text-center" style="color: var(--ok)">{{ row.paid_total }}</td>
+                <td class="p-2 text-center font-bold" style="color: {% if row.remaining > 0 %}var(--bad){% else %}var(--ok){% endif %}">
                   {{ row.remaining }}
                 </td>
                 <td class="p-1">
@@ -73,13 +82,13 @@
                 </td>
               </tr>
             {% empty %}
-              <tr><td colspan="8" class="text-center text-gray-400 py-6">Hakuna wanafunzi kwenye darasa hili.</td></tr>
+              <tr><td colspan="8" class="text-center py-6" style="color: var(--ink-3)">Hakuna wanafunzi kwenye darasa hili.</td></tr>
             {% endfor %}
           </tbody>
         </table>
 
         {% if students %}
-          <button type="submit" class="w-full mt-4 bg-gold text-amber-950 font-semibold py-2.5 rounded">Hifadhi Malipo Yote</button>
+          <button type="submit" class="sp-btn sp-btn-gold w-full mt-4">Hifadhi Malipo Yote</button>
         {% endif %}
       </div>
     </form>

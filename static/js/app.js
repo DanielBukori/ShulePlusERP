@@ -73,12 +73,22 @@
     }
 
     if (!('IntersectionObserver' in window)) { nodes.forEach(run); return; }
+    var started = new WeakSet();
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (en.isIntersecting) { run(en.target); io.unobserve(en.target); }
+        if (en.isIntersecting) { started.add(en.target); run(en.target); io.unobserve(en.target); }
       });
     }, { threshold: 0.3 });
     nodes.forEach(function (el) { io.observe(el); });
+
+    // Salama ya mwisho: kama IO haijawahi (tab isiyonekana, print, webview
+    // ya zamani), nambari zisibaki 0 milele.
+    setTimeout(function () {
+      nodes.forEach(function (el) {
+        if (!started.has(el)) run(el);
+      });
+      io.disconnect();
+    }, 2500);
   }
 
   /* ---------- Popovers: [data-popover] toggles #<id> ---------- */

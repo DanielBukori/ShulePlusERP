@@ -29,8 +29,8 @@ class ResultFilterForm(forms.Form):
     ili mfumo uonyeshe ripoti husika (class-wise results).
     """
     LEVEL_CHOICES = [
-        ('O', 'O-Level (Kidato cha I - IV)'),
-        ('A', 'A-Level (Kidato cha V - VI)'),
+        ('O', 'O-Level (Form One - Form Four)'),
+        ('A', 'A-Level (Form Five - Form Six)'),
     ]
 
     education_level = forms.ChoiceField(

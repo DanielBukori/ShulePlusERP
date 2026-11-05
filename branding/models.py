@@ -176,7 +176,7 @@ class AdmissionInquiry(models.Model):
     parent_name = models.CharField(max_length=150)
     phone = models.CharField(max_length=20)
     email = models.EmailField(blank=True, null=True)
-    class_interested = models.CharField(max_length=100, blank=True, null=True, help_text='Mfano: Kidato cha I 2027')
+    class_interested = models.CharField(max_length=100, blank=True, null=True, help_text='Mfano: Form One 2027')
     message = models.TextField(blank=True, null=True)
     is_contacted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -962,11 +962,11 @@ def download_import_template_view(request):
     # Mfano - mstari huu ni maelekezo tu, futa kabla ya kupakia
     ws.append([
         'Juma', 'Ally', 'Mussa', 'MWG/2026/001',
-        'Form I', '', 'Ally Mussa', '0712345678',
+        'Form One', '', 'Ally Mussa', '0712345678',
     ])
     ws.append([
         'Neema', '', 'Josephat', 'MWG/2026/002',
-        'Form V', 'PCM', 'Josephat Method', '0755000111',
+        'Form Five', 'PCM', 'Josephat Method', '0755000111',
     ])
 
     for col in ws.columns:
@@ -1137,7 +1137,7 @@ def promote_students_view(request):
     """
     Kupandisha wanafunzi darasa mwishoni mwa mwaka - Academic/Headmaster
     anachagua kila darasa 'linapanda kwenda wapi' (au 'Wamehitimu' kama
-    ni la mwisho, mfano Form IV kabla ya A-Level - hilo linahitaji
+    ni la mwisho, mfano Form Four kabla ya A-Level - hilo linahitaji
     usajili mpya wa combination kwa hiyo halifanyiki kiotomatiki hapa).
     """
     school = _get_school(request)

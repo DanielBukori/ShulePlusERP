@@ -232,7 +232,7 @@ class HeadmasterDashboardTenantFallbackTests(TestCase):
         self.assertEqual(response.context['school'], self.school)
         self.assertEqual(
             set(self.school.classes.values_list('name', flat=True)),
-            {'Form I', 'Form II', 'Form III', 'Form IV', 'Form V', 'Form VI'},
+            {'Form One', 'Form Two', 'Form Three', 'Form Four', 'Form Five', 'Form Six'},
         )
 
     def test_school_setup_adds_school_scoped_subject_and_extra_class_stream(self):
@@ -241,15 +241,15 @@ class HeadmasterDashboardTenantFallbackTests(TestCase):
 
         response = self.client.get(setup_url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Form VI')
+        self.assertContains(response, 'Form Six')
 
         response = self.client.post(
             setup_url,
-            {'action': 'add_class', 'name': 'Form I', 'stream': 'SCIENCE'},
+            {'action': 'add_class', 'name': 'Form One', 'stream': 'SCIENCE'},
         )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(
-            self.school.classes.filter(name='Form I', stream='SCIENCE', level='O').exists()
+            self.school.classes.filter(name='Form One', stream='SCIENCE', level='O').exists()
         )
 
         response = self.client.post(
@@ -340,9 +340,9 @@ class HeadmasterDashboardTenantFallbackTests(TestCase):
 class StandardSchoolClassSetupTests(TestCase):
     def test_school_level_classes_are_created_idempotently(self):
         expected = {
-            'O': {'Form I', 'Form II', 'Form III', 'Form IV'},
-            'A': {'Form V', 'Form VI'},
-            'B': {'Form I', 'Form II', 'Form III', 'Form IV', 'Form V', 'Form VI'},
+            'O': {'Form One', 'Form Two', 'Form Three', 'Form Four'},
+            'A': {'Form Five', 'Form Six'},
+            'B': {'Form One', 'Form Two', 'Form Three', 'Form Four', 'Form Five', 'Form Six'},
         }
         for level, class_names in expected.items():
             with self.subTest(level=level):

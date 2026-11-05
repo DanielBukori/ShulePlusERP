@@ -23,7 +23,7 @@ RAW_EXAM_TYPES_TERM_2 = [
     ('ANNUAL_EXAM', 'Mtihani wa Mwaka'),
 ]
 
-# Mitihani ya Maandalizi (Series) - HIARI, kwa Form IV/VI kujiandaa na
+# Mitihani ya Maandalizi (Series) - HIARI, kwa Form Four/Six kujiandaa na
 # National Exam. Hizi ni column za ZIADA kwenye spreadsheet - HAZIINGII
 # kwenye ukokotoaji wa MID_TERM/TERMINAL/ANNUAL (angalia academic/grading.py,
 # haziguswi popote pale kwa makusudi). Ni taarifa ya maendeleo tu kwa wazazi.

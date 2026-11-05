@@ -1,12 +1,12 @@
 from shule_core.models import SchoolClass
 
 STANDARD_CLASSES = (
-    ('Form I', 'O'),
-    ('Form II', 'O'),
-    ('Form III', 'O'),
-    ('Form IV', 'O'),
-    ('Form V', 'A'),
-    ('Form VI', 'A'),
+    ('Form One', 'O'),
+    ('Form Two', 'O'),
+    ('Form Three', 'O'),
+    ('Form Four', 'O'),
+    ('Form Five', 'A'),
+    ('Form Six', 'A'),
 )
 
 SCHOOL_LEVEL_CLASSES = {

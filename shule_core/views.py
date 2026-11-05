@@ -85,7 +85,7 @@ def onboarding_view(request):
         {
             'id': 'subjects',
             'title': 'Masomo na Madarasa',
-            'detail': 'Madarasa ya kawaida (kidato cha I–VI) tayari yapo. Ongeza masomo unayofundisha.',
+            'detail': 'Madarasa ya kawaida (Form One hadi Form Six) tayari yapo. Ongeza masomo unayofundisha.',
             'done': counts['subjects'] > 0,
             'metric': f"Masomo {counts['subjects']} · Madarasa {counts['classes']}",
             'url': 'academic:school_setup',

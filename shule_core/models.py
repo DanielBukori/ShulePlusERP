@@ -202,7 +202,7 @@ class AcademicResult(models.Model):
         ('TERMINAL_EXAM', 'Mtihani wa Mwisho wa Muhula (Muhula 1)'),
         ('ANNUAL_EXAM', 'Mtihani wa Mwaka (Muhula 2)'),
         ('NATIONAL', 'Mitihani ya Taifa'),
-        # --- MPYA: Mitihani ya Maandalizi (Series) - kwa Form IV/VI
+        # --- MPYA: Mitihani ya Maandalizi (Series) - kwa Form Four/Six
         # kabla ya National Exam. HAYAINGII kwenye ukokotoaji wa
         # MID_TERM/TERMINAL/ANNUAL - ni taarifa ya maendeleo TU kwa
         # wazazi (angalia academic/grading.py - haziguswi popote pale).

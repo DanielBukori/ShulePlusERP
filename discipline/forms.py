@@ -16,7 +16,7 @@ class OffenseTypeForm(forms.ModelForm):
             'description': 'Maelezo (hiari)',
         }
         widgets = {
-            'name': forms.TextInput(attrs={'class': TW, 'placeholder': 'Mfano: Kutoroka Shule'}),
+            'name': forms.TextInput(attrs={'class': TW, 'placeholder': 'Mfano: Kukwepa Shule'}),
             'points_deducted': forms.NumberInput(attrs={'class': TW, 'min': 1}),
             'description': forms.TextInput(attrs={'class': TW}),
         }

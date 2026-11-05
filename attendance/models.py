@@ -36,6 +36,8 @@ class Attendance(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        verbose_name = 'Mahudhurio'
+        verbose_name_plural = 'Mahudhurio'
         unique_together = ("student", "date")
         ordering = ["-date", "student__first_name"]
 

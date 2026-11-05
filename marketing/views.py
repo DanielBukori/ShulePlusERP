@@ -33,7 +33,7 @@ def landing_page_view(request):
         form = DemoRequestForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Asante! Tutakupigia simu ndani ya masaa 24 kupanga demo.")
+            messages.success(request, "Asante! Tutakupigia simu ndani ya masaa 24 kupanga onyesho.")
             return redirect('marketing:landing_page')
     else:
         form = DemoRequestForm()
@@ -61,6 +61,6 @@ def landing_page_view(request):
 def hero_image_view(request, slide_id):
     slide = get_object_or_404(HeroSlide, pk=slide_id)
     if not slide.image:
-        raise Http404("Hero image not found.")
+        raise Http404("Picha ya slaidi ya mwanzo haipatikani.")
     content_type = mimetypes.guess_type(slide.image.name)[0] or 'application/octet-stream'
     return FileResponse(slide.image.open('rb'), content_type=content_type)

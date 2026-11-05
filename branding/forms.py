@@ -150,6 +150,6 @@ class AdmissionInquiryForm(forms.ModelForm):
             'parent_name': forms.TextInput(attrs={'class': TW}),
             'phone': forms.TextInput(attrs={'class': TW, 'placeholder': '07XXXXXXXX'}),
             'email': forms.EmailInput(attrs={'class': TW}),
-            'class_interested': forms.TextInput(attrs={'class': TW, 'placeholder': 'Mfano: Form One 2027'}),
+            'class_interested': forms.TextInput(attrs={'class': TW, 'placeholder': 'Mfano: Kidato cha I 2027'}),
             'message': forms.Textarea(attrs={'class': TW, 'rows': 3}),
         }

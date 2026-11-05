@@ -34,13 +34,15 @@ class ContributionRequirement(models.Model):
     quantity_required = models.PositiveIntegerField(default=1)
     is_published = models.BooleanField(
         default=False,
-        help_text='Deni limewekwa kwa wanafunzi husika na linaonekana kwenye ripoti za wazazi + kwa Store Keeper'
+        help_text='Deni limewekwa kwa wanafunzi husika na linaonekana kwenye ripoti za wazazi na kwa Msimamizi wa Duka'
     )
     published_at = models.DateTimeField(null=True, blank=True)
     created_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'Sharti la Mchango'
+        verbose_name_plural = 'Masharti ya Michango'
         unique_together = ('school', 'school_class', 'term', 'academic_year', 'item_name')
         indexes = [models.Index(fields=['school', 'term', 'academic_year'])]
 
@@ -63,6 +65,8 @@ class StudentContribution(models.Model):
     notes = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        verbose_name = 'Mchango wa Mwanafunzi'
+        verbose_name_plural = 'Michango ya Wanafunzi'
         unique_together = ('student', 'requirement')
         indexes = [models.Index(fields=['school', 'student'])]
 
@@ -92,6 +96,8 @@ class StoreStock(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        verbose_name = 'Hisa za Duka'
+        verbose_name_plural = 'Hisa za Duka'
         unique_together = ('school', 'item_name')
 
     @property
@@ -123,6 +129,8 @@ class StockMovement(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'Mwendo wa Hisa'
+        verbose_name_plural = 'Miendo wa Hisa'
         indexes = [models.Index(fields=['school', 'stock', 'created_at'])]
 
     def __str__(self):

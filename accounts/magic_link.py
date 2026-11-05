@@ -41,10 +41,10 @@ def send_magic_link_email(user, request):
     verify_path = f"/accounts/magic-verify/{token}/"
     link = request.build_absolute_uri(verify_path)
 
-    subject = "ShulePlusERP - Link ya Kuingia"
+    subject = "ShulePlusERP - Kiungo cha Kuingia"
     message = (
         f"Habari {user.get_full_name() or user.username},\n\n"
-        f"Bofya link hii kuingia ShulePlusERP (inaisha muda baada ya dakika 10):\n\n"
+        f"Bofya kiungo hiki ili kuingia ShulePlusERP (kitaisha muda baada ya dakika 10):\n\n"
         f"{link}\n\n"
         f"Kama hukuomba kuingia, puuza ujumbe huu.\n\n"
         f"ShulePlusERP"

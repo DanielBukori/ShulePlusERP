@@ -26,7 +26,7 @@ class SchoolSettingsForm(forms.ModelForm):
             'school_level': 'Kiwango cha Shule',
             'address': 'Anwani',
             'phone': 'Simu ya Shule',
-            'email': 'Email ya Shule',
+            'email': 'Barua pepe ya shule',
             'logo': 'Logo ya Shule',
             'primary_color': 'Rangi Kuu ya Brand',
             'discipline_alert_score': 'Alama ya Angizo la Nidhamu',
@@ -80,7 +80,7 @@ class SchoolRegistrationForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'w-full border border-gray-300 rounded px-3 py-2 text-sm'}),
     )
     headmaster_email = forms.EmailField(
-        label="Barua Pepe ya Mkuu (kwa Magic Link ya kuingia)",
+        label="Barua pepe ya mkuu (kwa kiungo cha kuingia)",
         widget=forms.EmailInput(attrs={'class': 'w-full border border-gray-300 rounded px-3 py-2 text-sm'}),
     )
 
@@ -94,7 +94,7 @@ class SchoolRegistrationForm(forms.ModelForm):
             'school_level': 'Kiwango cha Shule',
             'address': 'Anwani',
             'phone': 'Simu ya Shule',
-            'email': 'Email ya Shule',
+            'email': 'Barua pepe ya shule',
             'logo': 'Logo ya Shule',
             'primary_color': 'Rangi ya Shule',
         }

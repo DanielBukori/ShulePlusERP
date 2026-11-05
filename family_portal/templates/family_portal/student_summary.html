@@ -32,7 +32,7 @@
         </div>
         <div>
           <span class="sp-chip is-active">{{ summary.results_summary.division }}</span>
-          <div class="sp-kpi-label mt-1">Division</div>
+          <div class="sp-kpi-label mt-1">Ngazi</div>
         </div>
       </div>
     {% else %}
@@ -60,7 +60,7 @@
   </div>
 
   <div class="sp-card p-4 sp-reveal">
-    <h3 class="font-serif text-base font-bold mb-2" style="color: var(--brand)">Michango ya Vifaa (Store)</h3>
+    <h3 class="font-serif text-base font-bold mb-2" style="color: var(--brand)">Michango ya Vifaa (Duka)</h3>
     {% if summary.pending_contributions %}
       <div class="space-y-2">
         {% for c in summary.pending_contributions %}
@@ -76,8 +76,8 @@
   </div>
   {% if summary.series_results %}
   <div class="sp-card p-4 sp-reveal">
-    <h3 class="font-serif text-base font-bold mb-1" style="color: var(--brand)">Mitihani ya Maandalizi (Series)</h3>
-    <p class="text-[11px] mb-3" style="color: var(--ink-3)">Haya ni matokeo ya maandalizi tu - hayaathiri Division/matokeo rasmi.</p>
+    <h3 class="font-serif text-base font-bold mb-1" style="color: var(--brand)">Mitihani ya Maandalizi</h3>
+    <p class="text-[11px] mb-3" style="color: var(--ink-3)">Haya ni matokeo ya maandalizi tu - hayathiri ngazi wala matokeo rasmi.</p>
     <div class="space-y-1">
       {% for r in summary.series_results %}
         <div class="flex items-center justify-between text-sm border-b py-1" style="border-color: var(--line)">
@@ -115,7 +115,7 @@
 
   {% if request.user.role == 'STUDENT' %}
   <div class="sp-card p-4">
-    <h3 class="font-serif text-base font-bold mb-2" style="color: var(--brand)">Kazi za Likizo (Home Package)</h3>
+    <h3 class="font-serif text-base font-bold mb-2" style="color: var(--brand)">Kazi za Nyumbani</h3>
     {% if summary.home_packages %}
       <div class="space-y-2">
         {% for p in summary.home_packages %}
@@ -136,7 +136,7 @@
 
   <a href="{% url 'family_portal:preview_consolidated_report' summary.student.id %}"
      class="sp-btn sp-btn-gold w-full sp-reveal">
-    Ona Ripoti Kamili (Preview)
+    Angalia Ripoti Kamili
   </a>
 
 </div>

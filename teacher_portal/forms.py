@@ -7,20 +7,20 @@ TW = 'border border-gray-300 rounded px-3 py-2 text-sm w-full'
 # Raw exam types kwa kila muhula - hizi ndizo column za spreadsheet ya
 # marks entry. MID_TERM/TERMINAL/ANNUAL ni COMPUTED (angalia academic/grading.py).
 RAW_EXAM_TYPES_TERM_1 = [
-    ('TEST_1_A', 'Test 1 (Robo I)'),
-    ('TEST_2_A', 'Test 2 (Robo I)'),
-    ('MID_TERM_EXAM', 'Mid-Term Exam'),
-    ('TEST_1_B', 'Test 1 (Robo II)'),
-    ('TEST_2_B', 'Test 2 (Robo II)'),
-    ('TERMINAL_EXAM', 'Terminal Exam'),
+    ('TEST_1_A', 'Jaribio 1 (Robo I)'),
+    ('TEST_2_A', 'Jaribio 2 (Robo I)'),
+    ('MID_TERM_EXAM', 'Mtihani wa Kati'),
+    ('TEST_1_B', 'Jaribio 1 (Robo II)'),
+    ('TEST_2_B', 'Jaribio 2 (Robo II)'),
+    ('TERMINAL_EXAM', 'Mtihani wa Mwisho wa Muhula'),
 ]
 RAW_EXAM_TYPES_TERM_2 = [
-    ('TEST_1_A', 'Test 1 (Robo I)'),
-    ('TEST_2_A', 'Test 2 (Robo I)'),
-    ('MID_TERM_EXAM', 'Mid-Term Exam'),
-    ('TEST_1_B', 'Test 1 (Robo II)'),
-    ('TEST_2_B', 'Test 2 (Robo II)'),
-    ('ANNUAL_EXAM', 'Annual Exam'),
+    ('TEST_1_A', 'Jaribio 1 (Robo I)'),
+    ('TEST_2_A', 'Jaribio 2 (Robo I)'),
+    ('MID_TERM_EXAM', 'Mtihani wa Kati'),
+    ('TEST_1_B', 'Jaribio 1 (Robo II)'),
+    ('TEST_2_B', 'Jaribio 2 (Robo II)'),
+    ('ANNUAL_EXAM', 'Mtihani wa Mwaka'),
 ]
 
 # Mitihani ya Maandalizi (Series) - HIARI, kwa Form IV/VI kujiandaa na
@@ -28,11 +28,11 @@ RAW_EXAM_TYPES_TERM_2 = [
 # kwenye ukokotoaji wa MID_TERM/TERMINAL/ANNUAL (angalia academic/grading.py,
 # haziguswi popote pale kwa makusudi). Ni taarifa ya maendeleo tu kwa wazazi.
 SERIES_EXAM_TYPES = [
-    ('SERIES_1', 'Series 1'),
-    ('SERIES_2', 'Series 2'),
-    ('SERIES_3', 'Series 3'),
-    ('SERIES_4', 'Series 4'),
-    ('SERIES_5', 'Series 5'),
+    ('SERIES_1', 'Mtihani wa Maandalizi 1'),
+    ('SERIES_2', 'Mtihani wa Maandalizi 2'),
+    ('SERIES_3', 'Mtihani wa Maandalizi 3'),
+    ('SERIES_4', 'Mtihani wa Maandalizi 4'),
+    ('SERIES_5', 'Mtihani wa Maandalizi 5'),
 ]
 
 
@@ -85,7 +85,7 @@ class EmergencyMarksFilterForm(forms.Form):
     combination = forms.ModelChoiceField(
         queryset=Combination.objects.all(), required=False,
         widget=forms.Select(attrs={'class': TW}),
-        label='Combination (A-Level tu)',
+        label='Mseto wa Masomo (A-Level pekee)',
     )
     term = forms.ChoiceField(
         choices=AcademicResult.TERM_CHOICES,
@@ -133,9 +133,9 @@ class StatsFilterForm(forms.Form):
     )
     exam_type = forms.ChoiceField(
         choices=RAW_EXAM_TYPES_TERM_1 + [
-            ('MID_TERM', 'Mid-Term (Kikokotolewa)'),
-            ('TERMINAL', 'Terminal (Kikokotolewa)'),
-            ('ANNUAL', 'Annual (Kikokotolewa)'),
+            ('MID_TERM', 'Mtihani wa Kati (unahesabiwa)'),
+            ('TERMINAL', 'Mtihani wa Mwisho wa Muhula (unahesabiwa)'),
+            ('ANNUAL', 'Mtihani wa Mwaka (unahesabiwa)'),
         ],
         widget=forms.Select(attrs={'class': TW}),
         label='Aina ya Matokeo',

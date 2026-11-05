@@ -22,7 +22,7 @@ class AuditLog(models.Model):
         ('DISCIPLINE_RECORDED', 'Kosa la Nidhamu Limerekodiwa'),
         ('STUDENT_REGISTERED', 'Mwanafunzi Amesajiliwa'),
         ('TEACHER_REGISTERED', 'Mwalimu Amesajiliwa'),
-        ('STOCK_ADJUSTED', 'Stock Imerekebishwa'),
+        ('STOCK_ADJUSTED', 'Hisa Zimekebishwa'),
         ('CONTRIBUTION_RECORDED', 'Mchango wa Mwanafunzi Umerekodiwa'),
         ('CONTRIBUTION_PUBLISHED', 'Michango Imechapishwa'),
         ('BRANDING_POST_CREATED', 'Chapisho la Tovuti Limeongezwa'),
@@ -33,10 +33,12 @@ class AuditLog(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='audit_logs', db_index=True)
     actor = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='audit_actions')
     action = models.CharField(max_length=30, choices=ACTION_CHOICES, db_index=True)
-    description = models.TextField(help_text='Maelezo ya kibinadamu ya kitendo kilichofanyika')
+    description = models.TextField(help_text='Maelezo ya kitendo kilichofanyika (yanayoeleweka)')
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
+        verbose_name = 'Kumbukumbu ya Ukaguzi'
+        verbose_name_plural = 'Kumbukumbu za Ukaguzi'
         ordering = ['-created_at']
         indexes = [models.Index(fields=['school', 'created_at'])]
 

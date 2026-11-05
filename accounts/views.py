@@ -111,7 +111,7 @@ def force_password_change_view(request):
             user.must_change_password = False
             user.save()
             update_session_auth_hash(request, user)  # asitolewe nje baada ya kubadilisha password
-            messages.success(request, "Password imebadilishwa kikamilifu.")
+            messages.success(request, "Neno la siri limebadilishwa kikamilifu.")
             return redirect('accounts:post_login_redirect')
     else:
         form = PasswordChangeForm(request.user)
@@ -127,7 +127,7 @@ def password_change_view(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, "Password imebadilishwa kikamilifu.")
+            messages.success(request, "Neno la siri limebadilishwa kikamilifu.")
             return redirect('accounts:post_login_redirect')
     else:
         form = PasswordChangeForm(request.user)

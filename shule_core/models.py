@@ -10,8 +10,8 @@ from .upload_paths import school_logo_path, receipt_upload_path
 class CustomUser(AbstractUser):
     ROLE_CHOICES = [
         ('HEADMASTER', 'Mkuu wa Shule'),
-        ('SECOND_MASTER', 'Second Master'),
-        ('ACADEMIC', 'Academic Master'), 
+        ('SECOND_MASTER', 'Msaidizi wa Mkuu'),
+        ('ACADEMIC', 'Msimamizi wa Masomo'), 
         ('TEACHER', 'Mwalimu'),
         ('DISCIPLINE', 'Mwalimu wa Nidhamu'),
         ('ACCOUNTANT', 'Mhasibu'),
@@ -25,6 +25,8 @@ class CustomUser(AbstractUser):
     must_change_password = models.BooleanField(default=True)
     school_registration_pending = models.BooleanField(default=False, db_index=True)
     class Meta:
+        verbose_name = 'Mtumiaji wa Mfumo'
+        verbose_name_plural = 'Watumiaji wa Mfumo'
         indexes = [ models.Index(fields=['school', 'role']) ]
 
     def __str__(self):
@@ -32,7 +34,7 @@ class CustomUser(AbstractUser):
 
 # 1. SHULE - MSINGI WA KILA KITU
 class School(models.Model):
-    LEVEL_CHOICES = [('O', 'O-Level Only'), ('A', 'Advanced Level Only'), ('B', 'Both O-Level and A-Level')]
+    LEVEL_CHOICES = [('O', 'O-Level Pekee'), ('A', 'A-Level Pekee'), ('B', 'O-Level na A-Level')]
     
     name = models.CharField(max_length=255, unique=True, db_index=True)
     subdomain = models.CharField(max_length=100, unique=True, blank=True, db_index=True)
@@ -48,6 +50,10 @@ class School(models.Model):
     discipline_alert_score = models.PositiveIntegerField(default=50)
     is_approved = models.BooleanField(default=True, db_index=True)
 
+    class Meta:
+        verbose_name = 'Shule'
+        verbose_name_plural = 'Shule'
+
     def save(self, *args, **kwargs):
         if not self.subdomain:
             self.subdomain = slugify(self.name).replace('-', '')
@@ -58,7 +64,7 @@ class School(models.Model):
 
 # 2. DARASA
 class SchoolClass(models.Model):
-    STREAM_CHOICES = [('GENERAL', 'General'), ('SCIENCE', 'Science'), ('ARTS', 'Arts'), ('S1', 'Stream 1'), ('S2', 'Stream 2')]
+    STREAM_CHOICES = [('GENERAL', 'Tawi la Jumla'), ('SCIENCE', 'Sayansi'), ('ARTS', 'Sanaa'), ('S1', 'Tawi 1'), ('S2', 'Tawi 2')]
     
     name = models.CharField(max_length=50, db_index=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='classes', db_index=True)
@@ -74,7 +80,7 @@ class SchoolClass(models.Model):
     )
 
     class Meta:
-        verbose_name_plural = "School Classes"
+        verbose_name_plural = "Madarasa ya Shule"
         unique_together = ('name', 'stream', 'school')
         indexes = [ models.Index(fields=['school', 'level']) ]
 
@@ -88,7 +94,10 @@ class Combination(models.Model):
     name = models.CharField(max_length=10, db_index=True)
     level = models.CharField(max_length=1, choices=[('A', 'A-Level')], default='A')
     
-    class Meta: unique_together = ('name', 'level')
+    class Meta:
+        unique_together = ('name', 'level')
+        verbose_name = 'Mchanganyiko wa Masomo'
+        verbose_name_plural = 'Michanganyiko ya Masomo'
     def __str__(self): return self.name
 
 # 4. SOMO
@@ -102,6 +111,8 @@ class Subject(models.Model):
     combination = models.ForeignKey(Combination, on_delete=models.CASCADE, related_name='subjects', null=True, blank=True)
 
     class Meta:
+        verbose_name = 'Somo'
+        verbose_name_plural = 'Masomo'
         unique_together = ('code', 'level', 'combination', 'school')
         indexes = [ models.Index(fields=['school', 'level']) ]
 
@@ -139,6 +150,8 @@ class Student(models.Model):
                     'combination': 'Mwanafunzi wa O-Level hapaswi kuwa na Combination.'  })
 
     class Meta:
+        verbose_name = 'Mwanafunzi'
+        verbose_name_plural = 'Wanafunzi'
         unique_together = ('reg_number', 'school', 'school_class')
         indexes = [ models.Index(fields=['school', 'school_class']), models.Index(fields=['school', 'combination']) ]
 
@@ -157,6 +170,8 @@ class Staff(models.Model):
     is_teaching_staff = models.BooleanField(default=True) # Ili kujua ni mwalimu au mhasibu tu
     is_store_keeper = models.BooleanField(default=False)
     class Meta:
+        verbose_name = 'Mfanyakazi'
+        verbose_name_plural = 'Wafanyakazi'
         unique_together = ('user', 'school') # Mtu hawezi kuwa staff mara 2 shule 1
         indexes = [models.Index(fields=['school', 'is_store_keeper'])]
     def __str__(self):
@@ -172,28 +187,30 @@ class SubjectAssignment(models.Model):
     academic_year = models.IntegerField(default=2026, db_index=True)
     is_principal = models.BooleanField(default=True)
     class Meta:
+        verbose_name = 'Kazi ya Ufundishaji'
+        verbose_name_plural = 'Kazi za Ufundishaji'
         unique_together = ('teacher', 'subject', 'school_class', 'combination', 'academic_year')
         indexes = [ models.Index(fields=['school', 'academic_year']) ]
 
 # 8. ALAMA
 class AcademicResult(models.Model):  
-    EXAM_TYPE_CHOICES = [('TEST_1_A', 'Test 1 - Robo ya Kwanza'),
-        ('TEST_2_A', 'Test 2 - Robo ya Kwanza'),
-        ('MID_TERM_EXAM', 'Mtihani wa Mid-Term'),
-        ('TEST_1_B', 'Test 1 - Robo ya Pili'),
-        ('TEST_2_B', 'Test 2 - Robo ya Pili'),
-        ('TERMINAL_EXAM', 'Mtihani wa Terminal (Muhula 1)'),
-        ('ANNUAL_EXAM', 'Mtihani wa Annual (Muhula 2)'),
-        ('NATIONAL', 'National Exam'),
+    EXAM_TYPE_CHOICES = [('TEST_1_A', 'Jaribio 1 - Robo ya Kwanza'),
+        ('TEST_2_A', 'Jaribio 2 - Robo ya Kwanza'),
+        ('MID_TERM_EXAM', 'Mtihani wa Kati'),
+        ('TEST_1_B', 'Jaribio 1 - Robo ya Pili'),
+        ('TEST_2_B', 'Jaribio 2 - Robo ya Pili'),
+        ('TERMINAL_EXAM', 'Mtihani wa Mwisho wa Muhula (Muhula 1)'),
+        ('ANNUAL_EXAM', 'Mtihani wa Mwaka (Muhula 2)'),
+        ('NATIONAL', 'Mitihani ya Taifa'),
         # --- MPYA: Mitihani ya Maandalizi (Series) - kwa Form IV/VI
         # kabla ya National Exam. HAYAINGII kwenye ukokotoaji wa
         # MID_TERM/TERMINAL/ANNUAL - ni taarifa ya maendeleo TU kwa
         # wazazi (angalia academic/grading.py - haziguswi popote pale).
-        ('SERIES_1', 'Series 1'),
-        ('SERIES_2', 'Series 2'),
-        ('SERIES_3', 'Series 3'),
-        ('SERIES_4', 'Series 4'),
-        ('SERIES_5', 'Series 5'),
+        ('SERIES_1', 'Mtihani wa Maandalizi 1'),
+        ('SERIES_2', 'Mtihani wa Maandalizi 2'),
+        ('SERIES_3', 'Mtihani wa Maandalizi 3'),
+        ('SERIES_4', 'Mtihani wa Maandalizi 4'),
+        ('SERIES_5', 'Mtihani wa Maandalizi 5'),
         ]
     TERM_CHOICES = [('TERM_1', 'Muhula wa Kwanza'), ('TERM_2', 'Muhula wa Pili')
     ]
@@ -212,7 +229,7 @@ class AcademicResult(models.Model):
     is_auto_absent = models.BooleanField(
         default=False,
         db_index=True,
-        help_text='Alama F(0) iliwekwa kiotomatiki wakati wa Publish - mwanafunzi hakuwa na alama ya somo hili lililofanyiwa mtihani (siyo F halisi aliyoipata).',
+        help_text='Alama F(0) iliwekwa kiotomatiki wakati wa kuchapisha - mwanafunzi hakuwa na alama ya somo hili lililofanyiwa mtihani (siyo F halisi aliyoipata).',
     )
     recorded_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True) 
     
@@ -221,6 +238,8 @@ class AcademicResult(models.Model):
    
 
     class Meta:
+        verbose_name = 'Matokeo ya Masomo'
+        verbose_name_plural = 'Matokeo ya Masomo'
         unique_together = ('student', 'subject', 'exam_type', 'term', 'academic_year')
         indexes = [
             models.Index(fields=['school', 'subject', 'term', 'academic_year']),
@@ -272,6 +291,8 @@ class Payment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'Malipo'
+        verbose_name_plural = 'Malipo'
         unique_together = ('school', 'receipt_number')
         indexes = [
             models.Index(fields=['school', 'date_paid']),
@@ -291,7 +312,7 @@ class ConductReport(models.Model):
 
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='conduct_reports')
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='conduct_reports')
-    term = models.CharField(max_length=10, choices=[('TERM_1', 'Term 1'), ('TERM_2', 'Term 2')])
+    term = models.CharField(max_length=10, choices=[('TERM_1', 'Muhula wa Kwanza'), ('TERM_2', 'Muhula wa Pili')])
     academic_year = models.IntegerField()
 
     # Vigezo vya tabia - vyote hiari (A/B/C/D/F kila kimoja)
@@ -304,10 +325,10 @@ class ConductReport(models.Model):
     leadership = models.CharField(max_length=1, choices=GRADE_CHOICES, blank=True, null=True, verbose_name='Uongozi')
     self_discipline = models.CharField(max_length=1, choices=GRADE_CHOICES, blank=True, null=True, verbose_name='Nidhamu Binafsi')
     self_cleanliness = models.CharField(max_length=1, choices=GRADE_CHOICES, blank=True, null=True, verbose_name='Usafi Binafsi')
-    work_consideration = models.CharField(max_length=1, choices=GRADE_CHOICES, blank=True, null=True, verbose_name='Kujituma Kazini')
-    proactiveness = models.CharField(max_length=1, choices=GRADE_CHOICES, blank=True, null=True, verbose_name='Kujitolea/Ubunifu')
+    work_consideration = models.CharField(max_length=1, choices=GRADE_CHOICES, blank=True, null=True, verbose_name='Jitihada Kazini')
+    proactiveness = models.CharField(max_length=1, choices=GRADE_CHOICES, blank=True, null=True, verbose_name='Kujitolea na Ubunifu')
     sporting = models.CharField(max_length=1, choices=GRADE_CHOICES, blank=True, null=True, verbose_name='Michezo')
-    general_behavior = models.CharField(max_length=50, blank=True, null=True, verbose_name='Mwenendo kwa Ujumla', help_text='Mfano: GOOD, VERY GOOD')
+    general_behavior = models.CharField(max_length=50, blank=True, null=True, verbose_name='Mwenendo kwa Ujumla', help_text='Mfano: NZURI, NZURI SANI')
 
     # Maoni ya maandishi - hiari
     class_teacher_remarks = models.TextField(blank=True, null=True, verbose_name='Maoni ya Mwalimu wa Darasa')

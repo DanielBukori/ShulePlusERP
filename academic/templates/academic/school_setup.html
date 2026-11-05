@@ -6,7 +6,7 @@
 
   <p class="eyebrow mb-1">Madarasa na Masomo</p>
   <h1 class="font-serif text-xl md:text-2xl font-bold mb-1" style="color: var(--brand)">Madarasa na Masomo</h1>
-  <p class="text-sm mb-5" style="color: var(--ink-3)">Madarasa ya kawaida ya Form I–VI yameandaliwa kulingana na kiwango cha shule. Ongeza mkondo au masomo hapa.</p>
+  <p class="text-sm mb-5" style="color: var(--ink-3)">Madarasa ya kawaida ya kidato cha I hadi VI yameandaliwa kulingana na kiwango cha shule. Ongeza mkondo au masomo hapa.</p>
 
   {% if messages %}
     {% for message in messages %}
@@ -42,7 +42,7 @@
 
     <section class="sp-card p-5 sp-reveal">
       <h2 class="font-serif text-lg mb-1" style="color: var(--brand)">Ongeza Somo</h2>
-      <p class="text-xs mb-4" style="color: var(--ink-3)">Somo litaunganishwa na shule hii pekee. Kwa A-Level, chagua combination yake.</p>
+      <p class="text-xs mb-4" style="color: var(--ink-3)">Somo litaunganishwa na shule hii pekee. Kwa A-Level, chagua mseto wake wa masomo.</p>
       <form method="post" class="space-y-3">
         {% csrf_token %}
         <input type="hidden" name="action" value="add_subject">
@@ -60,13 +60,13 @@
 
     {% if school.school_level != 'O' %}
       <section class="sp-card p-5 sp-reveal">
-        <h2 class="font-serif text-lg mb-1" style="color: var(--brand)">Combination za A-Level</h2>
-        <p class="text-xs mb-4" style="color: var(--ink-3)">Orodha hii ni ya pamoja kwa shule zote; admin wa mfumo ndiye anayeisimamia.</p>
+        <h2 class="font-serif text-lg mb-1" style="color: var(--brand)">Mseto wa Masomo wa A-Level</h2>
+        <p class="text-xs mb-4" style="color: var(--ink-3)">Orodha hii ni ya pamoja kwa shule zote; msimamizi wa mfumo ndiye anayeisimamia.</p>
         <div class="flex flex-wrap gap-2">
           {% for combination in combinations %}
             <span class="sp-chip">{{ combination.name }}</span>
           {% empty %}
-            <span class="text-xs" style="color: var(--ink-3)">Hakuna combination bado. Wasiliana na admin wa mfumo.</span>
+            <span class="text-xs" style="color: var(--ink-3)">Hakuna mseto wa masomo bado. Wasiliana na msimamizi wa mfumo.</span>
           {% endfor %}
         </div>
       </section>
@@ -90,7 +90,7 @@
     <h2 class="font-serif text-lg mb-3" style="color: var(--brand)">Masomo Yaliyopo</h2>
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
-        <thead><tr class="text-xs uppercase" style="background: var(--brand); color: var(--brand-ink)"><th class="text-left p-2" style="background: var(--brand); color: var(--brand-ink)">Code</th><th class="text-left p-2" style="background: var(--brand); color: var(--brand-ink)">Somo</th><th class="text-left p-2" style="background: var(--brand); color: var(--brand-ink)">Kiwango</th><th class="text-left p-2" style="background: var(--brand); color: var(--brand-ink)">Combination</th></tr></thead>
+        <thead><tr class="text-xs uppercase" style="background: var(--brand); color: var(--brand-ink)"><th class="text-left p-2" style="background: var(--brand); color: var(--brand-ink)">Kodi</th><th class="text-left p-2" style="background: var(--brand); color: var(--brand-ink)">Somo</th><th class="text-left p-2" style="background: var(--brand); color: var(--brand-ink)">Kiwango</th><th class="text-left p-2" style="background: var(--brand); color: var(--brand-ink)">Mseto wa Masomo</th></tr></thead>
         <tbody>
           {% for subject in subjects %}
             <tr class="border-b border-gray-100">

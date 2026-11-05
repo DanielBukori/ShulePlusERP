@@ -66,7 +66,7 @@
   </div>
   <div class="summary-card">
     <div class="num">{% if results_summary %}{{ results_summary.division }}{% else %}-{% endif %}</div>
-    <div class="lbl">Division</div>
+    <div class="lbl">Ngazi</div>
   </div>
   <div class="summary-card">
     <div class="num">{{ discipline_score }}/100</div>
@@ -91,9 +91,9 @@
 </table>
 
 {% if series_results %}
-<div class="section-title">Mitihani ya Maandalizi (Series) - Hiari, si Rasmi</div>
+<div class="section-title">Mitihani ya Maandalizi - Hiari, si rasmi</div>
 <table>
-  <thead><tr><th style="text-align:left;">Somo</th><th>Series</th><th>Alama</th></tr></thead>
+  <thead><tr><th style="text-align:left;">Somo</th><th>Maandalizi</th><th>Alama</th></tr></thead>
   <tbody>
     {% for r in series_results %}
       <tr><td class="name">{{ r.subject.name }}</td><td>{{ r.get_exam_type_display }}</td><td>{{ r.score }}</td></tr>
@@ -133,7 +133,7 @@
   <div class="alert-box">Tahadhari: alama za nidhamu ziko chini - inashauriwa mzazi awasiliane na shule.</div>
 {% endif %}
 
-<div class="section-title">Michango ya Vifaa (Store)</div>
+<div class="section-title">Michango ya Vifaa (Duka)</div>
 <table>
   <thead><tr><th style="text-align:left;">Kifaa</th><th>Anadaiwa</th></tr></thead>
   <tbody>

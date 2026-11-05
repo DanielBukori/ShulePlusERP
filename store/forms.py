@@ -99,8 +99,8 @@ class StockAdjustmentForm(forms.Form):
     (mfano: shule imetumia mifagio 3, au ununuzi mpya umefika).
     """
     REASON_CHOICES = [
-        ('SCHOOL_USE', 'Matumizi ya Shule (punguza)'),
-        ('PURCHASE', 'Ununuzi (ongeza)'),
+        ('SCHOOL_USE', 'Matumizi ya Shule (hupunguza hisa)'),
+        ('PURCHASE', 'Ununuzi (huongeza hisa)'),
         ('ADJUSTMENT', 'Marekebisho'),
     ]
 

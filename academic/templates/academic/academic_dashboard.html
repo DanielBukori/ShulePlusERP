@@ -1,7 +1,7 @@
 {% extends 'shule_core/base_tailwind.html' %}
 {% load static %}
-{% block title %}Academic Dashboard{% endblock %}
-{% block page_tag %}Academic Control Center{% endblock %}
+{% block title %}Dashibodi ya Masomo{% endblock %}
+{% block page_tag %}Kituo cha Usimamizi wa Masomo{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 py-6">
@@ -72,7 +72,7 @@
         </div>
         <div>
           <div class="sp-kpi-value" {% if open_discipline_alerts %}style="color: var(--bad)"{% endif %} data-count="{{ open_discipline_alerts }}">0</div>
-          <div class="sp-kpi-label">Discipline Alerts</div>
+          <div class="sp-kpi-label">Arifa za Nidhamu</div>
         </div>
       </a>
       <a href="{% url 'store:store_dashboard' %}" class="sp-card sp-card-lift sp-kpi sp-reveal">
@@ -101,7 +101,7 @@
       <a href="{% url 'academic:register_student' %}" class="sp-btn sp-btn-primary sp-reveal">+ Sajili Mwanafunzi</a>
       <a href="{% url 'academic:publish_results' %}" class="sp-btn sp-btn-primary sp-reveal">Chapisha Matokeo</a>
       {% if request.user.role == 'HEADMASTER' %}
-        <a href="{% url 'audit:audit_log' %}" class="sp-btn sp-btn-gold sp-reveal">Ona Ripoti Kamili (Audit)</a>
+        <a href="{% url 'audit:audit_log' %}" class="sp-btn sp-btn-gold sp-reveal">Angalia Ripoti Kamili</a>
       {% else %}
         <a href="{% url 'accountant:generate_assessments' %}" class="sp-btn sp-btn-gold sp-reveal">Tathmini za Ada</a>
       {% endif %}
@@ -152,7 +152,7 @@
             {% elif div == 'III' %}text-amber-700
             {% elif div == 'IV' %}text-orange-700
             {% else %}text-red-700{% endif %}" data-count="{{ count }}">0</div>
-          <div class="sp-kpi-label mt-1">Division {{ div }}</div>
+          <div class="sp-kpi-label mt-1">Ngazi {{ div }}</div>
         </div>
       {% endfor %}
     </div>
@@ -165,7 +165,7 @@
         <div class="sp-chart"><canvas id="subjectChart"></canvas></div>
       </div>
       <div class="sp-card p-5 sp-reveal">
-        <h3 class="font-serif text-navy mb-1">Division - Shule Nzima</h3>
+        <h3 class="font-serif text-navy mb-1">Ngazi - Shule Nzima</h3>
         <p class="text-xs text-gray-400 mb-3">Mgawanyo wa wanafunzi kwa daraja</p>
         <div class="sp-chart"><canvas id="divisionChart"></canvas></div>
       </div>
@@ -194,7 +194,7 @@
               <td class="p-2 font-bold text-navy">{{ c.average }}</td>
             </tr>
           {% empty %}
-            <tr><td colspan="3" class="text-center text-gray-400 py-6">Hakuna data bado.</td></tr>
+            <tr><td colspan="3" class="text-center text-gray-400 py-6">Hakuna taarifa bado.</td></tr>
           {% endfor %}
         </tbody>
       </table>
@@ -203,7 +203,7 @@
     <div class="sp-card p-8 text-center sp-reveal">
       <p class="text-gray-500 mb-4">Hakuna matokeo yaliyochapishwa bado - takwimu za shule nzima zitaonekana hapa mara ya kwanza matokeo yatakapochapishwa.</p>
       <div class="flex flex-wrap gap-2 justify-center">
-        <a href="{% url 'teacher_portal:enter_marks' %}" class="sp-btn sp-btn-primary">Jaza Marks</a>
+        <a href="{% url 'teacher_portal:enter_marks' %}" class="sp-btn sp-btn-primary">Jaza Alama</a>
         <a href="{% url 'academic:publish_results' %}" class="sp-btn sp-btn-gold">Chapisha Matokeo</a>
       </div>
     </div>

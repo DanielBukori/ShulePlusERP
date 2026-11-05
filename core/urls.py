@@ -22,6 +22,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+admin.site.site_header = 'Utawala wa ShulePlusERP'
+admin.site.site_title = 'Utawala wa ShulePlusERP'
+admin.site.index_title = 'Simamia Mfumo wa Shule'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 

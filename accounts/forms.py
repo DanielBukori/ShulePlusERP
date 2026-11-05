@@ -12,17 +12,17 @@ class TeacherRegistrationForm(forms.Form):
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(max_length=50, label='Jina la Mwisho',
                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
-    phone = forms.CharField(max_length=15, label='Namba ya Simu (itakuwa username)',
+    phone = forms.CharField(max_length=15, label='Namba ya Simu (itakuwa jina la mtumiaji)',
                              widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '07XXXXXXXX'}))
     email = forms.EmailField(
-        label='Barua Pepe (kwa Magic Link ya kuingia)',
+        label='Barua pepe (kwa kiungo cha kuingia)',
         widget=forms.EmailInput(attrs={'class': 'form-control'}),
     )
     tsc_number = forms.CharField(max_length=50, required=False, label='Namba ya TSC (hiari)',
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
-    qualification = forms.CharField(max_length=100, required=False, label='Taaluma (Diploma/Degree)',
+    qualification = forms.CharField(max_length=100, required=False, label='Taaluma (Cheti au Shahada)',
                                      widget=forms.TextInput(attrs={'class': 'form-control'}))
-    is_store_keeper = forms.BooleanField(required=False, label='Mteue kuwa Store Keeper')
+    is_store_keeper = forms.BooleanField(required=False, label='Mteue kuwa Msimamizi wa Duka')
 
     def __init__(self, *args, school=None, **kwargs):
         super().__init__(*args, **kwargs)

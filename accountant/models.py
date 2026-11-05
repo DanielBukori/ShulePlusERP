@@ -19,6 +19,8 @@ class FeeStructure(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'Muundo wa Ada'
+        verbose_name_plural = 'Miyundo ya Ada'
         unique_together = ('school', 'school_class', 'academic_year')
 
     def __str__(self):
@@ -41,8 +43,12 @@ class OtherCharge(models.Model):
     created_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='charges_created')
     authorized_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True,
                                         related_name='charges_authorized',
-                                        help_text='Lazima ijazwe kama muundaji ni Accountant')
+                                        help_text='Lazima ijazwe kama aliyeweka ada hii ni Mhasibu')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Ada Nyingine'
+        verbose_name_plural = 'Ada Nyingine'
 
     def __str__(self):
         return f"{self.name} - {self.amount} ({self.academic_year})"
@@ -63,6 +69,8 @@ class StudentFeeAssessment(models.Model):
     generated_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'Tathmini ya Ada ya Mwanafunzi'
+        verbose_name_plural = 'Tathmini za Ada za Wanafunzi'
         unique_together = ('student', 'academic_year')
 
     def __str__(self):

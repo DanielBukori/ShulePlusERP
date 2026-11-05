@@ -163,9 +163,9 @@ def record_incident_view(request):
                     if created:
                         _notify_discipline_alert(alert)
                         alert_msg = (
-                            f"⚠ ALERT: Alama za {incident.student} zimeshuka hadi {score} "
+                            f"TAARIFA YA DHARURA: Alama za {incident.student} zimeshuka hadi {score} "
                             f"(chini ya kiwango cha {school.discipline_alert_score}). "
-                            f"Bodi ikae / Mzazi aitwe."
+                            f"Itisheni bodi na mpigieni mzazi simu."
                         )
 
             messages.success(request, f"Kosa la {incident.student} limerekodiwa. Alama za sasa: {score}.")
@@ -260,7 +260,7 @@ def record_incident_spreadsheet_view(request):
                 f"[Spreadsheet] Amerekodi makosa {created_count} - {school_class} ({date_occurred})."
             )
             for m in alert_msgs:
-                messages.warning(request, f"⚠ ALERT: {m}")
+                messages.warning(request, f"TAARIFA YA DHARURA: {m}")
             return redirect(f"{request.path}?{request.GET.urlencode()}")
 
     context = {

@@ -47,7 +47,7 @@ def store_keeper_required(view_func):
     def wrapper(request, *args, **kwargs):
         allowed = request.user.role in ('HEADMASTER', 'SECOND_MASTER') or _is_store_keeper(request.user)
         if not allowed:
-            return HttpResponseForbidden("Hauruhusiwi kufikia ukurasa huu - wewe si Store Keeper.")
+            return HttpResponseForbidden("Hauruhusiwi kufikia ukurasa huu - wewe si Msimamizi wa Duka.")
         return view_func(request, *args, **kwargs)
     return wrapper
 
@@ -65,7 +65,7 @@ def _notify_low_stock(stock):
         school=stock.school, role__in=['HEADMASTER', 'SECOND_MASTER']
     ).exclude(phone__isnull=True).exclude(phone='')
     message = (
-        f"ShulePlusERP Store: '{stock.item_name}' zimebaki {stock.quantity_in_stock} tu "
+        f"Duka la ShulePlusERP: '{stock.item_name}' zimebaki {stock.quantity_in_stock} tu "
         f"(chini ya kiwango cha {stock.low_stock_threshold})."
     )
     for head in heads:
@@ -217,7 +217,7 @@ def publish_requirement_view(request, requirement_id):
         messages.success(
             request,
             f"'{requirement.item_name}' imechapishwa - deni limewekwa kwa wanafunzi {created_count} wapya "
-            f"(sasa linaonekana kwenye ripoti za wazazi na kwa Store Keeper)."
+            f"(sasa linaonekana kwenye ripoti za wazazi na kwa Msimamizi wa Duka)."
         )
         log_action(
             request.user, school, 'CONTRIBUTION_PUBLISHED',
@@ -399,12 +399,12 @@ def stock_adjustment_view(request):
 
             if stock.is_low:
                 _notify_low_stock(stock)
-                messages.warning(request, f"Stock ya '{stock.item_name}' iko chini ({stock.quantity_in_stock}). Wajulishe wakuu.")
+                messages.warning(request, f"Hisa za '{stock.item_name}' ziko chini ({stock.quantity_in_stock}). Wajulishe wakuu.")
             else:
-                messages.success(request, f"Stock ya '{stock.item_name}' imesasishwa: sasa ni {stock.quantity_in_stock}.")
+                messages.success(request, f"Hisa za '{stock.item_name}' zimesasishwa: sasa ni {stock.quantity_in_stock}.")
             log_action(
                 request.user, school, 'STOCK_ADJUSTED',
-                f"Amerekebisha stock ya '{stock.item_name}' kwa {qty:+d} ({reason}). Sasa: {stock.quantity_in_stock}."
+                f"Amerekebisha hisa za '{stock.item_name}' kwa {qty:+d} ({reason}). Sasa: {stock.quantity_in_stock}."
             )
             return redirect('store:stock_adjustment')
     else:

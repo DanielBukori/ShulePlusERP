@@ -1,5 +1,5 @@
 {% extends 'shule_core/base_tailwind.html' %}
-{% block title %}Bulk Import - Wanafunzi{% endblock %}
+{% block title %}Ingiza Wanafunzi kwa Wingi{% endblock %}
 
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 py-6">
@@ -11,15 +11,15 @@
   {% endif %}
 
   <p class="eyebrow mb-1">Usajili wa Mwanafunzi</p>
-  <h1 class="font-serif text-xl md:text-2xl font-bold mb-1" style="color: var(--brand)">Sajili Wanafunzi Wengi Mara Moja (Excel)</h1>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-1" style="color: var(--brand)">Usajili wa Wanafunzi kwa Wingi (Excel)</h1>
 
   <div class="sp-card p-5 mb-5 mt-4 sp-reveal">
     <p class="text-sm mb-4" style="color: var(--ink-2)">
-      Pakua template hapa chini, jaza taarifa za wanafunzi (mstari mmoja = mwanafunzi mmoja), kisha pakia hapa.
+      Pakua kiolezo hapa chini, jaza taarifa za wanafunzi (mstari mmoja = mwanafunzi mmoja), kisha pakia hapa.
       PIN za akaunti zitatumwa kwa SMS kwenye namba ya mzazi; akaunti zitafunguliwa baada ya SMS kutumwa.
     </p>
     <a href="{% url 'academic:download_import_template' %}" class="sp-btn sp-btn-primary mb-5">
-      Pakua Template ya Excel
+      Pakua Kiolezo cha Excel
     </a>
 
     <form method="POST" enctype="multipart/form-data" class="border-t pt-4" style="border-color: var(--line)">
@@ -56,7 +56,7 @@
           </tbody>
         </table>
       </div>
-      <p class="text-xs mt-3" style="color: var(--warn)">PIN hazionyeshwi kwenye ukurasa huu. Ikiwa SMS haikutumwa, wasiliana na admin.</p>
+      <p class="text-xs mt-3" style="color: var(--warn)">PIN hazionyeshwi kwenye ukurasa huu. Ikiwa SMS haikutumwa, wasiliana na msimamizi wa mfumo.</p>
     </div>
   {% endif %}
 

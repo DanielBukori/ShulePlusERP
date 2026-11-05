@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShulePlusERP - Mfumo Kamili wa Usimamizi wa Shule</title>
-<meta name="description" content="Mfumo wa kompyuta wa kusimamia matokeo, ada, nidhamu, store na mawasiliano na wazazi - kwa shule za Tanzania.">
+<meta name="description" content="Mfumo wa kompyuta wa kusimamia matokeo, ada, nidhamu, duka na mawasiliano na wazazi - kwa shule za Tanzania.">
 <meta name="theme-color" content="#0B2545">
 <meta property="og:type" content="website">
 <meta property="og:title" content="ShulePlusERP - Mfumo Kamili wa Usimamizi wa Shule">
@@ -95,6 +95,12 @@
   /* ---------- Slider ---------- */
   .hero-slide { position: absolute; inset: 0; display: flex; align-items: center; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .7s var(--ease), visibility 0s linear .7s; }
   .hero-slide.is-active { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity .7s var(--ease); }
+  /* Picha za shule huwa na maeneo meupe (nguo, ukuta, jua). Kichwa cha slaidi kipo
+     kushoto, hivyo giza ni nene upande wa kushoto na hupungua kuelekea kulia. */
+  .lp-scrim { background: rgba(11,37,69,.82); }
+  @media (min-width: 1024px) {
+    .lp-scrim { background: linear-gradient(100deg, rgba(6,20,38,.94) 0%, rgba(7,26,49,.80) 42%, rgba(7,26,49,.50) 100%); }
+  }
   .lp-dot { width: 22px; height: 4px; border-radius: 999px; background: rgba(255, 255, 255, .3); }
   .lp-dot:hover { background: rgba(255, 255, 255, .58); }
   .lp-dot.is-active { width: 46px; background: var(--lp-gold); box-shadow: 0 0 14px rgba(212, 175, 55, .55); }
@@ -202,7 +208,7 @@
       <a href="#pricing" class="text-white/85 text-sm font-semibold px-3 py-2.5 rounded-lg hover:bg-white/10">Bei</a>
       <a href="#roles" class="text-white/85 text-sm font-semibold px-3 py-2.5 rounded-lg hover:bg-white/10">Kwa Nani</a>
       <a href="#faq" class="text-white/85 text-sm font-semibold px-3 py-2.5 rounded-lg hover:bg-white/10">Maswali</a>
-      <a href="#demo" class="text-white/85 text-sm font-semibold px-3 py-2.5 rounded-lg hover:bg-white/10">Omba Demo</a>
+      <a href="#demo" class="text-white/85 text-sm font-semibold px-3 py-2.5 rounded-lg hover:bg-white/10">Omba Onyesho</a>
       <div class="lp-rule my-2"></div>
       <div class="grid grid-cols-2 gap-2">
         <a href="{% url 'accounts:login' %}" class="sp-btn lp-btn-ghost">Ingia</a>
@@ -225,15 +231,15 @@
 
     <!-- Slaidi 1 -->
     <div id="hero-slide-0" class="hero-slide is-active" aria-label="Slaidi 1 kati ya 7">
-      {% if hero_images.0 %}<img src="{{ hero_images.0 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/70"></div>{% endif %}
+      {% if hero_images.0 %}<img src="{{ hero_images.0 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="lp-scrim absolute inset-0 z-0"></div>{% endif %}
       <div class="relative z-10 w-full grid lg:grid-cols-12 gap-10 items-center">
         <div class="lg:col-span-7 text-center lg:text-left">
           <span class="lp-eyebrow -light">Matokeo &amp; Taaluma</span>
-          <h1 class="lp-display mt-4 mb-4">Matokeo, Broadsheet, na Division —<br class="hidden lg:block"> Kikokotolewa Kiotomatiki.</h1>
-          <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Mfumo wa CA (Continuous Assessment) unaofanana na jinsi shule za Tanzania zinavyofanya kazi - Test, Midterm, Terminal, Annual.</p>
+          <h1 class="lp-display mt-4 mb-4">Matokeo, Jedwali Kuu na Ngazi —<br class="hidden lg:block"> Huhesabiwa Kiotomatiki.</h1>
+          <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Mfumo wa CA (Continuous Assessment) unaofanana na jinsi shule za Tanzania zinavyofanya kazi — majaribio, mtihani wa kati, mtihani wa mwisho wa muhula na mtihani wa mwaka.</p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
             <a href="/register-school/" class="sp-btn sp-btn-gold lp-shine !px-8 !py-3 !text-[15px]">Jisajili Sasa</a>
-            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Demo Kwanza</a>
+            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Onyesho Kwanza</a>
           </div>
         </div>
         <div class="lg:col-span-5 {% if hero_images.0 %}hidden{% else %}hidden lg:block{% endif %}">
@@ -258,7 +264,7 @@
 
     <!-- Slaidi 2 -->
     <div id="hero-slide-1" class="hero-slide" aria-label="Slaidi 2 kati ya 7">
-      {% if hero_images.1 %}<img src="{{ hero_images.1 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/70"></div>{% endif %}
+      {% if hero_images.1 %}<img src="{{ hero_images.1 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="lp-scrim absolute inset-0 z-0"></div>{% endif %}
       <div class="relative z-10 w-full grid lg:grid-cols-12 gap-10 items-center">
         <div class="lg:col-span-7 text-center lg:text-left">
           <span class="lp-eyebrow -light">Mawasiliano ya Wazazi</span>
@@ -266,7 +272,7 @@
           <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Matokeo, ada, na nidhamu - mzazi anajua kila kitu bila kupiga simu shuleni.</p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
             <a href="/register-school/" class="sp-btn sp-btn-gold lp-shine !px-8 !py-3 !text-[15px]">Jisajili Sasa</a>
-            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Demo Kwanza</a>
+            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Onyesho Kwanza</a>
           </div>
         </div>
         <div class="lg:col-span-5 {% if hero_images.1 %}hidden{% else %}hidden lg:block{% endif %}">
@@ -293,15 +299,15 @@
 
     <!-- Slaidi 3 -->
     <div id="hero-slide-2" class="hero-slide" aria-label="Slaidi 3 kati ya 7">
-      {% if hero_images.2 %}<img src="{{ hero_images.2 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/70"></div>{% endif %}
+      {% if hero_images.2 %}<img src="{{ hero_images.2 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="lp-scrim absolute inset-0 z-0"></div>{% endif %}
       <div class="relative z-10 w-full grid lg:grid-cols-12 gap-10 items-center">
         <div class="lg:col-span-7 text-center lg:text-left">
           <span class="lp-eyebrow -light">Nidhamu na Usalama</span>
           <h1 class="lp-display mt-4 mb-4">Nidhamu ya Wanafunzi<br class="hidden lg:block"> Inafuatiliwa kwa Uwazi.</h1>
-          <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Alama za nidhamu, alert za moja kwa moja, na ripoti kamili - bila karatasi zinazopotea.</p>
+          <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Alama za nidhamu, arifa za moja kwa moja, na ripoti kamili - bila karatasi zinazopotea.</p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
             <a href="/register-school/" class="sp-btn sp-btn-gold lp-shine !px-8 !py-3 !text-[15px]">Jisajili Sasa</a>
-            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Demo Kwanza</a>
+            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Onyesho Kwanza</a>
           </div>
         </div>
         <div class="lg:col-span-5 {% if hero_images.2 %}hidden{% else %}hidden lg:block{% endif %}">
@@ -324,15 +330,15 @@
 
     <!-- Slaidi 4 -->
     <div id="hero-slide-3" class="hero-slide" aria-label="Slaidi 4 kati ya 7">
-      {% if hero_images.3 %}<img src="{{ hero_images.3 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/70"></div>{% endif %}
+      {% if hero_images.3 %}<img src="{{ hero_images.3 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="lp-scrim absolute inset-0 z-0"></div>{% endif %}
       <div class="relative z-10 w-full grid lg:grid-cols-12 gap-10 items-center">
         <div class="lg:col-span-7 text-center lg:text-left">
           <span class="lp-eyebrow -light">Ada na Malipo</span>
           <h1 class="lp-display mt-4 mb-4">Madeni ya Ada<br class="hidden lg:block"> Yanafuatiliwa Kiotomatiki.</h1>
-          <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Risiti, tathmini za mwaka, na ripoti ya madeni - kila kitu sehemu moja kwa Accountant.</p>
+          <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Risiti, tathmini za mwaka, na ripoti ya madeni - kila kitu sehemu moja kwa Mhasibu.</p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
             <a href="/register-school/" class="sp-btn sp-btn-gold lp-shine !px-8 !py-3 !text-[15px]">Jisajili Sasa</a>
-            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Demo Kwanza</a>
+            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Onyesho Kwanza</a>
           </div>
         </div>
         <div class="lg:col-span-5 {% if hero_images.3 %}hidden{% else %}hidden lg:block{% endif %}">
@@ -359,15 +365,15 @@
 
     <!-- Slaidi 5 -->
     <div id="hero-slide-4" class="hero-slide" aria-label="Slaidi 5 kati ya 7">
-      {% if hero_images.4 %}<img src="{{ hero_images.4 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/70"></div>{% endif %}
+      {% if hero_images.4 %}<img src="{{ hero_images.4 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="lp-scrim absolute inset-0 z-0"></div>{% endif %}
       <div class="relative z-10 w-full grid lg:grid-cols-12 gap-10 items-center">
         <div class="lg:col-span-7 text-center lg:text-left">
           <span class="lp-eyebrow -light">Kwa Walimu</span>
-          <h1 class="lp-display mt-4 mb-4">Jaza Marks kwa Dakika Tano,<br class="hidden lg:block"> Siyo Masaa.</h1>
-          <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Spreadsheet moja kwa somo lako - darasa zima, mihula yote - bila makaratasi wala Excel za kuchanganya.</p>
+          <h1 class="lp-display mt-4 mb-4">Jaza Alama kwa Dakika Tano,<br class="hidden lg:block"> Siyo Masaa.</h1>
+          <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Jedwali moja tu kwa kila somo - darasa zima na mihula yote - bila vitabu vya kuandikia wala Excel tofauti.</p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
             <a href="/register-school/" class="sp-btn sp-btn-gold lp-shine !px-8 !py-3 !text-[15px]">Jisajili Sasa</a>
-            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Demo Kwanza</a>
+            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Onyesho Kwanza</a>
           </div>
         </div>
         <div class="lg:col-span-5 {% if hero_images.4 %}hidden{% else %}hidden lg:block{% endif %}">
@@ -393,15 +399,15 @@
 
     <!-- Slaidi 6 -->
     <div id="hero-slide-5" class="hero-slide" aria-label="Slaidi 6 kati ya 7">
-      {% if hero_images.5 %}<img src="{{ hero_images.5 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/70"></div>{% endif %}
+      {% if hero_images.5 %}<img src="{{ hero_images.5 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="lp-scrim absolute inset-0 z-0"></div>{% endif %}
       <div class="relative z-10 w-full grid lg:grid-cols-12 gap-10 items-center">
         <div class="lg:col-span-7 text-center lg:text-left">
           <span class="lp-eyebrow -light">Duka la Shule</span>
           <h1 class="lp-display mt-4 mb-4">Vifaa na Michango<br class="hidden lg:block"> Vinafuatiliwa Kiotomatiki.</h1>
-          <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Store Keeper anasimamia stock, michango ya wanafunzi, na maombi - bila kuchanganya kwenye daftari.</p>
+          <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Msimamizi wa Duka anasimamia hisa ya vifaa, michango ya wanafunzi na maombi - bila kuchanganya kwenye mabuku.</p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
             <a href="/register-school/" class="sp-btn sp-btn-gold lp-shine !px-8 !py-3 !text-[15px]">Jisajili Sasa</a>
-            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Demo Kwanza</a>
+            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Onyesho Kwanza</a>
           </div>
         </div>
         <div class="lg:col-span-5 {% if hero_images.5 %}hidden{% else %}hidden lg:block{% endif %}">
@@ -425,7 +431,7 @@
 
     <!-- Slaidi 7 -->
     <div id="hero-slide-6" class="hero-slide" aria-label="Slaidi 7 kati ya 7">
-      {% if hero_images.6 %}<img src="{{ hero_images.6 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="absolute inset-0 z-0 bg-navy/70"></div>{% endif %}
+      {% if hero_images.6 %}<img src="{{ hero_images.6 }}" alt="" class="absolute inset-0 z-0 w-full h-full object-cover"><div class="lp-scrim absolute inset-0 z-0"></div>{% endif %}
       <div class="relative z-10 w-full grid lg:grid-cols-12 gap-10 items-center">
         <div class="lg:col-span-7 text-center lg:text-left">
           <span class="lp-eyebrow -light">Ripoti Kamili kwa Mzazi</span>
@@ -433,7 +439,7 @@
           <p class="lp-lead text-white/80 max-w-xl mx-auto lg:mx-0 mb-7">Mzazi anapakua ripoti kamili ya mtoto wake - kila kitu shuleni kinachomhusu, sehemu moja, muda wowote.</p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
             <a href="/register-school/" class="sp-btn sp-btn-gold lp-shine !px-8 !py-3 !text-[15px]">Jisajili Sasa</a>
-            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Demo Kwanza</a>
+            <a href="#demo" class="sp-btn lp-btn-ghost !px-8 !py-3 !text-[15px]">Omba Onyesho Kwanza</a>
           </div>
         </div>
         <div class="lg:col-span-5 {% if hero_images.6 %}hidden{% else %}hidden lg:block{% endif %}">
@@ -533,7 +539,7 @@
         <span class="lp-num">01</span>
       </div>
       <h3 class="font-serif text-navy font-bold text-lg mb-2">Matokeo Kiotomatiki</h3>
-      <p class="text-sm text-gray-500 leading-relaxed">Division, nafasi, na wastani vinahesabika wenyewe — hakuna Excel za mkono tena.</p>
+      <p class="text-sm text-gray-500 leading-relaxed">Ngazi, nafasi na wastani huhesabika otomatiki — huhitaji Excel tena.</p>
     </div>
     <div class="sp-card p-7 sp-card-lift sp-reveal">
       <div class="flex items-center justify-between mb-5">
@@ -553,7 +559,7 @@
         <span class="lp-num">03</span>
       </div>
       <h3 class="font-serif text-navy font-bold text-lg mb-2">Kila Kitu Kinafuatiliwa</h3>
-      <p class="text-sm text-gray-500 leading-relaxed">Audit log inarekodi nani-alifanya-nini-lini — hakuna nafasi ya udanganyifu.</p>
+      <p class="text-sm text-gray-500 leading-relaxed">Kumbukumbu za Ukaguzi zinarekodi nani, aliyefanya nini na lini — hakuna nafasi ya udanganyifu.</p>
     </div>
   </div>
 </section>
@@ -566,7 +572,7 @@
         <span class="lp-eyebrow">Moduli</span>
         <h2 class="lp-h2 text-navy mt-3">Kila Idara, Mfumo Mmoja</h2>
       </div>
-      <p class="text-sm text-gray-500 max-w-md md:text-right sp-reveal">Kila moduli ina dashboard, ripoti na ruhusa zake - zote zinaonekana chini ya akaunti moja ya shule.</p>
+      <p class="text-sm text-gray-500 max-w-md md:text-right sp-reveal">Kila moduli ina dashibodi, ripoti na ruhusa zake - zote zinaonekana chini ya akaunti moja ya shule.</p>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
@@ -575,34 +581,34 @@
           <div class="lp-icon-ring">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 20h16M7 16V9M12 16V4M17 16v-6"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Academic</h4>
+          <h4 class="font-semibold text-navy">Masomo</h4>
         </div>
-        <p class="text-sm text-gray-500">Alama za CA, broadsheet, division, kuchapisha matokeo na PDF/Excel.</p>
+        <p class="text-sm text-gray-500">Alama za CA, jedwali kuu, ngazi, kuchapisha matokeo na PDF/Excel.</p>
       </div>
       <div class="sp-card lp-module p-5 sp-card-lift sp-reveal">
         <div class="flex items-center gap-3 mb-2.5">
           <div class="lp-icon-ring" style="background: color-mix(in srgb, var(--ok) 12%, transparent); color: var(--ok)">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Attendance</h4>
+          <h4 class="font-semibold text-navy">Mahudhurio</h4>
         </div>
-        <p class="text-sm text-gray-500">Mahudhurio ya kila siku kwa darasa, ripoti na takwimu za ufuputo.</p>
+        <p class="text-sm text-gray-500">Mahudhurio ya kila siku kwa darasa, ripoti na takwimu za ukosefu wa mahudhurio.</p>
       </div>
       <div class="sp-card lp-module p-5 sp-card-lift sp-reveal">
         <div class="flex items-center gap-3 mb-2.5">
           <div class="lp-icon-ring" style="background: color-mix(in srgb, var(--bad) 10%, transparent); color: var(--bad)">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Discipline</h4>
+          <h4 class="font-semibold text-navy">Nidhamu</h4>
         </div>
-        <p class="text-sm text-gray-500">Alama za nidhamu, maoni ya mwalimu na alert kwa wazazi.</p>
+        <p class="text-sm text-gray-500">Alama za nidhamu, maoni ya mwalimu na arifa kwa wazazi.</p>
       </div>
       <div class="sp-card lp-module p-5 sp-card-lift sp-reveal">
         <div class="flex items-center gap-3 mb-2.5">
           <div class="lp-icon-ring" style="background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--warn)">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Accountant</h4>
+          <h4 class="font-semibold text-navy">Uhasibu</h4>
         </div>
         <p class="text-sm text-gray-500">Muundo wa ada, kurekodi malipo, risiti na ripoti ya madeni.</p>
       </div>
@@ -611,16 +617,16 @@
           <div class="lp-icon-ring">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9-5 9 5v8l-9 5-9-5V8z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 5 9-5"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Store</h4>
+          <h4 class="font-semibold text-navy">Duka</h4>
         </div>
-        <p class="text-sm text-gray-500">Stock ya vifaa, michango ya wanafunzi na maombi ya bidhaa.</p>
+        <p class="text-sm text-gray-500">Hisa za vifaa, michango ya wanafunzi na maombi ya bidhaa.</p>
       </div>
       <div class="sp-card lp-module p-5 sp-card-lift sp-reveal">
         <div class="flex items-center gap-3 mb-2.5">
           <div class="lp-icon-ring" style="background: color-mix(in srgb, var(--brand-2) 12%, transparent); color: var(--brand-2)">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path stroke-linecap="round" d="M6.5 16h5M14 10h4M14 13.5h3"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Staff</h4>
+          <h4 class="font-semibold text-navy">Wafanyakazi</h4>
         </div>
         <p class="text-sm text-gray-500">Usajili wa walimu na wafanyakazi, ugawaji wa masomo na OTP.</p>
       </div>
@@ -629,7 +635,7 @@
           <div class="lp-icon-ring">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 20l4-4 4 4"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Teacher Portal</h4>
+          <h4 class="font-semibold text-navy">Lango la Mwalimu</h4>
         </div>
         <p class="text-sm text-gray-500">Mwalimu anajaza alama za somo lake na kuona takwimu za darasa.</p>
       </div>
@@ -638,7 +644,7 @@
           <div class="lp-icon-ring" style="background: color-mix(in srgb, var(--ok) 12%, transparent); color: var(--ok)">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M3.5 20c.5-3 2.8-5 5.5-5s5 2 5.5 5"/><circle cx="17.5" cy="10" r="2.5"/><path stroke-linecap="round" d="M15.5 19.5c.4-2 1.4-3.2 3.2-3.4 1.1-.1 1.8.4 1.8.4"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Family Portal</h4>
+          <h4 class="font-semibold text-navy">Lango la Mzazi</h4>
         </div>
         <p class="text-sm text-gray-500">Mzazi anaona matokeo, ada, mahudhurio na nidhamu ya mtoto wake.</p>
       </div>
@@ -647,16 +653,16 @@
           <div class="lp-icon-ring" style="background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--warn)">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Branding</h4>
+          <h4 class="font-semibold text-navy">Utambulisho</h4>
         </div>
-        <p class="text-sm text-gray-500">Tovuti ya umma ya shule yako - wasifu, mission/vision na ukubaji.</p>
+        <p class="text-sm text-gray-500">Tovuti ya umma ya shule yako — wasifu, dhamira, dira na picha za shule.</p>
       </div>
       <div class="sp-card lp-module p-5 sp-card-lift sp-reveal">
         <div class="flex items-center gap-3 mb-2.5">
           <div class="lp-icon-ring" style="background: color-mix(in srgb, var(--bad) 10%, transparent); color: var(--bad)">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" d="M5 6h14M5 12h9M5 18h7"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 16l2 2 4-4"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Audit Log</h4>
+          <h4 class="font-semibold text-navy">Kumbukumbu za Ukaguzi</h4>
         </div>
         <p class="text-sm text-gray-500">Rekodi ya kila kitendo mfumoni - nani, lini na alibadilisha nini.</p>
       </div>
@@ -665,7 +671,7 @@
           <div class="lp-icon-ring">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M18 8a6 6 0 10-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path stroke-linecap="round" d="M13.7 21a2 2 0 01-3.4 0"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Notifications</h4>
+          <h4 class="font-semibold text-navy">Arifa</h4>
         </div>
         <p class="text-sm text-gray-500">Arifa za mfumo na SMS kwa wazazi kupitia mfumo wa Beem.</p>
       </div>
@@ -674,9 +680,9 @@
           <div class="lp-icon-ring" style="background: color-mix(in srgb, var(--brand-2) 12%, transparent); color: var(--brand-2)">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 21V10l8-5 8 5v11"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 21v-6h6v6M11 12h2"/></svg>
           </div>
-          <h4 class="font-semibold text-navy">Multi-tenant</h4>
+          <h4 class="font-semibold text-navy">Hifadhi Huria kwa Kila Shule</h4>
         </div>
-        <p class="text-sm text-gray-500">Kila shule ina anwani yake (<span class="font-mono text-[12px]">&lt;shule&gt;.{{ platform_domain }}</span>) na data iliyotengwa.</p>
+        <p class="text-sm text-gray-500">Kila shule ina anwani yake (<span class="font-mono text-[12px]">&lt;shule&gt;.{{ platform_domain }}</span>) na taarifa zilizotengwa.</p>
       </div>
     </div>
   </div>
@@ -694,23 +700,23 @@
     <div class="text-center md:text-left sp-reveal lp-step">
       <div class="lp-step-badge mx-auto md:mx-0 mb-5">1</div>
       <h3 class="font-serif text-navy font-bold text-lg mb-2">Tuma Ombi au Usajili</h3>
-      <p class="text-sm text-gray-500 leading-relaxed">Jaza fomu ya "Omba Demo" au usajili wa shule - jina la shule, mawasiliano yako na idadi ya wanafunzi.</p>
+      <p class="text-sm text-gray-500 leading-relaxed">Jaza fomu ya "Omba Onyesho" au usajili wa shule - jina la shule, mawasiliano yako na idadi ya wanafunzi.</p>
     </div>
     <div class="text-center md:text-left sp-reveal lp-step">
       <div class="lp-step-badge mx-auto md:mx-0 mb-5">2</div>
       <h3 class="font-serif text-navy font-bold text-lg mb-2">Tunakagua na Kuidhinisha</h3>
-      <p class="text-sm text-gray-500 leading-relaxed">Akaunti ya shule hufunguliwa baada ya ukaguzi wa admin; akaunti ya kwanza ya mkuu wa shule ndiyo hupewa ruhusa kamili.</p>
+      <p class="text-sm text-gray-500 leading-relaxed">Akaunti ya shule hufunguliwa baada ya ukaguzi wa msimamizi wa mfumo; akaunti ya kwanza ya mkuu wa shule ndiyo hupewa ruhusa kamili.</p>
     </div>
     <div class="text-center md:text-left sp-reveal lp-step">
       <div class="lp-step-badge mx-auto md:mx-0 mb-5">3</div>
       <h3 class="font-serif text-navy font-bold text-lg mb-2">Sanidi na Uanze</h3>
-      <p class="text-sm text-gray-500 leading-relaxed">Dashboard kuna mkongozo wa hatua kwa hatua: darasa, masomo, wanafunzi, walimu, muundo wa ada, alama na tovuti ya shule.</p>
+      <p class="text-sm text-gray-500 leading-relaxed">Dashibodi ina mkongozo wa hatua kwa hatua: madarasa, masomo, wanafunzi, walimu, miundo ya ada, alama na tovuti ya shule.</p>
     </div>
   </div>
 
   <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-3 sp-reveal">
     <a href="/register-school/" class="sp-btn sp-btn-primary !px-7 !py-3">Sajili Shule Yako</a>
-    <a href="#demo" class="sp-btn sp-btn-ghost !px-7 !py-3">Au Omba Demo Kwanza</a>
+    <a href="#demo" class="sp-btn sp-btn-ghost !px-7 !py-3">Au Omba Onyesho Kwanza</a>
   </div>
 </section>
 
@@ -759,15 +765,15 @@
         </div>
         <div class="flex items-start gap-2">
           <svg class="lp-check w-4 h-4 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4 10-11"/></svg>
-          Data ya shule yako iliyotengwa na shule nyingine
+          Taarifa za shule yako zilizotengwa na shule nyingine
         </div>
         <div class="flex items-start gap-2">
           <svg class="lp-check w-4 h-4 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4 10-11"/></svg>
-          Audit log na ripoti za kila idara
+          Kumbukumbu za Ukaguzi na ripoti za kila idara
         </div>
         <div class="flex items-start gap-2">
           <svg class="lp-check w-4 h-4 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4 10-11"/></svg>
-          Mkongozo wa kujiweka sawa (onboarding)
+          Mkongozo wa maandalizi ya shule
         </div>
       </div>
       <p class="text-xs text-gray-400 mt-5">SMS zinanunuliwa tofauti (Beem Africa credits) - hazijajumuishwa kwenye bei hapo juu.</p>
@@ -787,7 +793,7 @@
   <div class="text-center max-w-2xl mx-auto mb-12 sp-reveal">
     <span class="lp-eyebrow -center">Matumizi</span>
     <h2 class="lp-h2 text-navy mt-3 mb-3">Kwa Nani ShulePlusERP?</h2>
-    <p class="text-gray-500 text-sm">Kila mtu shuleni ana dashboard yake mwenyewe - ruhusa, ripoti na kazi zake pekee.</p>
+    <p class="text-gray-500 text-sm">Kila mtu shuleni ana dashibodi yake mwenyewe - ruhusa, ripoti na kazi zake pekee.</p>
   </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
@@ -823,11 +829,11 @@
 
   <div class="mt-9 flex flex-wrap items-center justify-center gap-2.5 sp-reveal">
     <span class="eyebrow mr-1">Na pia:</span>
-    <span class="sp-chip">Second Master</span>
-    <span class="sp-chip">Academic Master</span>
+    <span class="sp-chip">Msaidizi wa Mkuu</span>
+    <span class="sp-chip">Msimamizi wa Masomo</span>
     <span class="sp-chip">Mwalimu wa Nidhamu</span>
     <span class="sp-chip">Mwanafunzi</span>
-    <span class="sp-chip">Store Keeper</span>
+    <span class="sp-chip">Msimamizi wa Duka</span>
   </div>
 
   <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-px overflow-hidden rounded-[14px] border lp-hairline" style="background: var(--line)">
@@ -837,7 +843,7 @@
     </div>
     <div class="bg-white px-4 py-7 text-center">
       <div class="lp-display !text-[28px] text-navy">8</div>
-      <div class="text-[11px] uppercase tracking-[0.14em] text-gray-400 mt-1.5">Roles Tofauti</div>
+      <div class="text-[11px] uppercase tracking-[0.14em] text-gray-400 mt-1.5">Cheo Tofauti</div>
     </div>
     <div class="bg-white px-4 py-7 text-center">
       <div class="lp-display !text-[28px] text-navy">100%</div>
@@ -867,17 +873,17 @@
       </details>
       <details class="sp-card lp-faq p-5">
         <summary class="font-semibold text-navy text-sm cursor-pointer flex items-center justify-between gap-3">
-          Je, data ya shule yangu iko salama?
+          Je, taarifa za shule yangu ziko salama?
           <span class="lp-faq-plus text-gold text-xl leading-none">+</span>
         </summary>
-        <p class="text-sm text-gray-500 mt-3 leading-relaxed">Ndiyo - kila shule ina data yake iliyotengwa kabisa (multi-tenant), password zimesimbwa, na tunafanya backup ya mara kwa mara. Angalia Sera yetu ya Faragha kwa maelezo zaidi.</p>
+        <p class="text-sm text-gray-500 mt-3 leading-relaxed">Ndiyo - kila shule ina taarifa zake zilizotengwa kabisa, maneno ya siri huhifadhiwa kama msimbo usiorudishwa, na tunatengeneza nakala za uhakika mara kwa mara. Angalia Sera yetu ya Faragha kwa maelezo zaidi.</p>
       </details>
       <details class="sp-card lp-faq p-5">
         <summary class="font-semibold text-navy text-sm cursor-pointer flex items-center justify-between gap-3">
-          Je, shule zingine zinaweza kuona data yangu?
+          Je, shule zingine zinaweza kuona taarifa zangu?
           <span class="lp-faq-plus text-gold text-xl leading-none">+</span>
         </summary>
-        <p class="text-sm text-gray-500 mt-3 leading-relaxed">Hapana. Kila ombi la mfumo huhujishwa kwenye shule iliyoingia (school scoping), kwa hiyo mwanafunzi, alama au ripoti ya shule moja haionekani kwenye nyingine.</p>
+        <p class="text-sm text-gray-500 mt-3 leading-relaxed">Hapana. Kila ombi la mfumo huchujwa na huhusiana na shule iliyoingia tu (taarifa za kila shule zimetengwa), kwa hiyo mwanafunzi, alama au ripoti ya shule moja haionekani kwenye nyingine.</p>
       </details>
       <details class="sp-card lp-faq p-5">
         <summary class="font-semibold text-navy text-sm cursor-pointer flex items-center justify-between gap-3">
@@ -898,24 +904,24 @@
           Tunaanzaje kutumia mfumo?
           <span class="lp-faq-plus text-gold text-xl leading-none">+</span>
         </summary>
-        <p class="text-sm text-gray-500 mt-3 leading-relaxed">Jaza fomu ya "Omba Demo" hapa chini, tutakupigia simu ndani ya masaa 24 kupanga demo na kukusanidia akaunti ya shule yako.</p>
+        <p class="text-sm text-gray-500 mt-3 leading-relaxed">Jaza fomu ya "Omba Onyesho" hapa chini, tutakupigia simu ndani ya masaa 24 kupanga onyesho na kukusaidia kuanzisha akaunti ya shule yako.</p>
       </details>
     </div>
   </div>
 </section>
 
-<!-- ======================= OMTA DEMO ======================= -->
+<!-- ======================= ONYESHO ======================= -->
 <section id="demo" class="lp-mesh relative overflow-hidden text-white">
   <div class="lp-grid-lines" aria-hidden="true"></div>
   <div class="relative z-10 max-w-7xl mx-auto px-5 lg:px-8 py-16 md:py-20 grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
     <div class="lg:pt-4">
-      <span class="lp-eyebrow -light">Demo bure</span>
+      <span class="lp-eyebrow -light">Onyesho Bure</span>
       <h2 class="lp-display text-white mt-4 mb-4">Tuone Pamoja<br class="hidden sm:block"> Jinsi Inavyofanya Kazi.</h2>
-      <p class="lp-lead text-white/80 max-w-lg mb-8">Tutakupigia simu ndani ya masaa 24. Tunakuonyesha uwekaji alama, toleo la broadsheet, ukusanyaji wa ada na ripoti ya mzazi - kwa data ya shule yako.</p>
+      <p class="lp-lead text-white/80 max-w-lg mb-8">Tutakupigia simu ndani ya masaa 24. Tunakuonyesha uwekaji alama, toleo la jedwali kuu, ukusanyaji wa ada na ripoti ya mzazi - kwa taarifa za shule yako.</p>
       <ul class="space-y-3 text-sm text-white/85">
         <li class="flex items-start gap-3">
           <svg class="lp-check w-5 h-5 mt-0.5 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4 10-11"/></svg>
-          Demo ya moja kwa moja na maelezo kwa Kiswahili
+          Onyesho la moja kwa moja na maelezo kwa Kiswahili
         </li>
         <li class="flex items-start gap-3">
           <svg class="lp-check w-5 h-5 mt-0.5 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4 10-11"/></svg>
@@ -923,7 +929,7 @@
         </li>
         <li class="flex items-start gap-3">
           <svg class="lp-check w-5 h-5 mt-0.5 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4 10-11"/></svg>
-          Demo haitagharimu chochote
+          Onyesho hili halina gharama yoyote
         </li>
       </ul>
       <div class="mt-9 lp-rule"></div>
@@ -938,7 +944,7 @@
         {% endfor %}
       {% endif %}
 
-      <h3 class="font-serif text-navy font-bold text-xl mb-1">Omba Demo</h3>
+      <h3 class="font-serif text-navy font-bold text-xl mb-1">Omba Onyesho</h3>
       <p class="text-xs text-gray-400 mb-6">Fomu hii hufika kwa kundi la usaidiaji.</p>
 
       <form method="POST" class="grid grid-cols-1 gap-3">
@@ -1026,7 +1032,7 @@
           <li>
             <a href="mailto:{{ platform_email }}" class="hover:text-gold flex items-center gap-2">
               <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              Email: {{ platform_email }}
+              Barua pepe: {{ platform_email }}
             </a>
           </li>
           <li class="flex items-center gap-2 pt-1 text-gray-400">
@@ -1060,7 +1066,7 @@
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
           </a>
         </div>
-        <a href="#demo" class="sp-btn sp-btn-gold lp-shine w-full mt-5">Omba Demo</a>
+        <a href="#demo" class="sp-btn sp-btn-gold lp-shine w-full mt-5">Omba Onyesho</a>
       </div>
     </div>
 

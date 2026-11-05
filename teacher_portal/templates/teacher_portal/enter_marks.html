@@ -1,5 +1,5 @@
 {% extends 'shule_core/base_tailwind.html' %}
-{% block title %}Jaza Marks{% endblock %}
+{% block title %}Jaza Alama{% endblock %}
 
 {% block content %}
 <div class="max-w-5xl mx-auto px-4 py-6">
@@ -12,12 +12,12 @@
 
   {% if is_emergency %}
     <div class="text-sm rounded px-3 py-2 mb-4" style="background: rgba(180,83,9,.14); color: var(--warn); border: 1px solid var(--warn)">
-      <svg class="w-3.5 h-3.5 inline-block -mt-0.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg> Uko kwenye mode ya <b>DHARURA</b> - unaweza kujaza marks za somo/darasa lolote, hata usilofundisha.
+      <svg class="w-3.5 h-3.5 inline-block -mt-0.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg> Uko kwenye mode ya <b>DHARURA</b> - unaweza kujaza alama za somo/darasa lolote, hata usilofundisha.
     </div>
   {% endif %}
 
   <p class="eyebrow mb-1">Alama</p>
-  <h1 class="font-serif text-xl md:text-2xl font-bold mb-3" style="color: var(--brand)">Jaza Marks</h1>
+  <h1 class="font-serif text-xl md:text-2xl font-bold mb-3" style="color: var(--brand)">Jaza Alama</h1>
 
   <div class="sp-card p-5 mb-5 sp-reveal">
     <h3 class="font-serif font-bold mb-3" style="color: var(--brand)">Chagua {% if is_emergency %}Somo na Darasa{% else %}Somo/Darasa Lako{% endif %}</h3>
@@ -44,7 +44,7 @@
         {% if series_columns %}
           <p class="text-xs mb-4" style="color: var(--ink-2)">
             <span class="inline-block w-2.5 h-2.5 rounded-sm align-middle mr-1" style="background: var(--brand-2)"></span>
-            Column za <b>"Maandalizi (Series)"</b> ni hiari kwa Form IV/VI - <b>hazibadilishi</b> Mid-Term/Terminal/Annual, ni taarifa ya maendeleo tu.
+            Safu wima za <b>"Maandalizi"</b> ni hiari kwa Kidato cha IV/VI - <b>hazibadilishi</b> mitihani ya Kati ya Muhula, Kumaliza Muhula au ya Mwaka; ni taarifa ya maendeleo tu.
           </p>
         {% endif %}
 
@@ -57,10 +57,10 @@
               {% endfor %}
               {% if series_columns %}
                 {% for code, label in series_columns %}
-                  <th class="p-2" style="background: var(--brand-2); color: var(--brand-ink)" title="Mtihani wa maandalizi - hauathiri Mid-Term/Terminal/Annual">{{ label }}</th>
+                  <th class="p-2" style="background: var(--brand-2); color: var(--brand-ink)" title="Mtihani wa maandalizi - hauathiri Mtihani wa Kati, wa Mwisho wa Muhula wala wa Mwaka">{{ label }}</th>
                 {% endfor %}
               {% endif %}
-              <th class="p-2" style="background: var(--accent); color: var(--accent-ink)">Mid-Term</th>
+              <th class="p-2" style="background: var(--accent); color: var(--accent-ink)">Kati ya Muhula</th>
               <th class="p-2" style="background: var(--ok); color: #fff">Matokeo ya Sasa</th>
             </tr>
           </thead>
@@ -97,7 +97,7 @@
         </table>
 
         {% if students %}
-          <button type="submit" class="sp-btn sp-btn-gold w-full mt-4">Hifadhi Marks Zote</button>
+          <button type="submit" class="sp-btn sp-btn-gold w-full mt-4">Hifadhi Alama Zote</button>
         {% endif %}
       </div>
     </form>

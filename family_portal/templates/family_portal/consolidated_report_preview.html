@@ -1,6 +1,6 @@
 {% extends 'shule_core/base_tailwind.html' %}
-{% block title %}Preview ya Ripoti - {{ student }}{% endblock %}
-{% block page_tag %}Report Card Preview{% endblock %}
+{% block title %}Muhtasari wa Ripoti - {{ student }}{% endblock %}
+{% block page_tag %}Muhtasari wa Ripoti ya Mwanafunzi{% endblock %}
 
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 py-6">
@@ -55,7 +55,7 @@
         <div class="mb-1">
           <span class="sp-chip">{% if results_summary %}{{ results_summary.division }}{% else %}-{% endif %}</span>
         </div>
-        <div class="sp-kpi-label">Division</div>
+        <div class="sp-kpi-label">Ngazi</div>
       </div>
       <div class="rounded-lg p-3 text-center" style="border: 1px solid var(--line)">
         <div class="sp-kpi-value" style="font-size: 18px; {% if discipline_score < 50 %}color: var(--bad){% endif %}">{{ discipline_score }}</div>
@@ -94,13 +94,13 @@
     </div>
 
     {% if series_results %}
-      <h3 class="font-serif text-sm uppercase tracking-wide font-bold pl-2 mb-3" style="color: var(--brand); border-left: 4px solid var(--accent)">Mitihani ya Maandalizi (Series) - Hiari, si Rasmi</h3>
+      <h3 class="font-serif text-sm uppercase tracking-wide font-bold pl-2 mb-3" style="color: var(--brand); border-left: 4px solid var(--accent)">Mitihani ya Maandalizi - Hiari, si rasmi</h3>
       <div class="overflow-x-auto mb-6">
         <table class="w-full text-sm">
           <thead>
             <tr class="text-xs uppercase">
               <th class="p-2 text-left" style="background: var(--brand-2); color: var(--brand-ink)">Somo</th>
-              <th class="p-2" style="background: var(--brand-2); color: var(--brand-ink)">Series</th>
+              <th class="p-2" style="background: var(--brand-2); color: var(--brand-ink)">Maandalizi</th>
               <th class="p-2" style="background: var(--brand-2); color: var(--brand-ink)">Alama</th>
             </tr>
           </thead>
@@ -169,7 +169,7 @@
       </table>
     </div>
 
-    <h3 class="font-serif text-sm uppercase tracking-wide font-bold pl-2 mb-3" style="color: var(--brand); border-left: 4px solid var(--accent)">Michango ya Vifaa (Store)</h3>
+    <h3 class="font-serif text-sm uppercase tracking-wide font-bold pl-2 mb-3" style="color: var(--brand); border-left: 4px solid var(--accent)">Michango ya Vifaa (Duka)</h3>
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
         <thead>

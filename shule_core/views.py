@@ -85,7 +85,7 @@ def onboarding_view(request):
         {
             'id': 'subjects',
             'title': 'Masomo na Madarasa',
-            'detail': 'Madarasa ya kawaida (Form I-VI) tayari yapo. Ongeza masomo unayofundisha.',
+            'detail': 'Madarasa ya kawaida (kidato cha I–VI) tayari yapo. Ongeza masomo unayofundisha.',
             'done': counts['subjects'] > 0,
             'metric': f"Masomo {counts['subjects']} · Madarasa {counts['classes']}",
             'url': 'academic:school_setup',
@@ -94,7 +94,7 @@ def onboarding_view(request):
         {
             'id': 'students',
             'title': 'Sajili Wanafunzi',
-            'detail': 'Pakia Excel template ili uwaingize wote kwa mara moja; akaunti za wazazi zinaundwa kiotomatiki.',
+            'detail': 'Pakia kiolezo cha Excel ili uwaingize wote kwa mara moja; akaunti za wazazi zinaundwa kiotomatiki.',
             'done': counts['students'] > 0,
             'metric': f"Wanafunzi {counts['students']}",
             'url': 'academic:bulk_register_students',
@@ -197,7 +197,7 @@ def register_school(request):
 
             messages.success(
                 request,
-                "Ombi lako limepokelewa. Akaunti itafunguliwa baada ya ukaguzi na idhini ya admin."
+                "Ombi lako limepokelewa. Akaunti itafunguliwa baada ya ukaguzi na idhini ya msimamizi."
             )
             return redirect('shule_core:registration_received')
     else:

@@ -61,7 +61,7 @@ class ConductReportForm(forms.ModelForm):
             'proactiveness': forms.Select(attrs={'class': 'border border-gray-300 rounded px-2 py-1.5 text-sm w-full'}),
             'sporting': forms.Select(attrs={'class': 'border border-gray-300 rounded px-2 py-1.5 text-sm w-full'}),
             'general_behavior': forms.TextInput(attrs={
-                'class': 'border border-gray-300 rounded px-2 py-1.5 text-sm w-full', 'placeholder': 'Mfano: GOOD'}),
+                'class': 'border border-gray-300 rounded px-2 py-1.5 text-sm w-full', 'placeholder': 'Mfano: NZURI'}),
             'class_teacher_remarks': forms.Textarea(attrs={
                 'class': 'border border-gray-300 rounded px-2 py-1.5 text-sm w-full', 'rows': 3,
                 'placeholder': 'Maoni ya Mwalimu wa Darasa (hiari)'}),

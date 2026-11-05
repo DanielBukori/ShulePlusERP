@@ -14,8 +14,8 @@ class TeacherRegistrationForm(forms.Form):
     # kusajili shule (register_school), siyo hapa.
     STAFF_ROLE_CHOICES = [
         ('TEACHER', 'Mwalimu'),
-        ('ACADEMIC', 'Academic Master'),
-        ('SECOND_MASTER', 'Second Master'),
+        ('ACADEMIC', 'Msimamizi wa Masomo'),
+        ('SECOND_MASTER', 'Msaidizi wa Mkuu'),
         ('DISCIPLINE', 'Mwalimu wa Nidhamu'),
         ('ACCOUNTANT', 'Mhasibu'),
     ]
@@ -26,15 +26,15 @@ class TeacherRegistrationForm(forms.Form):
                                   widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Jina la kwanza'}))
     last_name = forms.CharField(max_length=50, label='Jina la Mwisho', 
                                  widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Jina la mwisho'}))
-    phone = forms.CharField(max_length=15, label='Namba ya Simu (itakuwa username)',
+    phone = forms.CharField(max_length=15, label='Namba ya Simu (itakuwa jina la mtumiaji)',
                              widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '07XXXXXXXX'}))
     tsc_number = forms.CharField(max_length=50, required=False, label='Namba ya TSC (hiari)',
                                   widget=forms.TextInput(attrs={'class': 'form-control',  'placeholder': 'Namba ya TSC'}))
-    email = forms.CharField(max_length=50, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'email yako'}))
+    email = forms.CharField(max_length=50, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'mfano: juma@shule.co.tz'}))
 
-    qualification = forms.CharField(max_length=100, required=False, label='Taaluma (Diploma/Degree)', 
-                                     widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Diploma/Degree'}))
-    is_store_keeper = forms.BooleanField(required=False, label='Mteue kuwa Store Keeper')
+    qualification = forms.CharField(max_length=100, required=False, label='Taaluma (Cheti au Shahada)', 
+                                     widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Cheti au Shahada'}))
+    is_store_keeper = forms.BooleanField(required=False, label='Mteue kuwa Msimamizi wa Duka')
 
     def __init__(self, *args, school=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -72,7 +72,7 @@ class StaffRoleForm(forms.Form):
         label='Cheo',
         widget=forms.Select(attrs={'class': 'form-select'})
     )
-    is_store_keeper = forms.BooleanField(required=False, label='Store Keeper (anasimamia vifaa/michango)')
+    is_store_keeper = forms.BooleanField(required=False, label='Msimamizi wa Duka (anasimamia vifaa na michango)')
 
 
 class SubjectAssignmentForm(forms.ModelForm):

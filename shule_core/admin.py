@@ -30,7 +30,7 @@ class SchoolAdmin(admin.ModelAdmin):
     readonly_fields = ('is_approved',)
     actions = ('approve_pending_registrations',)
 
-    @admin.action(description='Approve selected pending school registrations')
+    @admin.action(description='Idhinisha usajili wa shule zilizochaguliwa zinazosubiri')
     def approve_pending_registrations(self, request, queryset):
         approved = []
         skipped = []

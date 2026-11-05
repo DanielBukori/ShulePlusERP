@@ -21,6 +21,8 @@ class HomePackage(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'Kazi za Nyumbani'
+        verbose_name_plural = 'Kazi za Nyumbani'
         ordering = ['-uploaded_at']
         indexes = [models.Index(fields=['school', 'subject', 'school_class', 'term', 'academic_year'])]
 

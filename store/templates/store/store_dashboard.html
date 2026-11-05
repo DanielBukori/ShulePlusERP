@@ -1,6 +1,6 @@
 {% extends 'shule_core/base_tailwind.html' %}
-{% block title %}Store Dashboard{% endblock %}
-{% block page_tag %}Store - Vifaa vya Shule{% endblock %}
+{% block title %}Dashibodi ya Duka{% endblock %}
+{% block page_tag %}Duka la Shule - Vifaa vya Shule{% endblock %}
 
 {% block content %}
 <div class="max-w-3xl mx-auto px-4 py-6">
@@ -18,7 +18,7 @@
 
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3 sp-reveal">
     <a href="{% url 'store:record_contribution_spreadsheet' %}" class="sp-card sp-card-primary sp-card-lift p-4">
-      <div class="eyebrow mb-1">Wingi (Spreadsheet)</div>
+      <div class="eyebrow mb-1">Kwa Wingi (Jedwali la Taarifa)</div>
       <div class="font-serif text-lg font-bold" style="color: var(--brand)">Rekodi Mchango Mengi</div>
     </a>
     <a href="{% url 'store:record_contribution' %}" class="sp-card sp-card-lift p-4">
@@ -30,16 +30,16 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 sp-reveal">
     <a href="{% url 'store:add_requirement' %}" class="sp-card sp-card-lift p-4">
       <div class="eyebrow mb-1">Weka Sharti Jipya</div>
-      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Requirement</div>
+      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Sharti</div>
     </a>
     <a href="{% url 'store:stock_adjustment' %}" class="sp-card sp-card-lift p-4">
-      <div class="eyebrow mb-1">Rekebisha Stock</div>
-      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Adjustment</div>
+      <div class="eyebrow mb-1">Rekebisha Hisa</div>
+      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Marekebisho</div>
     </a>
   </div>
 
   <a href="{% url 'store:full_report' %}" class="sp-card sp-card-lift block p-4 mb-6 sp-reveal" style="background: var(--ok); color: var(--brand-ink)">
-    <div class="text-[11px] uppercase tracking-wide mb-1" style="color: var(--brand-ink); opacity: .75">Kwa Store Keeper, Headmaster na Second Master</div>
+    <div class="text-[11px] uppercase tracking-wide mb-1" style="color: var(--brand-ink); opacity: .75">Kwa Msimamizi wa Duka, Mkuu wa Shule na Msaidizi wa Mkuu</div>
     <div class="font-serif text-lg font-bold">Ripoti Kamili ya Michango</div>
     <div class="text-xs mt-1" style="color: var(--brand-ink); opacity: .75">Kila sharti, kila mwanafunzi, aliyeleta na aliyekosa - mahali pamoja</div>
   </a>
@@ -74,7 +74,7 @@
 
   <div class="sp-card overflow-x-auto sp-reveal">
     <div class="p-5">
-      <h3 class="font-serif mb-4" style="color: var(--brand)">Stock Ilivyopo Sasa</h3>
+      <h3 class="font-serif mb-4" style="color: var(--brand)">Hisa Iliopo Sasa</h3>
       <table class="w-full text-sm min-w-[420px]">
         <thead>
           <tr class="text-xs uppercase" style="background: var(--brand); color: var(--brand-ink)">

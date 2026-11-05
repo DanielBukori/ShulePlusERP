@@ -20,6 +20,8 @@ class OffenseType(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        verbose_name = 'Aina ya Kosa'
+        verbose_name_plural = 'Aina za Makosa'
         unique_together = ('school', 'name')
         ordering = ['-points_deducted']
 
@@ -43,6 +45,8 @@ class DisciplineIncident(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'Tukio la Nidhamu'
+        verbose_name_plural = 'Matukio ya Nidhamu'
         ordering = ['-date_occurred']
         indexes = [models.Index(fields=['school', 'student', 'academic_year'])]
 
@@ -67,11 +71,13 @@ class DisciplineAlert(models.Model):
     resolved_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
+        verbose_name = 'Arifa ya Nidhamu'
+        verbose_name_plural = 'Arifa za Nidhamu'
         unique_together = ('student', 'academic_year')
 
     def __str__(self):
         status = 'Imeshughulikiwa' if self.is_resolved else 'Bado Wazi'
-        return f"Alert: {self.student} - {self.score_at_alert} pts ({status})"
+        return f"Arifa: {self.student} - alama {self.score_at_alert} ({status})"
 
 
 def get_student_discipline_score(student, academic_year):

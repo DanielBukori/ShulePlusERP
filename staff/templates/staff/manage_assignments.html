@@ -22,7 +22,7 @@
       <div class="font-serif font-bold" style="color: var(--ink)">{{ staff.user.get_full_name }}</div>
       <div class="text-xs mt-0.5" style="color: var(--ink-3)">
         {{ staff.user.phone }}
-        {% if staff.is_store_keeper %}<span class="sp-chip ml-2">STORE KEEPER</span>{% endif %}
+        {% if staff.is_store_keeper %}<span class="sp-chip ml-2">MSIMAMIZI WA DUKA</span>{% endif %}
       </div>
     </div>
   </div>
@@ -56,7 +56,7 @@
         {% endfor %}
       </select>
       <select name="{{ form.combination.html_name }}" class="border border-gray-300 rounded px-2 py-2 text-sm">
-        <option value="">Combination (A-Level tu)</option>
+        <option value="">Mseto wa Masomo (A-Level pekee)</option>
         {% for choice in form.combination.field.queryset %}
           <option value="{{ choice.pk }}">{{ choice }}</option>
         {% endfor %}

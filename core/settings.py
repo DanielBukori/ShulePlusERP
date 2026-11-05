@@ -77,7 +77,7 @@ INSTALLED_APPS = [
     'staff',
     'teacher_portal',
     'branding',
-    'family_portal', 
+    'family_portal',
     'marketing',
     'notifications',
     'attendance',
@@ -181,7 +181,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# 'sw' hutumia tafsiri rasmi ya Kiswahili iliyomo kwenye Django (admin, auth,
+# na ujumbe wa fomu) - hivyo sehemu za mfumo zisizoandikwa na sisi huja kwa Kiswahili.
+LANGUAGE_CODE = 'sw'
 
 TIME_ZONE =  'Africa/Dar_es_Salaam'
 
@@ -216,7 +218,7 @@ LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'accounts:post_login_redirect'
 LOGOUT_REDIRECT_URL = 'accounts:post_login_redirect'
 # 8. FILE UPLOAD SIZE - Ili receipt kubwa zipite. 10MB
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
 
 AUTH_USER_MODEL = 'shule_core.CustomUser'

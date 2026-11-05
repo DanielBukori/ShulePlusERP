@@ -1,12 +1,12 @@
 {% extends 'shule_core/base_tailwind.html' %}
-{% block title %}Dashboard ya Mzazi{% endblock %}
-{% block page_tag %}Dashboard ya Mzazi{% endblock %}
+{% block title %}Dashibodi ya Mzazi{% endblock %}
+{% block page_tag %}Dashibodi ya Mzazi{% endblock %}
 
 {% block content %}
 <div class="max-w-lg mx-auto px-4 py-6 space-y-4">
 
   <p class="eyebrow mb-1">Watoto</p>
-  <h1 class="font-serif text-xl md:text-2xl font-bold" style="color: var(--brand)">Dashboard ya Mzazi</h1>
+  <h1 class="font-serif text-xl md:text-2xl font-bold" style="color: var(--brand)">Dashibodi ya Mzazi</h1>
 
   {% for s in summaries %}
     <a href="{% url 'family_portal:child_detail' s.student.id %}" class="sp-card sp-card-lift p-4 block sp-reveal">
@@ -24,7 +24,7 @@
       <div class="grid grid-cols-3 gap-2 text-center mt-3">
         <div class="rounded-lg p-2" style="background: var(--panel-2)">
           <div class="text-sm font-bold" style="color: var(--ink)">{% if s.results_summary %}{{ s.results_summary.division }}{% else %}-{% endif %}</div>
-          <div class="sp-kpi-label">Division</div>
+          <div class="sp-kpi-label">Ngazi</div>
         </div>
         <div class="rounded-lg p-2" style="background: var(--panel-2)">
           <div class="text-sm font-bold" style="color: {% if s.debt > 0 %}var(--bad){% else %}var(--ok){% endif %}">TZS {{ s.debt }}</div>

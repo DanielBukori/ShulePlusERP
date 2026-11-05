@@ -182,10 +182,10 @@ def enter_marks_view(request):
                             combination=combination,
                         )
 
-            messages.success(request, f"Marks {saved_count} zimehifadhiwa - {subject.name} ({school_class}).")
+            messages.success(request, f"Alama {saved_count} zimehifadhiwa - {subject.name} ({school_class}).")
             log_action(
                 request.user, school, 'MARKS_ENTERED',
-                f"{'[DHARURA] ' if is_emergency else ''}Amejaza marks {saved_count} - {subject.name} "
+                f"{'[DHARURA] ' if is_emergency else ''}Amejaza alama {saved_count} - {subject.name} "
                 f"({school_class}, {term}, {academic_year})."
             )
             return redirect(f"{request.path}?{request.GET.urlencode()}")

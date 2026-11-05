@@ -861,7 +861,7 @@ def download_broadsheet_pdf(request, class_id):
     form = ResultFilterForm(request.GET or None, school=school)
 
     if not form.is_valid():
-        return HttpResponseForbidden("Chagua Term/Exam/Academic Year kwanza kabla ya ku-download.")
+        return HttpResponseForbidden("Chagua muhula, jaribio na mwaka wa kitaalimu kwanza kabla ya kupakua.")
 
     broadsheet_groups = _build_broadsheet(
         school, school_class,
@@ -896,7 +896,7 @@ def download_broadsheet_excel(request, class_id):
     form = ResultFilterForm(request.GET or None, school=school)
 
     if not form.is_valid():
-        return HttpResponseForbidden("Chagua Term/Exam/Academic Year kwanza kabla ya ku-download.")
+        return HttpResponseForbidden("Chagua muhula, jaribio na mwaka wa kitaalimu kwanza kabla ya kupakua.")
 
     broadsheet_groups = _build_broadsheet(
         school, school_class,
@@ -1113,7 +1113,7 @@ def bulk_register_students_view(request):
         if created:
             log_action(
                 request.user, school, 'STUDENT_REGISTERED',
-                f"Bulk import: amesajili wanafunzi {len(created)} kwa mkupuo (Excel)."
+                f"Amesajili wanafunzi {len(created)} kwa mkupuo (Excel)."
             )
             messages.success(
                 request,
@@ -1173,9 +1173,9 @@ def promote_students_view(request):
         if promoted_summary:
             log_action(
                 request.user, school, 'STUDENT_REGISTERED',
-                "Promotion: " + " | ".join(promoted_summary)
+                "Upandishaji: " + " | ".join(promoted_summary)
             )
-            messages.success(request, "Promotion imekamilika: " + " | ".join(promoted_summary))
+            messages.success(request, "Upandishaji umekamilika: " + " | ".join(promoted_summary))
         else:
             messages.warning(request, "Hakuna darasa lililochaguliwa kupandishwa.")
         return redirect('academic:promote_students')

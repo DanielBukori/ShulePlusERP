@@ -1,21 +1,21 @@
 {% extends 'shule_core/base_tailwind.html' %}
-{% block title %}Dashboard ya Mwalimu{% endblock %}
-{% block page_tag %}Dashboard ya Mwalimu{% endblock %}
+{% block title %}Dashibodi ya Mwalimu{% endblock %}
+{% block page_tag %}Dashibodi ya Mwalimu{% endblock %}
 
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 py-6 space-y-5">
 
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
     <a href="{% url 'teacher_portal:enter_marks' %}" class="sp-card sp-card-lift p-4 sp-reveal">
-      <p class="eyebrow mb-1">Jaza Marks</p>
-      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Marks</div>
+      <p class="eyebrow mb-1">Jaza Alama</p>
+      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Alama</div>
     </a>
     <a href="{% url 'teacher_portal:subject_stats' %}" class="sp-card sp-card-lift p-4 sp-reveal">
       <p class="eyebrow mb-1">Takwimu za Somo</p>
       <div class="font-serif text-lg font-bold" style="color: var(--brand)">Stats</div>
     </a>
     <a href="{% url 'teacher_portal:upload_home_package' %}" class="sp-card sp-card-lift p-4 sp-reveal">
-      <p class="eyebrow mb-1">Home Package</p>
+      <p class="eyebrow mb-1">Kazi za Nyumbani</p>
       <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Pakia</div>
     </a>
   </div>
@@ -30,13 +30,13 @@
           <span class="text-xs shrink-0" style="color: var(--ink-3)">{{ a.academic_year }}</span>
         </div>
       {% empty %}
-        <p class="text-sm" style="color: var(--ink-3)">Bado hujapangiwa somo lolote na Academic.</p>
+        <p class="text-sm" style="color: var(--ink-3)">Bado hujapangiwa somo lolote na Msimamizi wa Masomo.</p>
       {% endfor %}
     </div>
   </div>
 
   <div class="sp-card p-5 sp-reveal">
-    <h3 class="font-serif font-bold mb-3" style="color: var(--brand)">Home Packages za Hivi Karibuni</h3>
+    <h3 class="font-serif font-bold mb-3" style="color: var(--brand)">Kazi za Nyumbani za Hivi Karibuni</h3>
     <div class="space-y-2">
       {% for p in recent_packages %}
         <div class="flex items-center justify-between gap-3 text-sm">

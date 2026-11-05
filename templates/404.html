@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ukurasa Haujapatikana</title>
+<link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
+<link href="{% static 'css/app.css' %}" rel="stylesheet">
+</head>
+<body class="min-h-screen flex items-center justify-center" style="background: var(--surface)">
+  <div class="sp-card px-8 py-12 mx-4 max-w-md w-full text-center sp-reveal">
+    <div class="h-14 w-14 rounded-2xl grid place-items-center mx-auto mb-5"
+         style="background: color-mix(in srgb, var(--warn) 14%, transparent); color: var(--warn)">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 3h.01M10.3 4.3 2.6 18a1.9 1.9 0 0 0 1.6 2.9h15.6a1.9 1.9 0 0 0 1.6-2.9L13.7 4.3a1.9 1.9 0 0 0-3.4 0z"/>
+      </svg>
+    </div>
+    <p class="text-xs font-semibold mb-2" style="color: var(--ink-3)">KOSA 404</p>
+    <h1 class="font-serif text-2xl font-bold mb-2" style="color: var(--brand)">Ukurasa Haujapatikana</h1>
+    <p class="text-sm mb-7" style="color: var(--ink-2)">Anwani uliyofungua haipo au imehamishwa. Hakikisha anwani ni sahihi, kisha ujaribu tena.</p>
+    <div class="flex flex-wrap gap-3 justify-center">
+      <a href="/" class="sp-btn sp-btn-primary">Rudi Kwenye Mfumo</a>
+      <a href="/accounts/login/" class="sp-btn sp-btn-ghost">Fungua Ukurasa wa Kuingia</a>
+    </div>
+  </div>
+<script src="{% static 'js/app.js' %}" defer></script>
+</body>
+</html>

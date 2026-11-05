@@ -21,6 +21,6 @@ class DemoRequestForm(forms.ModelForm):
             'contact_name': forms.TextInput(attrs={'class': TW}),
             'phone': forms.TextInput(attrs={'class': TW, 'placeholder': '07XXXXXXXX'}),
             'email': forms.EmailInput(attrs={'class': TW}),
-            'student_count': forms.TextInput(attrs={'class': TW, 'placeholder': 'Mfano: 300-800'}),
+            'student_count': forms.TextInput(attrs={'class': TW, 'placeholder': 'Mfano: 300 hadi 800'}),
             'message': forms.Textarea(attrs={'class': TW, 'rows': 3}),
         }

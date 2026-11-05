@@ -17,9 +17,9 @@ TERM_EXAM_MAP = {
 # Broadsheet na 'Chapisha Matokeo' zinaonyesha matokeo yaliyokamilika
 # (computed) pekee - siyo raw components za CA.
 EXAM_CHOICES = [
-    ('MID_TERM', 'Mid-Term (Kikokotolewa)'),
-    ('TERMINAL', 'Terminal (Kikokotolewa)'),
-    ('ANNUAL', 'Annual (Kikokotolewa)'),
+    ('MID_TERM', 'Mtihani wa Kati (ya Awali)'),
+    ('TERMINAL', 'Mtihani wa Mwisho wa Muhula (ya Awali)'),
+    ('ANNUAL', 'Mtihani wa Mwaka (ya Awali)'),
 ]
 
 
@@ -29,8 +29,8 @@ class ResultFilterForm(forms.Form):
     ili mfumo uonyeshe ripoti husika (class-wise results).
     """
     LEVEL_CHOICES = [
-        ('O', 'O-Level (Form I - IV)'),
-        ('A', 'A-Level (Form V - VI)'),
+        ('O', 'O-Level (Kidato cha I - IV)'),
+        ('A', 'A-Level (Kidato cha V - VI)'),
     ]
 
     education_level = forms.ChoiceField(
@@ -41,7 +41,7 @@ class ResultFilterForm(forms.Form):
     term = forms.ChoiceField(
         choices=AcademicResult.TERM_CHOICES,
         widget=forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
-        label='Muhula (Term)',
+        label='Muhula',
     )
     exam_type = forms.ChoiceField(
         choices=EXAM_CHOICES,
@@ -96,7 +96,7 @@ class SubjectScoreFilterForm(forms.Form):
     term = forms.ChoiceField(
         choices=AcademicResult.TERM_CHOICES,
         widget=forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
-        label='Muhula (Term)',
+        label='Muhula',
     )
     exam_type = forms.ChoiceField(
         choices=EXAM_CHOICES,
@@ -142,7 +142,7 @@ class AcademicStatisticsFilterForm(forms.Form):
     term = forms.ChoiceField(
         choices=AcademicResult.TERM_CHOICES,
         widget=forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
-        label='Muhula (Term)',
+        label='Muhula',
     )
     exam_type = forms.ChoiceField(
         choices=EXAM_CHOICES,
@@ -153,7 +153,7 @@ class AcademicStatisticsFilterForm(forms.Form):
         queryset=SchoolClass.objects.none(),
         required=False,
         widget=forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
-        label='Darasa (acha wazi kwa Shule Nzima)',
+        label='Darasa (acha tupu kwa shule nzima)',
     )
     academic_year = forms.IntegerField(
         min_value=2020,
@@ -202,7 +202,7 @@ class ReportPublishForm(forms.Form):
     term = forms.ChoiceField(
         choices=AcademicResult.TERM_CHOICES,
         widget=forms.Select(attrs={'class': 'border border-gray-300 rounded px-3 py-2 text-sm w-full'}),
-        label='Muhula (Term)',
+        label='Muhula',
     )
     exam_type = forms.ChoiceField(
         choices=EXAM_CHOICES,

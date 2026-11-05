@@ -1,18 +1,18 @@
 {% extends 'shule_core/base_tailwind.html' %}
-{% block title %}Discipline Dashboard{% endblock %}
-{% block page_tag %}Discipline - Nidhamu ya Shule{% endblock %}
+{% block title %}Dashibodi ya Nidhamu{% endblock %}
+{% block page_tag %}Nidhamu ya Shule{% endblock %}
 
 {% block content %}
 <div class="max-w-3xl mx-auto px-4 py-6">
   <p class="eyebrow mb-1">Nidhamu</p>
   <h1 class="font-serif text-xl md:text-2xl font-bold mb-1" style="color: var(--brand)">Dashibodi ya Nidhamu</h1>
-  <p class="text-sm mb-5" style="color: var(--ink-3)">Kiwango cha Alert: chini ya {{ school.discipline_alert_score }}</p>
+  <p class="text-sm mb-5" style="color: var(--ink-3)">Kiwango cha arifa: chini ya {{ school.discipline_alert_score }}</p>
 
   {% if open_alerts %}
     <div class="sp-card p-5 mb-6 overflow-x-auto sp-reveal" style="border-left: 4px solid var(--bad)">
       <h3 class="mb-3 font-semibold flex items-center gap-2" style="color: var(--bad)">
         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        Alerts Zinazohitaji Hatua
+        Arifa Zinazohitaji Hatua
       </h3>
       <table class="w-full text-sm min-w-[420px]">
         <thead><tr class="text-xs uppercase">
@@ -37,7 +37,7 @@
 
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3 sp-reveal">
     <a href="{% url 'discipline:record_incident_spreadsheet' %}" class="sp-card sp-card-primary sp-card-lift p-4">
-      <div class="text-[11px] uppercase tracking-wide" style="color: var(--warn)">Wingi (Spreadsheet)</div>
+      <div class="text-[11px] uppercase tracking-wide" style="color: var(--warn)">Kwa Wingi (Jedwali la Taarifa)</div>
       <div class="font-serif text-lg font-bold" style="color: var(--brand)">Rekodi Makosa Mengi</div>
     </a>
     <a href="{% url 'discipline:record_incident' %}" class="sp-card sp-card-lift p-4">
@@ -49,12 +49,12 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 sp-reveal">
     <a href="{% url 'discipline:add_offense_type' %}" class="sp-card sp-card-lift p-4">
       <div class="text-[11px] uppercase tracking-wide" style="color: var(--ink-3)">Weka Aina ya Kosa</div>
-      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Offense Type</div>
+      <div class="font-serif text-lg font-bold" style="color: var(--brand)">+ Aina ya Makosa</div>
     </a>
   </div>
 
   <a href="{% url 'discipline:full_report' %}" class="block sp-card sp-card-primary sp-card-lift p-4 mb-6 sp-reveal">
-    <div class="text-[11px] uppercase tracking-wide" style="color: var(--warn)">Kwa Discipline, Headmaster na Second Master</div>
+    <div class="text-[11px] uppercase tracking-wide" style="color: var(--warn)">Kwa Mwalimu wa Nidhamu, Mkuu wa Shule na Msaidizi wa Mkuu</div>
     <div class="font-serif text-lg font-bold flex items-center gap-2" style="color: var(--brand)">
       <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
       Ripoti Kamili ya Nidhamu

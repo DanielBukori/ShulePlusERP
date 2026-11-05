@@ -51,7 +51,7 @@ def register_teacher_view(request):
         if not email:
             messages.error(
                 request,
-                "Email ya mwalimu ni lazima - itatumika kutuma link ya kuingia (2FA)."
+                "Barua pepe ya mwalimu ni lazima - itatumika kutuma kiungo cha kuingia (thibitisho la hatua mbili)."
             )
             return redirect('staff:register_teacher')
 
@@ -59,8 +59,8 @@ def register_teacher_view(request):
         if CustomUser.objects.filter(email__iexact=email).exists():
             messages.error(
                 request,
-                f"Email '{email}' tayari inatumiwa na mtumiaji mwingine. "
-                "Kila mtumiaji lazima awe na email yake ya kipekee."
+                f"Barua pepe '{email}' tayari inatumiwa na mtumiaji mwingine. "
+                "Kila mtumiaji lazima awe na barua pepe yake ya kipekee."
             )
             return redirect('staff:register_teacher')
 
@@ -95,7 +95,7 @@ def register_teacher_view(request):
             except IntegrityError:
                 messages.error(
                     request,
-                    "Namba ya simu au email hii tayari imesajiliwa (mgongano wa taarifa). "
+                    "Namba ya simu au barua pepe hii tayari imesajiliwa (mgongano wa taarifa). "
                     "Tafadhali angalia tena na ujaribu kusajili upya."
                 )
                 return redirect('staff:register_teacher')
@@ -118,7 +118,7 @@ def register_teacher_view(request):
                 messages.warning(
                     request,
                     f"{user.get_role_display()} {user.get_full_name()} amesajiliwa lakini SMS ya PIN haikutumwa; "
-                    "akaunti imefungwa hadi admin atatue tatizo la SMS.",
+                    "akaunti imefungwa hadi msimamizi atatue tatizo la SMS.",
                 )
             log_action(
                 request.user, school, 'TEACHER_REGISTERED',
@@ -197,7 +197,7 @@ def edit_staff_role_view(request, staff_id):
             messages.success(
                 request,
                 f"Cheo cha {user.get_full_name()} kimebadilishwa: {old_role_display} \u2192 {user.get_role_display()}"
-                f"{' (Store Keeper)' if staff.is_store_keeper else ''}."
+                f"{' (Msimamizi wa Duka)' if staff.is_store_keeper else ''}."
             )
             log_action(
                 request.user, school, 'STAFF_ROLE_CHANGED',

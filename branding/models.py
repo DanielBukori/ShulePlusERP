@@ -18,12 +18,16 @@ class SchoolProfile(models.Model):
     cover_image = models.ImageField(upload_to=branding_upload_path, blank=True, null=True)
     facebook_url = models.URLField(blank=True, null=True)
     instagram_url = models.URLField(blank=True, null=True)
-    primary_color = models.CharField(max_length=7, blank=True, null=True, help_text='Mfano: #0B2545 (hiari - rangi kuu ya brand ya shule)')
-    accent_color = models.CharField(max_length=7, blank=True, null=True, help_text='Mfano: #D4AF37 (hiari - rangi ya pili ya brand)')
+    primary_color = models.CharField(max_length=7, blank=True, null=True, help_text='Mfano: #0B2545 (hiari - rangi kuu ya utambulisho wa shule)')
+    accent_color = models.CharField(max_length=7, blank=True, null=True, help_text='Mfano: #D4AF37 (hiari - rangi ya pili ya utambulisho)')
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = 'Wasifu wa Shule'
+        verbose_name_plural = 'Wasifu wa Shule'
+
     def __str__(self):
-        return f"Profile ya {self.school.name}"
+        return f"Wasifu wa {self.school.name}"
 
     def is_complete(self):
         return bool(self.about_text and self.cover_image and self.mission and self.vision)
@@ -36,11 +40,11 @@ class BrandingPost(models.Model):
     ndio wanaoandika.
     """
     CATEGORY_CHOICES = [
-        ('ADMISSIONS', 'Admissions'),
+        ('ADMISSIONS', 'Usajili'),
         ('NECTA_RESULTS', 'Matokeo ya NECTA'),
         ('EVENT', 'Tukio/Mahafali'),
         ('ACHIEVEMENT', 'Mafanikio'),
-        ('GALLERY', 'Gallery (Majengo/Picha)'),
+        ('GALLERY', 'Picha za Shule'),
         ('GENERAL', 'Taarifa ya Jumla'),
     ]
 
@@ -55,6 +59,8 @@ class BrandingPost(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        verbose_name = 'Chapisho la Tovuti'
+        verbose_name_plural = 'Vichapisho vya Tovuti'
         ordering = ['-created_at']
         indexes = [models.Index(fields=['school', 'category', 'is_published'])]
 
@@ -67,6 +73,10 @@ class PostImage(models.Model):
     post = models.ForeignKey(BrandingPost, on_delete=models.CASCADE, related_name='extra_images')
     image = models.ImageField(upload_to=post_image_upload_path)
     caption = models.CharField(max_length=150, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Picha ya Chapisho'
+        verbose_name_plural = 'Picha za Chapisho'
 
     def __str__(self):
         return f"Picha ya {self.post.title}"
@@ -85,6 +95,8 @@ class LeadershipMember(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'Mwanauongozi'
+        verbose_name_plural = 'Wanaouongozi'
         ordering = ['order', 'full_name']
 
     def __str__(self):
@@ -106,6 +118,8 @@ class AcademicProgram(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'Programu ya Masomo'
+        verbose_name_plural = 'Programu za Masomo'
         ordering = ['order', 'name']
 
     def __str__(self):
@@ -118,7 +132,7 @@ class Facility(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to=branding_upload_path, blank=True, null=True)
-    icon = models.CharField(max_length=10, blank=True, null=True, help_text='Emoji moja, mfano: 🔬 au 📚')
+    icon = models.CharField(max_length=10, blank=True, null=True, help_text='Alama moja fupi ya kifaa hiki (itaonekana kwenye tovuti ya shule). Ukiacha tupu, alama haitaonyeshwa.')
     order = models.PositiveIntegerField(default=0)
     is_published = models.BooleanField(default=True)
     created_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
@@ -126,7 +140,7 @@ class Facility(models.Model):
 
     class Meta:
         ordering = ['order', 'name']
-        verbose_name_plural = 'Facilities'
+        verbose_name_plural = 'Vifaa na Sehemu'
 
     def __str__(self):
         return self.name
@@ -147,6 +161,8 @@ class Testimonial(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'Ushuhuda wa Mzazi'
+        verbose_name_plural = 'Ushuhuda wa Wazazi'
         ordering = ['order', '-created_at']
 
     def __str__(self):
@@ -160,14 +176,14 @@ class AdmissionInquiry(models.Model):
     parent_name = models.CharField(max_length=150)
     phone = models.CharField(max_length=20)
     email = models.EmailField(blank=True, null=True)
-    class_interested = models.CharField(max_length=100, blank=True, null=True, help_text='Mfano: Form One 2027')
+    class_interested = models.CharField(max_length=100, blank=True, null=True, help_text='Mfano: Kidato cha I 2027')
     message = models.TextField(blank=True, null=True)
     is_contacted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-created_at']
-        verbose_name_plural = 'Admission Inquiries'
+        verbose_name_plural = 'Maswali ya Usajili'
 
     def __str__(self):
         return f"{self.student_name} - {self.parent_name}"
